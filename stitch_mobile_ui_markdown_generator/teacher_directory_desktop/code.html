@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#98472a",
+                    "secondary-fixed-dim": "#92ccff",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#2b322b",
+                    "secondary-container": "#5cb8fd",
+                    "secondary": "#006397",
+                    "primary": "#006d37",
+                    "on-tertiary-container": "#772e14",
+                    "surface": "#f3fcf1",
+                    "tertiary-container": "#ff9875",
+                    "tertiary-fixed": "#ffdbd0",
+                    "surface-container": "#e8f0e5",
+                    "on-surface-variant": "#3d4a3e",
+                    "on-primary-container": "#005027",
+                    "tertiary-fixed-dim": "#ffb59d",
+                    "secondary-fixed": "#cce5ff",
+                    "surface-bright": "#f3fcf1",
+                    "on-secondary-fixed-variant": "#004b73",
+                    "surface-variant": "#dce5da",
+                    "outline-variant": "#bbcbbb",
+                    "background": "#f3fcf1",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed-dim": "#4ae183",
+                    "surface-container-high": "#e2ebe0",
+                    "on-primary-fixed-variant": "#005228",
+                    "on-tertiary-fixed-variant": "#793015",
+                    "on-secondary-fixed": "#001d31",
+                    "on-secondary-container": "#00476e",
+                    "on-background": "#161d17",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#00210c",
+                    "on-tertiary-fixed": "#390c00",
+                    "surface-tint": "#006d37",
+                    "primary-container": "#2ecc71",
+                    "on-error-container": "#93000a",
+                    "outline": "#6c7b6d",
+                    "surface-container-low": "#eef6eb",
+                    "surface-dim": "#d4dcd2",
+                    "on-surface": "#161d17",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-primary": "#4ae183",
+                    "primary-fixed": "#6bfe9c",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#ebf3e8",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#dce5da"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "gutter": "12px",
+                    "stack-md": "16px",
+                    "stack-lg": "24px",
+                    "container-margin": "16px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Cairo"],
+                    "title-lg": ["Cairo"],
+                    "headline-md": ["Cairo"],
+                    "body-md": ["Cairo"],
+                    "display-lg": ["Cairo"],
+                    "body-lg": ["Cairo"],
+                    "title-md": ["Cairo"],
+                    "label-lg": ["Cairo"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Cairo', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-inverse-surface shadow-sm dark:shadow-none flex justify-between items-center px-container-margin h-16 w-full docked full-width top-0 z-40 fixed">
+<div class="flex items-center gap-stack-md">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
+<img alt="administrator_profile_photo" class="w-full h-full object-cover" data-alt="A professional portrait of a senior school administrator in a bright, modern educational setting. The individual is wearing professional corporate attire, exuding authority and approachability. The background features soft bokeh with emerald green and white tones, matching the corporate edtech aesthetic of the platform. High-quality lighting highlights clear, sharp features." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ3aLEFNG5KNDUqkYmKC0uGFeboUHfMrSgk8JvlnXwHTaNavSULVpewUtRWZ-D-5h9HZnGuS7I2kcuGqnLDbZhf_3T5Vcq8PKMh6ggWns2tBUtb05UlzmhRQjQXF9oFt8KyqQmclpbi0jOpYotgAjwt70yzSRrGGlI3loKZC7aZBzhtLrLA_eYKzEMXfjCaVzkMK2rkHQr2P5xVB27sVglWXVpvFQCkQHwEL8KuYt7nrpK8T6NZ4DUrbxID-MXX-5LO43-yd8-EegK"/>
+</div>
+<h1 class="font-display-lg text-display-lg font-bold text-primary dark:text-primary-fixed-dim">EduCore Manager</h1>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-variant p-2 rounded-full transition-colors duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<div class="flex flex-1 pt-16">
+<!-- Sidebar Navigation Drawer (Desktop Only) -->
+<aside class="hidden md:flex flex-col h-[calc(100vh-64px)] w-80 bg-surface-container dark:bg-inverse-surface shadow-xl rounded-l-xl fixed right-0 top-16 z-30 py-stack-lg">
+<div class="px-6 mb-stack-lg">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<div>
+<h2 class="font-title-lg text-title-lg font-bold text-primary">Admin User</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Principal Office</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-on-surface-variant dark:text-outline-variant mx-2 px-4 py-3 flex items-center gap-4 transition-all duration-200 hover:bg-surface-container-high dark:hover:bg-surface-variant font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span>Academic Calendar</span>
+</a>
+<a class="bg-secondary-container text-on-secondary-container dark:bg-secondary dark:text-on-secondary font-bold rounded-full mx-2 px-4 py-3 flex items-center gap-4 transition-all duration-200 font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">badge</span>
+<span>Staff Directory</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant mx-2 px-4 py-3 flex items-center gap-4 transition-all duration-200 hover:bg-surface-container-high dark:hover:bg-surface-variant font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span>Exam Results</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant mx-2 px-4 py-3 flex items-center gap-4 transition-all duration-200 hover:bg-surface-container-high dark:hover:bg-surface-variant font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="px-6 py-stack-md border-t border-outline-variant">
+<span class="text-label-sm font-label-sm text-outline">v2.1.0</span>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:mr-80 p-container-margin pb-24 md:pb-container-margin">
+<!-- Header Section with Bento Style Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-stack-md mb-stack-lg">
+<div class="md:col-span-3 bg-surface-container-lowest rounded-xl p-stack-lg shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant/30">
+<h2 class="font-headline-md text-headline-md text-primary mb-stack-sm">دليل المعلمين</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">إدارة الكادر التعليمي ومراجعة التخصصات وبيانات التواصل.</p>
+<div class="mt-stack-lg flex flex-col md:flex-row gap-gutter">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full pr-12 pl-4 py-3 focus:ring-2 focus:ring-primary text-body-md font-body-md" placeholder="البحث عن اسم المعلم أو المادة..." type="text"/>
+</div>
+<button class="bg-primary text-on-primary px-stack-lg py-3 rounded-full flex items-center gap-2 font-label-lg transition-transform active:scale-95 shadow-lg">
+<span class="material-symbols-outlined">person_add</span>
+<span>إضافة معلم جديد</span>
+</button>
+</div>
+</div>
+<div class="bg-secondary-container text-on-secondary-container rounded-xl p-stack-lg shadow-[0px_4px_12px_rgba(0,0,0,0.05)] flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-4xl">groups</span>
+<h3 class="font-title-md text-title-md mt-2">إحصائيات الكادر</h3>
+</div>
+<div class="text-4xl font-bold">124</div>
+<div class="text-label-sm font-label-sm opacity-80">معلم ومعلمة مسجلين</div>
+</div>
+</div>
+<div class="flex flex-col lg:flex-row gap-stack-lg">
+<!-- Filter Sidebar (Mobile becomes horizontal scroll) -->
+<aside class="lg:w-64 space-y-stack-md">
+<div class="bg-surface-container rounded-xl p-stack-md border border-outline-variant/20">
+<h4 class="font-title-md text-title-md mb-stack-sm text-primary">الأقسام</h4>
+<div class="flex flex-wrap lg:flex-col gap-2">
+<button class="px-4 py-2 rounded-full bg-primary text-on-primary text-right text-label-lg font-label-lg">كل الأقسام</button>
+<button class="px-4 py-2 rounded-full bg-surface hover:bg-surface-variant text-right text-label-lg font-label-lg transition-colors">الرياضيات</button>
+<button class="px-4 py-2 rounded-full bg-surface hover:bg-surface-variant text-right text-label-lg font-label-lg transition-colors">العلوم الطبيعية</button>
+<button class="px-4 py-2 rounded-full bg-surface hover:bg-surface-variant text-right text-label-lg font-label-lg transition-colors">اللغات والآداب</button>
+<button class="px-4 py-2 rounded-full bg-surface hover:bg-surface-variant text-right text-label-lg font-label-lg transition-colors">الدراسات الإسلامية</button>
+<button class="px-4 py-2 rounded-full bg-surface hover:bg-surface-variant text-right text-label-lg font-label-lg transition-colors">التربية الفنية</button>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-stack-md border border-outline-variant/20">
+<h4 class="font-title-md text-title-md mb-stack-sm text-primary">الحالة</h4>
+<div class="space-y-3">
+<label class="flex items-center gap-3 cursor-pointer">
+<input checked="" class="rounded border-outline text-primary focus:ring-primary h-5 w-5" type="checkbox"/>
+<span class="font-body-md text-body-md">نشط حالياً</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="rounded border-outline text-primary focus:ring-primary h-5 w-5" type="checkbox"/>
+<span class="font-body-md text-body-md">في إجازة</span>
+</label>
+</div>
+</div>
+</aside>
+<!-- Profile Grid -->
+<div class="flex-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-stack-md">
+<!-- Teacher Card 1 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant/30 hover:shadow-md transition-shadow">
+<div class="h-48 overflow-hidden relative">
+<img alt="teacher_photo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional portrait of a friendly female teacher in a clean, bright school environment. She is smiling warmly at the camera, wearing professional modest attire. The background includes blurred school library shelves. The lighting is soft and natural, emphasizing a welcoming and educational atmosphere consistent with the green and white school brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtZSrokygyaVdn8JmK3dOcIuqwHGGIQU4aFi3a85ftnSU9ro_gM7Ayz3NRtdlunvvG6JdGjMIhG_wMt8K-MSt0LOIDOj0W-xUaqOZ_i9SRctuXA_KrmMafgFU0_eVBXuiIWqzbTxWO_PGpTsSnuU90pVGG2XQOfsDgNIdJ6Z3WwS_mHgf1ZuwcY2MqBXRnUoZi5rzNd62wmnYYU3zWNWUSs27eN9w44QmHyxk1ZVuyMQjZyjtAJSQaVQl8qhsDsV8ppfKf-V9rqsxo"/>
+<div class="absolute top-3 right-3">
+<span class="bg-primary-container/90 text-on-primary-container px-3 py-1 rounded-full text-label-sm font-label-sm">قسم الرياضيات</span>
+</div>
+</div>
+<div class="p-stack-md">
+<h3 class="font-title-lg text-title-lg text-on-surface">أ. سارة الأحمد</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-md">معلم أول - هندسة وجبر</p>
+<div class="flex flex-wrap gap-2 mb-stack-lg">
+<span class="bg-emerald-500/15 text-emerald-700 px-2 py-0.5 rounded text-label-sm font-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> نشط
+                                </span>
+<span class="bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded text-label-sm font-label-sm">12 سنة خبرة</span>
+</div>
+<div class="flex gap-gutter">
+<button class="flex-1 bg-surface-container-high hover:bg-surface-variant py-2 rounded-lg flex justify-center items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-secondary">mail</span>
+<span class="text-label-lg font-label-lg">بريد</span>
+</button>
+<button class="flex-1 bg-surface-container-high hover:bg-surface-variant py-2 rounded-lg flex justify-center items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-secondary">chat</span>
+<span class="text-label-lg font-label-lg">مراسلة</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Teacher Card 2 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant/30 hover:shadow-md transition-shadow">
+<div class="h-48 overflow-hidden relative">
+<img alt="teacher_photo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A sharp, clear portrait of a male teacher in a modern office or classroom setting. He is wearing a button-up shirt and glasses, conveying intelligence and professionalism. The lighting is crisp and high-key, with a palette dominated by white and subtle green accents. The overall mood is focused and academic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9bPP9qLUeXSNOiW77TNWeoZKOW2PVFLQ-6iP-8tLgsy6JByUdEV5wvuwc3DphhdziD2cihbN-4_i-aeNDVSpYHcOx4IQ4bnIqKcMScleA-chnXtFGJsA2nUi9Z4OkywkBGks7jzEztBDy2d1XUdBpM3tYfZUyPGEaJ4qpctTb-m9yvGSAlgjRrJ6oc-BdMz7sgPygbot5c0hzEBa3ntqqdPeMrjarXAa0uF3iH9loEYGINSQMGdUXnPPdfr7tgEIgTOn_ObIrGCsb"/>
+<div class="absolute top-3 right-3">
+<span class="bg-primary-container/90 text-on-primary-container px-3 py-1 rounded-full text-label-sm font-label-sm">قسم العلوم</span>
+</div>
+</div>
+<div class="p-stack-md">
+<h3 class="font-title-lg text-title-lg text-on-surface">د. محمد الشريف</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-md">رئيس قسم - فيزياء متقدمة</p>
+<div class="flex flex-wrap gap-2 mb-stack-lg">
+<span class="bg-emerald-500/15 text-emerald-700 px-2 py-0.5 rounded text-label-sm font-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> نشط
+                                </span>
+<span class="bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded text-label-sm font-label-sm">8 سنوات خبرة</span>
+</div>
+<div class="flex gap-gutter">
+<button class="flex-1 bg-surface-container-high hover:bg-surface-variant py-2 rounded-lg flex justify-center items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-secondary">mail</span>
+<span class="text-label-lg font-label-lg">بريد</span>
+</button>
+<button class="flex-1 bg-surface-container-high hover:bg-surface-variant py-2 rounded-lg flex justify-center items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-secondary">chat</span>
+<span class="text-label-lg font-label-lg">مراسلة</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Teacher Card 3 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant/30 hover:shadow-md transition-shadow">
+<div class="h-48 overflow-hidden relative">
+<img alt="teacher_photo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A portrait of an experienced male teacher sitting in an airy, sunlit faculty room. He is smiling warmly, dressed in a professional blazer. The scene is bright and airy with high-end corporate school branding colors—soft greens and clean whites. The background shows blurred architectural details of a modern school." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5KUOKoUkTiMAFxuQZ_7W71H69s8RXLgYvJS-66KWdSz0W4w-yFberXl4S5JIb-s41Wt3-pwCaSKdTtA5zEnD8gjxCdfsqncOrMJXtAsrzhpid7jFzw_SUlaY78Mm5kunPeozPx3uAYZAFTluzqMI-Tumd0H-b08KRjHWgYKrf2yK3NYMn0FPP7u_FeXsuYYmyWxk5SP2JTZJ-T7sC5NdVy0GbMYJ2kMsrS8WA6sWmVPWIGHSU_jqjJNFy4yjQ6wRNnGG28jKpr-xW"/>
+<div class="absolute top-3 right-3">
+<span class="bg-primary-container/90 text-on-primary-container px-3 py-1 rounded-full text-label-sm font-label-sm">اللغة العربية</span>
+</div>
+</div>
+<div class="p-stack-md">
+<h3 class="font-title-lg text-title-lg text-on-surface">أ. خالد منصور</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-md">معلم لغة عربية - بلاغة وأدب</p>
+<div class="flex flex-wrap gap-2 mb-stack-lg">
+<span class="bg-red-500/15 text-red-700 px-2 py-0.5 rounded text-label-sm font-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> إجازة
+                                </span>
+<span class="bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded text-label-sm font-label-sm">15 سنة خبرة</span>
+</div>
+<div class="flex gap-gutter">
+<button class="flex-1 bg-surface-container-high hover:bg-surface-variant py-2 rounded-lg flex justify-center items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-secondary">mail</span>
+<span class="text-label-lg font-label-lg">بريد</span>
+</button>
+<button class="flex-1 bg-surface-container-high hover:bg-surface-variant py-2 rounded-lg flex justify-center items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-secondary">chat</span>
+<span class="text-label-lg font-label-lg">مراسلة</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Teacher Card 4 -->
+<div class="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant/30 hover:shadow-md transition-shadow">
+<div class="h-48 overflow-hidden relative">
+<img alt="teacher_photo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A portrait of a young, energetic female art teacher in a vibrant but professional school art studio. She is wearing an elegant scarf and smiling brightly. The environment is filled with creative energy while maintaining a clean, modern aesthetic. Soft daylight illuminates the room with emerald green accent pieces visible in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmXeUBk8EfpTdfjDqtktTbrfSNQvBra8BVw_sLY3fse-esGukStytaudjqGmyTx3B7r_XfxobaHVb-HbebFAU2nT02f7ftoIsHdt0aWLI1suvc0ifNZEfeF5oP1eVSfwGyE8fYJiEef38uDSU--aTR-XcI1bQJyG3WNmsHtfvs_w0H893dXWribdvn2SXqTMAP3L4pm16jQ_Q-tjCDvLDTXiVlEk_gmJALEVMpP-B5L0CBj61VdpQ9jhfHGYcbgGR2RRNi2F-YNI_k"/>
+<div class="absolute top-3 right-3">
+<span class="bg-primary-container/90 text-on-primary-container px-3 py-1 rounded-full text-label-sm font-label-sm">التربية الفنية</span>
+</div>
+</div>
+<div class="p-stack-md">
+<h3 class="font-title-lg text-title-lg text-on-surface">أ. لينا عمر</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-md">معلمة فنون تشكيلية</p>
+<div class="flex flex-wrap gap-2 mb-stack-lg">
+<span class="bg-emerald-500/15 text-emerald-700 px-2 py-0.5 rounded text-label-sm font-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> نشط
+                                </span>
+<span class="bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded text-label-sm font-label-sm">5 سنوات خبرة</span>
+</div>
+<div class="flex gap-gutter">
+<button class="flex-1 bg-surface-container-high hover:bg-surface-variant py-2 rounded-lg flex justify-center items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-secondary">mail</span>
+<span class="text-label-lg font-label-lg">بريد</span>
+</button>
+<button class="flex-1 bg-surface-container-high hover:bg-surface-variant py-2 rounded-lg flex justify-center items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-secondary">chat</span>
+<span class="text-label-lg font-label-lg">مراسلة</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Visible only on mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface dark:bg-inverse-surface shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] flex justify-around items-center px-2 py-3 pb-safe border-t-0 rounded-t-full">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm text-label-sm">Students</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container dark:bg-primary dark:text-on-primary rounded-full px-4 py-1 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">how_to_reg</span>
+<span class="font-label-sm text-label-sm">Attendance</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-sm text-label-sm">Fees</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">menu</span>
+<span class="font-label-sm text-label-sm">More</span>
+</a>
+</nav>
+</body></html>

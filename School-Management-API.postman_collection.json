@@ -1,0 +1,3919 @@
+{
+	"info": {
+		"_postman_id": "school-management-api",
+		"name": "School Management API",
+		"description": "Complete API collection for School Management System with authentication, grades, classrooms, sections, teachers, students, parents, subjects, quizzes, questions, settings, and more.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{auth_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "locale",
+			"value": "en",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/login/student",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login",
+								"student"
+							]
+						},
+						"description": "Login to get authentication token. Use type: student, teacher, or parent"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/logout/student",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"logout",
+								"student"
+							]
+						},
+						"description": "Logout and invalidate token"
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/refresh",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"refresh"
+							]
+						},
+						"description": "Refresh authentication token"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{base_url}}/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"me"
+							]
+						},
+						"description": "Get current authenticated user information"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for login, logout, and token management"
+		},
+		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "Get Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/dashboard",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"dashboard"
+							]
+						},
+						"description": "Get dashboard statistics and recent data"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Public Info",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/public/info",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"public",
+								"info"
+							]
+						},
+						"description": "Get public information (no authentication required)"
+					},
+					"response": []
+				}
+			],
+			"description": "Dashboard and public information endpoints"
+		},
+		{
+			"name": "Grades",
+			"item": [
+				{
+					"name": "Get All Grades",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/grades",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"grades"
+							]
+						},
+						"description": "Get all grades with their classrooms"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Grade",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"Grade 1\",\n    \"Name_en\": \"Grade 1\",\n    \"Notes\": \"Primary grade level\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/grades",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"grades"
+							]
+						},
+						"description": "Create a new grade"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Grade",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/grades/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"grades",
+								"1"
+							]
+						},
+						"description": "Get specific grade by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Grade",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"Grade 1 Updated\",\n    \"Name_en\": \"Grade 1 Updated\",\n    \"Notes\": \"Updated primary grade level\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/grades/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"grades",
+								"1"
+							]
+						},
+						"description": "Update grade by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Grade",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/grades/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"grades",
+								"1"
+							]
+						},
+						"description": "Delete grade by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Grade management endpoints"
+		},
+		{
+			"name": "Classrooms",
+			"item": [
+				{
+					"name": "Get All Classrooms",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/classrooms",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"classrooms"
+							]
+						},
+						"description": "Get all classrooms with their grades"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Classroom",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name_Class\": \"Class A\",\n    \"Grade_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/classrooms",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"classrooms"
+							]
+						},
+						"description": "Create a new classroom"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Classroom",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/classrooms/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"classrooms",
+								"1"
+							]
+						},
+						"description": "Get specific classroom by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Classroom",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name_Class\": \"Class A Updated\",\n    \"Grade_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/classrooms/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"classrooms",
+								"1"
+							]
+						},
+						"description": "Update classroom by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Classroom",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/classrooms/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"classrooms",
+								"1"
+							]
+						},
+						"description": "Delete classroom by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete All Classrooms",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ids\": [1, 2, 3]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/classrooms/delete_all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"classrooms",
+								"delete_all"
+							]
+						},
+						"description": "Delete multiple classrooms by IDs"
+					},
+					"response": []
+				},
+				{
+					"name": "Filter Classrooms",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Grade_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/classrooms/filter",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"classrooms",
+								"filter"
+							]
+						},
+						"description": "Filter classrooms by grade"
+					},
+					"response": []
+				}
+			],
+			"description": "Classroom management endpoints"
+		},
+		{
+			"name": "Sections",
+			"item": [
+				{
+					"name": "Get All Sections",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/sections",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"sections"
+							]
+						},
+						"description": "Get all sections with their classrooms and teachers"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Section",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name_Section\": \"Section 1\",\n    \"Grade_id\": 1,\n    \"Class_id\": 1,\n    \"teacher_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/sections",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"sections"
+							]
+						},
+						"description": "Create a new section"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Section",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/sections/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"sections",
+								"1"
+							]
+						},
+						"description": "Get specific section by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Section",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name_Section\": \"Section 1 Updated\",\n    \"Grade_id\": 1,\n    \"Class_id\": 1,\n    \"teacher_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/sections/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"sections",
+								"1"
+							]
+						},
+						"description": "Update section by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Section",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/sections/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"sections",
+								"1"
+							]
+						},
+						"description": "Delete section by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Classes by Grade",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/sections/getclasses/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"sections",
+								"getclasses",
+								"1"
+							]
+						},
+						"description": "Get classrooms by grade ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Section management endpoints"
+		},
+		{
+			"name": "Teachers",
+			"item": [
+				{
+					"name": "Get All Teachers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/teachers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"teachers"
+							]
+						},
+						"description": "Get all teachers with their specializations"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Teacher",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"John Doe\",\n    \"Name_en\": \"John Doe\",\n    \"Email\": \"john@example.com\",\n    \"Password\": \"password123\",\n    \"Specialization_id\": 1,\n    \"Gender\": \"male\",\n    \"Joining_Date\": \"2023-01-01\",\n    \"Address\": \"123 Main St\",\n    \"Hiring_Date\": \"2023-01-01\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/teachers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"teachers"
+							]
+						},
+						"description": "Create a new teacher"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Teacher",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/teachers/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"teachers",
+								"1"
+							]
+						},
+						"description": "Get specific teacher by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Teacher",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"John Doe Updated\",\n    \"Name_en\": \"John Doe Updated\",\n    \"Email\": \"john@example.com\",\n    \"Specialization_id\": 1,\n    \"Gender\": \"male\",\n    \"Joining_Date\": \"2023-01-01\",\n    \"Address\": \"123 Main St Updated\",\n    \"Hiring_Date\": \"2023-01-01\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/teachers/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"teachers",
+								"1"
+							]
+						},
+						"description": "Update teacher by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Teacher",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/teachers/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"teachers",
+								"1"
+							]
+						},
+						"description": "Delete teacher by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Teacher management endpoints"
+		},
+		{
+			"name": "Parents",
+			"item": [
+				{
+					"name": "Get All Parents",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/parents",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"parents"
+							]
+						},
+						"description": "Get all parents with their students"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Parent",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Father_Name\": \"John Smith\",\n    \"Father_National_ID\": \"123456789\",\n    \"Father_Phone\": \"+1234567890\",\n    \"Father_Job\": \"Engineer\",\n    \"Father_Nationality\": \"American\",\n    \"Father_Blood_Type\": \"O+\",\n    \"Father_Address\": \"123 Main St\",\n    \"Father_Religion\": \"Christian\",\n    \"Mother_Name\": \"Jane Smith\",\n    \"Mother_National_ID\": \"987654321\",\n    \"Mother_Phone\": \"+1234567891\",\n    \"Mother_Job\": \"Teacher\",\n    \"Mother_Nationality\": \"American\",\n    \"Mother_Blood_Type\": \"A+\",\n    \"Mother_Address\": \"123 Main St\",\n    \"Mother_Religion\": \"Christian\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/parents",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"parents"
+							]
+						},
+						"description": "Create a new parent"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Parent",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/parents/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"parents",
+								"1"
+							]
+						},
+						"description": "Get specific parent by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Parent",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Father_Name\": \"John Smith Updated\",\n    \"Father_National_ID\": \"123456789\",\n    \"Father_Phone\": \"+1234567890\",\n    \"Father_Job\": \"Senior Engineer\",\n    \"Father_Nationality\": \"American\",\n    \"Father_Blood_Type\": \"O+\",\n    \"Father_Address\": \"123 Main St Updated\",\n    \"Father_Religion\": \"Christian\",\n    \"Mother_Name\": \"Jane Smith Updated\",\n    \"Mother_National_ID\": \"987654321\",\n    \"Mother_Phone\": \"+1234567891\",\n    \"Mother_Job\": \"Senior Teacher\",\n    \"Mother_Nationality\": \"American\",\n    \"Mother_Blood_Type\": \"A+\",\n    \"Mother_Address\": \"123 Main St Updated\",\n    \"Mother_Religion\": \"Christian\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/parents/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"parents",
+								"1"
+							]
+						},
+						"description": "Update parent by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Parent",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/parents/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"parents",
+								"1"
+							]
+						},
+						"description": "Delete parent by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Parent management endpoints"
+		},
+		{
+			"name": "Subjects",
+			"item": [
+				{
+					"name": "Get All Subjects",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/subjects",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"subjects"
+							]
+						},
+						"description": "Get all subjects with their grades and teachers"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Subject",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"Mathematics\",\n    \"Grade_id\": 1,\n    \"Classroom_id\": 1,\n    \"teacher_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/subjects",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"subjects"
+							]
+						},
+						"description": "Create a new subject"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Subject",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/subjects/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"subjects",
+								"1"
+							]
+						},
+						"description": "Get specific subject by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Subject",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Name\": \"Mathematics Advanced\",\n    \"Grade_id\": 1,\n    \"Classroom_id\": 1,\n    \"teacher_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/subjects/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"subjects",
+								"1"
+							]
+						},
+						"description": "Update subject by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Subject",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/subjects/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"subjects",
+								"1"
+							]
+						},
+						"description": "Delete subject by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Subject management endpoints"
+		},
+		{
+			"name": "Quizzes",
+			"item": [
+				{
+					"name": "Get All Quizzes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/quizzes",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"quizzes"
+							]
+						},
+						"description": "Get all quizzes with their subjects and teachers"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Quiz",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Math Quiz 1\",\n    \"subject_id\": 1,\n    \"teacher_id\": 1,\n    \"grade_id\": 1,\n	\"classroom_id\": 1,\n	\"section_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/quizzes",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"quizzes"
+							]
+						},
+						"description": "Create a new quiz"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Quiz",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/quizzes/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"quizzes",
+								"1"
+							]
+						},
+						"description": "Get specific quiz by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Quiz",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Math Quiz 1 Updated\",\n    \"subject_id\": 1,\n    \"teacher_id\": 1,\n    \"grade_id\": 1,\n	\"classroom_id\": 1,\n	\"section_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/quizzes/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"quizzes",
+								"1"
+							]
+						},
+						"description": "Update quiz by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Quiz",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/quizzes/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"quizzes",
+								"1"
+							]
+						},
+						"description": "Delete quiz by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Quiz management endpoints"
+		},
+		{
+			"name": "Questions",
+			"item": [
+				{
+					"name": "Get All Questions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/questions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"questions"
+							]
+						},
+						"description": "Get all questions with their quizzes"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"What is 2+2?\",\n    \"answers\": [\"3\", \"4\", \"5\", \"6\"],\n    \"right_answer\": \"4\",\n    \"score\": 5,\n    \"quizze_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/questions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"questions"
+							]
+						},
+						"description": "Create a new question"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Question",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/questions/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"questions",
+								"1"
+							]
+						},
+						"description": "Get specific question by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Question",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"What is 3+3?\",\n    \"answers\": [\"5\", \"6\", \"7\", \"8\"],\n    \"right_answer\": \"6\",\n    \"score\": 10,\n    \"quizze_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/questions/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"questions",
+								"1"
+							]
+						},
+						"description": "Update question by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Question",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/questions/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"questions",
+								"1"
+							]
+						},
+						"description": "Delete question by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Question management endpoints"
+		},
+		{
+			"name": "Settings",
+			"item": [
+				{
+					"name": "Get All Settings",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/settings",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"settings"
+							]
+						},
+						"description": "Get all system settings"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Setting",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"key\": \"school_name\",\n    \"value\": \"My School\",\n    \"description\": \"Name of the school\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/settings",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"settings"
+							]
+						},
+						"description": "Create a new setting"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Setting",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/settings/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"settings",
+								"1"
+							]
+						},
+						"description": "Get specific setting by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Setting",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"key\": \"school_name\",\n    \"value\": \"My School Updated\",\n    \"description\": \"Name of the school updated\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/settings/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"settings",
+								"1"
+							]
+						},
+						"description": "Update setting by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Setting",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/settings/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"settings",
+								"1"
+							]
+						},
+						"description": "Delete setting by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "System settings endpoints"
+		},
+		{
+			"name": "Students",
+			"item": [
+				{
+					"name": "Get All Students",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/students",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"students"
+							]
+						},
+						"description": "Get all students with their grades, classrooms, and sections"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Student",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@student.com\",\n    \"password\": \"password123\",\n    \"gender\": \"male\",\n    \"nationality\": \"American\",\n    \"blood_type\": \"O+\",\n    \"date_birth\": \"2005-01-01\",\n    \"grade_id\": 1,\n    \"classroom_id\": 1,\n    \"section_id\": 1,\n    \"parent_id\": 1,\n    \"academic_year\": \"2023-2024\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/students",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"students"
+							]
+						},
+						"description": "Create a new student"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Student",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/students/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"students",
+								"1"
+							]
+						},
+						"description": "Get specific student by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Student",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe Updated\",\n    \"email\": \"john@student.com\",\n    \"gender\": \"male\",\n    \"nationality\": \"American\",\n    \"blood_type\": \"O+\",\n    \"date_birth\": \"2005-01-01\",\n    \"grade_id\": 1,\n    \"classroom_id\": 1,\n    \"section_id\": 1,\n    \"parent_id\": 1,\n    \"academic_year\": \"2023-2024\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/students/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"students",
+								"1"
+							]
+						},
+						"description": "Update student by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Student",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/students/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"students",
+								"1"
+							]
+						},
+						"description": "Delete student by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Classes by Grade",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/students/getclasses/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"students",
+								"getclasses",
+								"1"
+							]
+						},
+						"description": "Get classrooms by grade ID for student enrollment"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sections by Classroom",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/students/getsections/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"students",
+								"getsections",
+								"1"
+							]
+						},
+						"description": "Get sections by classroom ID for student enrollment"
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Student Attachment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file_name",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/students/1/upload-attachment",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"students",
+								"1",
+								"upload-attachment"
+							]
+						},
+						"description": "Upload attachment for student"
+					},
+					"response": []
+				},
+				{
+					"name": "Download Student Attachment",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/students/1/download-attachment/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"students",
+								"1",
+								"download-attachment",
+								"1"
+							]
+						},
+						"description": "Download student attachment by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Student Attachment",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/students/1/delete-attachment/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"students",
+								"1",
+								"delete-attachment",
+								"1"
+							]
+						},
+						"description": "Delete student attachment by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Student management endpoints"
+		},
+		{
+			"name": "Online Classes",
+			"item": [
+				{
+					"name": "Get All Online Classes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/online-classes",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"online-classes"
+							]
+						},
+						"description": "Get all online classes with their subjects"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Online Class",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"grade_id\": 1,\n    \"classroom_id\": 1,\n    \"section_id\": 1,\n    \"subject_id\": 1,\n    \"teacher_id\": 1,\n    \"meeting_link\": \"https://zoom.us/j/123456789\",\n    \"meeting_time\": \"2023-12-01 10:00:00\",\n    \"duration\": 60\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/online-classes",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"online-classes"
+							]
+						},
+						"description": "Create a new online class"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Online Class",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/online-classes/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"online-classes",
+								"1"
+							]
+						},
+						"description": "Get specific online class by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Online Class",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"grade_id\": 1,\n    \"classroom_id\": 1,\n    \"section_id\": 1,\n    \"subject_id\": 1,\n    \"teacher_id\": 1,\n    \"meeting_link\": \"https://zoom.us/j/123456789\",\n    \"meeting_time\": \"2023-12-01 10:00:00\",\n    \"duration\": 90\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/online-classes/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"online-classes",
+								"1"
+							]
+						},
+						"description": "Update online class by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Online Class",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/online-classes/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"online-classes",
+								"1"
+							]
+						},
+						"description": "Delete online class by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Online class management endpoints"
+		},
+		{
+			"name": "Graduated Students",
+			"item": [
+				{
+					"name": "Get All Graduated Students",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/graduated-students",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"graduated-students"
+							]
+						},
+						"description": "Get all graduated students"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Graduated Student",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"student_id\": 1,\n    \"graduation_date\": \"2023-06-15\",\n    \"final_grade\": \"A\",\n    \"gpa\": 3.8\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/graduated-students",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"graduated-students"
+							]
+						},
+						"description": "Create a new graduated student record"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Graduated Student",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/graduated-students/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"graduated-students",
+								"1"
+							]
+						},
+						"description": "Get specific graduated student by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Graduated Student",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"graduation_date\": \"2023-06-15\",\n    \"final_grade\": \"A+\",\n    \"gpa\": 3.9\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/graduated-students/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"graduated-students",
+								"1"
+							]
+						},
+						"description": "Update graduated student by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Graduated Student",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/graduated-students/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"graduated-students",
+								"1"
+							]
+						},
+						"description": "Delete graduated student by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Graduated student management endpoints"
+		},
+		{
+			"name": "Promotions",
+			"item": [
+				{
+					"name": "Get All Promotions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/promotions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"promotions"
+							]
+						},
+						"description": "Get all student promotions"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Promotion",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"student_id\": 1,\n    \"from_grade_id\": 1,\n    \"from_classroom_id\": 1,\n    \"from_section_id\": 1,\n    \"to_grade_id\": 2,\n    \"to_classroom_id\": 2,\n    \"to_section_id\": 2,\n    \"promotion_date\": \"2023-06-01\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/promotions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"promotions"
+							]
+						},
+						"description": "Create a new student promotion"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Promotion",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/promotions/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"promotions",
+								"1"
+							]
+						},
+						"description": "Get specific promotion by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Promotion",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"to_grade_id\": 2,\n    \"to_classroom_id\": 2,\n    \"to_section_id\": 2,\n    \"promotion_date\": \"2023-06-01\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/promotions/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"promotions",
+								"1"
+							]
+						},
+						"description": "Update promotion by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Promotion",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/promotions/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"promotions",
+								"1"
+							]
+						},
+						"description": "Delete promotion by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Student promotion management endpoints"
+		},
+		{
+			"name": "Fee Invoices",
+			"item": [
+				{
+					"name": "Get All Fee Invoices",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/fee-invoices",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"fee-invoices"
+							]
+						},
+						"description": "Get all fee invoices"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Fee Invoice",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"student_id\": 1,\n    \"grade_id\": 1,\n    \"classroom_id\": 1,\n    \"fee_type\": \"tuition\",\n    \"amount\": 5000,\n    \"due_date\": \"2023-12-31\",\n    \"description\": \"Tuition fee for academic year 2023-2024\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/fee-invoices",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"fee-invoices"
+							]
+						},
+						"description": "Create a new fee invoice"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Fee Invoice",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/fee-invoices/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"fee-invoices",
+								"1"
+							]
+						},
+						"description": "Get specific fee invoice by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Fee Invoice",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 5500,\n    \"due_date\": \"2023-12-31\",\n    \"description\": \"Updated tuition fee for academic year 2023-2024\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/fee-invoices/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"fee-invoices",
+								"1"
+							]
+						},
+						"description": "Update fee invoice by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Fee Invoice",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/fee-invoices/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"fee-invoices",
+								"1"
+							]
+						},
+						"description": "Delete fee invoice by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Fee invoice management endpoints"
+		},
+		{
+			"name": "Fees",
+			"item": [
+				{
+					"name": "Get All Fees",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/fees",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"fees"
+							]
+						},
+						"description": "Get all fee types"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Fee",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Tuition Fee\",\n    \"amount\": 5000,\n    \"grade_id\": 1,\n    \"classroom_id\": 1,\n    \"description\": \"Annual tuition fee\",\n    \"year\": \"2023-2024\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/fees",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"fees"
+							]
+						},
+						"description": "Create a new fee type"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Fee",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/fees/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"fees",
+								"1"
+							]
+						},
+						"description": "Get specific fee by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Fee",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Tuition Fee Updated\",\n    \"amount\": 5500,\n    \"grade_id\": 1,\n    \"classroom_id\": 1,\n    \"description\": \"Updated annual tuition fee\",\n    \"year\": \"2023-2024\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/fees/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"fees",
+								"1"
+							]
+						},
+						"description": "Update fee by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Fee",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/fees/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"fees",
+								"1"
+							]
+						},
+						"description": "Delete fee by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Fee management endpoints"
+		},
+		{
+			"name": "Receipt Students",
+			"item": [
+				{
+					"name": "Get All Receipts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/receipt-students",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"receipt-students"
+							]
+						},
+						"description": "Get all student receipts"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Receipt",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"student_id\": 1,\n    \"debit\": 5000,\n    \"credit\": 5000,\n    \"description\": \"Tuition fee payment\",\n    \"fee_invoice_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/receipt-students",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"receipt-students"
+							]
+						},
+						"description": "Create a new student receipt"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Receipt",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/receipt-students/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"receipt-students",
+								"1"
+							]
+						},
+						"description": "Get specific receipt by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Receipt",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"debit\": 5500,\n    \"credit\": 5500,\n    \"description\": \"Updated tuition fee payment\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/receipt-students/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"receipt-students",
+								"1"
+							]
+						},
+						"description": "Update receipt by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Receipt",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/receipt-students/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"receipt-students",
+								"1"
+							]
+						},
+						"description": "Delete receipt by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Student receipt management endpoints"
+		},
+		{
+			"name": "Processing Fees",
+			"item": [
+				{
+					"name": "Get All Processing Fees",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/processing-fees",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"processing-fees"
+							]
+						},
+						"description": "Get all processing fees"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Processing Fee",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"student_id\": 1,\n    \"grade_id\": 1,\n    \"classroom_id\": 1,\n    \"section_id\": 1,\n    \"amount\": 100,\n    \"fee_type\": \"registration\",\n    \"due_date\": \"2023-12-31\",\n    \"description\": \"Registration processing fee\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/processing-fees",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"processing-fees"
+							]
+						},
+						"description": "Create a new processing fee"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Processing Fee",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/processing-fees/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"processing-fees",
+								"1"
+							]
+						},
+						"description": "Get specific processing fee by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Processing Fee",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 150,\n    \"fee_type\": \"registration\",\n    \"due_date\": \"2023-12-31\",\n    \"description\": \"Updated registration processing fee\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/processing-fees/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"processing-fees",
+								"1"
+							]
+						},
+						"description": "Update processing fee by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Processing Fee",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/processing-fees/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"processing-fees",
+								"1"
+							]
+						},
+						"description": "Delete processing fee by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Processing fee management endpoints"
+		},
+		{
+			"name": "Payments",
+			"item": [
+				{
+					"name": "Get All Payments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/payments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"payments"
+							]
+						},
+						"description": "Get all payments"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"student_id\": 1,\n    \"amount\": 5000,\n    \"payment_date\": \"2023-11-15\",\n    \"payment_method\": \"cash\",\n    \"reference_type\": \"fee_invoice\",\n    \"reference_id\": 1,\n    \"notes\": \"Tuition fee payment\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/payments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"payments"
+							]
+						},
+						"description": "Create a new payment"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Payment",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/payments/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"payments",
+								"1"
+							]
+						},
+						"description": "Get specific payment by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Payment",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 5500,\n    \"payment_date\": \"2023-11-15\",\n    \"payment_method\": \"bank_transfer\",\n    \"notes\": \"Updated tuition fee payment\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/payments/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"payments",
+								"1"
+							]
+						},
+						"description": "Update payment by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Payment",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/payments/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"payments",
+								"1"
+							]
+						},
+						"description": "Delete payment by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Payment management endpoints"
+		},
+		{
+			"name": "Attendance",
+			"item": [
+				{
+					"name": "Get All Attendance",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/attendance",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"attendance"
+							]
+						},
+						"description": "Get all attendance records"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Attendance",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"student_id\": 1,\n    \"grade_id\": 1,\n    \"classroom_id\": 1,\n    \"section_id\": 1,\n    \"teacher_id\": 1,\n    \"attendance_date\": \"2023-11-15\",\n    \"attendance_status\": \"present\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/attendance",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"attendance"
+							]
+						},
+						"description": "Create a new attendance record"
+					},
+					"response": []
+				},
+				{
+					"name": "Bulk Create Attendance",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attendance_records\": [\n        {\n            \"student_id\": 1,\n            \"grade_id\": 1,\n            \"classroom_id\": 1,\n            \"section_id\": 1,\n            \"teacher_id\": 1,\n            \"attendance_date\": \"2023-11-15\",\n            \"attendance_status\": \"present\"\n        },\n        {\n            \"student_id\": 2,\n            \"grade_id\": 1,\n            \"classroom_id\": 1,\n            \"section_id\": 1,\n            \"teacher_id\": 1,\n            \"attendance_date\": \"2023-11-15\",\n            \"attendance_status\": \"absent\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/attendance/bulk",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"attendance",
+								"bulk"
+							]
+						},
+						"description": "Create multiple attendance records"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Attendance",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/attendance/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"attendance",
+								"1"
+							]
+						},
+						"description": "Get specific attendance record by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Attendance",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"attendance_status\": \"late\",\n    \"attendance_date\": \"2023-11-15\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/attendance/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"attendance",
+								"1"
+							]
+						},
+						"description": "Update attendance record by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Attendance",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/attendance/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"attendance",
+								"1"
+							]
+						},
+						"description": "Delete attendance record by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Attendance management endpoints"
+		},
+		{
+			"name": "Library",
+			"item": [
+				{
+					"name": "Get All Library Items",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/library",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"library"
+							]
+						},
+						"description": "Get all library items"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Library Item",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"type": "text",
+									"value": "Mathematics Textbook"
+								},
+								{
+									"key": "grade_id",
+									"type": "text",
+									"value": "1"
+								},
+								{
+									"key": "classroom_id",
+									"type": "text",
+									"value": "1"
+								},
+								{
+									"key": "section_id",
+									"type": "text",
+									"value": "1"
+								},
+								{
+									"key": "category",
+									"type": "text",
+									"value": "textbook"
+								},
+								{
+									"key": "file_name",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/library",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"library"
+							]
+						},
+						"description": "Create a new library item with file upload"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Library Item",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/library/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"library",
+								"1"
+							]
+						},
+						"description": "Get specific library item by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Library Item",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Mathematics Textbook Updated\",\n    \"grade_id\": 1,\n    \"classroom_id\": 1,\n    \"section_id\": 1,\n    \"category\": \"textbook_updated\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/library/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"library",
+								"1"
+							]
+						},
+						"description": "Update library item by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Library Item",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/library/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"library",
+								"1"
+							]
+						},
+						"description": "Delete library item by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Download Library File",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/{{locale}}/library/1/download",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{locale}}",
+								"library",
+								"1",
+								"download"
+							]
+						},
+						"description": "Download library file by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Library management endpoints"
+		}
+	]
+}

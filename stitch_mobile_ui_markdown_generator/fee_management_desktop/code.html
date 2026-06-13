@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#98472a",
+                    "secondary-fixed-dim": "#92ccff",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#2b322b",
+                    "secondary-container": "#5cb8fd",
+                    "secondary": "#006397",
+                    "primary": "#006d37",
+                    "on-tertiary-container": "#772e14",
+                    "surface": "#f3fcf1",
+                    "tertiary-container": "#ff9875",
+                    "tertiary-fixed": "#ffdbd0",
+                    "surface-container": "#e8f0e5",
+                    "on-surface-variant": "#3d4a3e",
+                    "on-primary-container": "#005027",
+                    "tertiary-fixed-dim": "#ffb59d",
+                    "secondary-fixed": "#cce5ff",
+                    "surface-bright": "#f3fcf1",
+                    "on-secondary-fixed-variant": "#004b73",
+                    "surface-variant": "#dce5da",
+                    "outline-variant": "#bbcbbb",
+                    "background": "#f3fcf1",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed-dim": "#4ae183",
+                    "surface-container-high": "#e2ebe0",
+                    "on-primary-fixed-variant": "#005228",
+                    "on-tertiary-fixed-variant": "#793015",
+                    "on-secondary-fixed": "#001d31",
+                    "on-secondary-container": "#00476e",
+                    "on-background": "#161d17",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#00210c",
+                    "on-tertiary-fixed": "#390c00",
+                    "surface-tint": "#006d37",
+                    "primary-container": "#2ecc71",
+                    "on-error-container": "#93000a",
+                    "outline": "#6c7b6d",
+                    "surface-container-low": "#eef6eb",
+                    "surface-dim": "#d4dcd2",
+                    "on-surface": "#161d17",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-primary": "#4ae183",
+                    "primary-fixed": "#6bfe9c",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#ebf3e8",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#dce5da"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "gutter": "12px",
+                    "stack-md": "16px",
+                    "stack-lg": "24px",
+                    "container-margin": "16px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Cairo"],
+                    "title-lg": ["Cairo"],
+                    "headline-md": ["Cairo"],
+                    "body-md": ["Cairo"],
+                    "display-lg": ["Cairo"],
+                    "body-lg": ["Cairo"],
+                    "title-md": ["Cairo"],
+                    "label-lg": ["Cairo"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Cairo', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-inverse-surface shadow-sm dark:shadow-none docked full-width top-0 flex justify-between items-center px-container-margin h-16 w-full sticky z-40">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">account_balance_wallet</span>
+<h1 class="font-display-lg text-display-lg font-bold text-primary dark:text-primary-fixed-dim">EduCore Manager</h1>
+</div>
+<div class="flex items-center gap-stack-md">
+<div class="hidden md:flex gap-4 ml-6">
+<nav class="flex gap-4">
+<a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high px-3 py-1 rounded-full transition-colors duration-200" href="#">Dashboard</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high px-3 py-1 rounded-full transition-colors duration-200" href="#">Students</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high px-3 py-1 rounded-full transition-colors duration-200" href="#">Attendance</a>
+<a class="bg-primary-container text-on-primary-container rounded-full px-4 py-1 font-bold" href="#">Fees</a>
+</nav>
+</div>
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary">
+<img alt="Admin Profile" data-alt="A professional headshot of a middle-aged academic administrator in a modern office. The lighting is soft and natural, coming from a large window. He wears a dark suit and a friendly, authoritative expression. The background shows a blurred bookshelf with educational books, maintaining a clean, professional light-mode aesthetic with Emerald Green accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHu3k7h5_MnJ0KL2Pt-hAsjyW9PSlTVMMn6yNiY3LFHe69Cg1oxrff0GthORV6k2HpsfhLXm8vhGIzAzBUW_1jnjVn_XmTXWYTsFsb9-1MCgvtvPRRW9exiUUIYzl755bsgwA7RJYJ8Jp4aWuYncDK0LbFiw0-iJMUteJv-zySTTBNs9MM4_PKZF7j8zsd7us_AW-EyD79T31d6c-eDlltwtsOLGHcb5wQdPdrs6Bbz_mRGKBWzi9o0LzNvtuE2BUx2YuLankO7lUN"/>
+</div>
+</div>
+</header>
+<div class="flex">
+<!-- Sidebar (NavigationDrawer Replacement for Desktop) -->
+<aside class="hidden md:flex flex-col h-[calc(100vh-64px)] w-80 bg-surface-container dark:bg-inverse-surface shadow-xl sticky top-16 py-stack-lg">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-4 p-4 bg-surface rounded-xl shadow-sm">
+<img alt="User Profile" class="rounded-full" data-alt="A circular profile avatar showing a high-resolution 3D rendered character of a professional male administrator. The character is smiling warmly, set against a solid Emerald Green background that matches the school's primary branding. The style is clean, modern, and friendly, optimized for an educational management dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAprxmU_Y2lFpSC8GReGhq0Tmq1viXekNFwinAn7x1jlOa_WfPtfz1tlVetFvVzLV87rLvNJhmhhx3Hiyfp56-wTH0kSxDInA_woJibqsMxXHKFS33NZHcchncx8KoLnKgMKHmbA3gXBQMkVXeSPa1AzK4pQ6v-EbGjKqHI0o63AgoLyjSkonv_QyFChKdJtvbm3vqdSjXaB26cj5T2cd-_v3iWbRE4ZAucgVG8TQwABl0PTK4QHGi96CyxH97PZGI9kRj6dp8u5wIw"/>
+<div>
+<p class="font-title-lg text-title-lg font-bold text-primary">مدير النظام</p>
+<p class="font-body-md text-body-md text-on-surface-variant">مكتب المدير العام</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 text-on-surface-variant mx-2 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all duration-200" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-body-md text-body-md">التقويم الأكاديمي</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant mx-2 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all duration-200" href="#">
+<span class="material-symbols-outlined">badge</span>
+<span class="font-body-md text-body-md">دليل الموظفين</span>
+</a>
+<a class="flex items-center gap-4 text-on-surface-variant mx-2 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all duration-200" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-body-md text-body-md">نتائج الامتحانات</span>
+</a>
+<a class="flex items-center gap-4 bg-secondary-container text-on-secondary-container font-bold rounded-full mx-2 px-4 py-3 shadow-sm" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md text-body-md">إدارة الرسوم</span>
+</a>
+<div class="border-t border-outline-variant my-4 mx-6"></div>
+<a class="flex items-center gap-4 text-on-surface-variant mx-2 px-4 py-3 hover:bg-surface-container-high rounded-full transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">الإعدادات</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<span class="text-label-sm font-label-sm text-outline">v2.1.0</span>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 p-container-margin md:p-stack-lg space-y-stack-lg max-w-7xl mx-auto w-full pb-24 md:pb-8">
+<!-- Dashboard Header & Stats -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
+<!-- Total Collected -->
+<div class="bg-surface p-stack-lg rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-surface-variant/30 flex items-center justify-between group hover:border-primary transition-colors">
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant mb-1">إجمالي المحصل</p>
+<h2 class="font-headline-md text-headline-md text-primary">154,200 ريال</h2>
+<p class="text-label-sm text-primary flex items-center gap-1 mt-2">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>+12% عن الشهر الماضي</span>
+</p>
+</div>
+<div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">account_balance</span>
+</div>
+</div>
+<!-- Pending -->
+<div class="bg-surface p-stack-lg rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-surface-variant/30 flex items-center justify-between group hover:border-error transition-colors">
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant mb-1">المبالغ المعلقة</p>
+<h2 class="font-headline-md text-headline-md text-error">42,850 ريال</h2>
+<p class="text-label-sm text-error flex items-center gap-1 mt-2">
+<span class="material-symbols-outlined text-[14px]">pending_actions</span>
+<span>15 معاملة بانتظار الدفع</span>
+</p>
+</div>
+<div class="w-14 h-14 rounded-full bg-error/10 flex items-center justify-center text-error group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">hourglass_empty</span>
+</div>
+</div>
+<!-- Discounts -->
+<div class="bg-surface p-stack-lg rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-surface-variant/30 flex items-center justify-between group hover:border-secondary transition-colors">
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant mb-1">إجمالي الخصومات</p>
+<h2 class="font-headline-md text-headline-md text-secondary">8,400 ريال</h2>
+<p class="text-label-sm text-secondary flex items-center gap-1 mt-2">
+<span class="material-symbols-outlined text-[14px]">sell</span>
+<span>منح دراسية وخصم إخوة</span>
+</p>
+</div>
+<div class="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">redeem</span>
+</div>
+</div>
+</section>
+<!-- Transactions & Bento Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-stack-lg">
+<!-- Recent Transactions (High Density Table) -->
+<section class="lg:col-span-2 bg-surface rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] overflow-hidden">
+<div class="p-6 border-b border-surface-variant/30 flex justify-between items-center">
+<h3 class="font-title-lg text-title-lg text-on-surface">آخر المعاملات المالية</h3>
+<button class="text-primary font-label-lg flex items-center gap-1 hover:underline">
+                            عرض الكل
+                            <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-right border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-6 py-4 font-label-lg text-on-surface-variant">الطالب</th>
+<th class="px-6 py-4 font-label-lg text-on-surface-variant">البيان</th>
+<th class="px-6 py-4 font-label-lg text-on-surface-variant">التاريخ</th>
+<th class="px-6 py-4 font-label-lg text-on-surface-variant">القيمة</th>
+<th class="px-6 py-4 font-label-lg text-on-surface-variant">الحالة</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant/20">
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">أ م</div>
+<span class="font-body-md text-on-surface">أحمد محمد علي</span>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md">رسوم الفصل الدراسي الثاني</td>
+<td class="px-6 py-4 font-body-md">2023/10/24</td>
+<td class="px-6 py-4 font-body-md font-bold">4,500 ريال</td>
+<td class="px-6 py-4">
+<span class="bg-primary/15 text-primary px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 w-fit">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                            مكتمل
+                                        </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center text-secondary text-xs font-bold">س خ</div>
+<span class="font-body-md text-on-surface">سارة خالد</span>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md">رسوم النقل المدرسي</td>
+<td class="px-6 py-4 font-body-md">2023/10/23</td>
+<td class="px-6 py-4 font-body-md font-bold">1,200 ريال</td>
+<td class="px-6 py-4">
+<span class="bg-error/15 text-error px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 w-fit">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                                            معلق
+                                        </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary/20 flex items-center justify-center text-tertiary text-xs font-bold">ي ف</div>
+<span class="font-body-md text-on-surface">ياسر فهد</span>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md">أنشطة طلابية</td>
+<td class="px-6 py-4 font-body-md">2023/10/22</td>
+<td class="px-6 py-4 font-body-md font-bold">500 ريال</td>
+<td class="px-6 py-4">
+<span class="bg-primary/15 text-primary px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 w-fit">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                            مكتمل
+                                        </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">ن س</div>
+<span class="font-body-md text-on-surface">نورة سالم</span>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md">رسوم التسجيل</td>
+<td class="px-6 py-4 font-body-md">2023/10/21</td>
+<td class="px-6 py-4 font-body-md font-bold">2,000 ريال</td>
+<td class="px-6 py-4">
+<span class="bg-primary/15 text-primary px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 w-fit">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                            مكتمل
+                                        </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Financial Insights Card -->
+<section class="space-y-stack-lg">
+<div class="bg-secondary text-on-secondary p-stack-lg rounded-xl shadow-lg relative overflow-hidden h-full flex flex-col justify-between">
+<!-- Decorative background element -->
+<div class="absolute -right-10 -bottom-10 w-40 h-40 bg-secondary-container/20 rounded-full blur-3xl"></div>
+<div>
+<h4 class="font-title-md text-title-md mb-2">رؤى مالية</h4>
+<p class="font-body-md text-body-md opacity-90 mb-6">لقد وصلت إلى 85% من هدف التحصيل لهذا الشهر. أداء متميز!</p>
+<div class="space-y-4">
+<div class="w-full bg-white/20 rounded-full h-2.5">
+<div class="bg-primary-container h-2.5 rounded-full" style="width: 85%"></div>
+</div>
+<div class="flex justify-between text-label-sm font-label-sm">
+<span>الهدف: 200,000 ريال</span>
+<span>المحقق: 170,000 ريال</span>
+</div>
+</div>
+</div>
+<button class="mt-8 w-full bg-white text-secondary py-3 rounded-xl font-bold hover:bg-secondary-fixed transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">analytics</span>
+                            عرض التقارير التفصيلية
+                        </button>
+</div>
+<div class="bg-surface p-stack-lg rounded-xl shadow-sm border border-surface-variant/30">
+<h4 class="font-title-md text-title-md text-on-surface mb-4">توزيع المدفوعات</h4>
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="font-body-md">نقدأ</span>
+</div>
+<span class="font-bold">45%</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+<span class="font-body-md">تحويل بنكي</span>
+</div>
+<span class="font-bold">40%</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-tertiary"></div>
+<span class="font-body-md">بطاقات إئتمان</span>
+</div>
+<span class="font-bold">15%</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Student Fee Status (Asymmetric Card Layout) -->
+<section class="space-y-stack-md">
+<div class="flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-on-surface">حالة رسوم الطلاب</h3>
+<div class="flex gap-2">
+<button class="bg-surface border border-outline px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-surface-container-low">
+<span class="material-symbols-outlined">filter_list</span>
+<span>تصفية</span>
+</button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-xl flex items-center gap-2 shadow-sm hover:opacity-90">
+<span class="material-symbols-outlined">add</span>
+<span>إضافة دفعة</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-stack-md">
+<!-- Student Card 1 -->
+<div class="bg-surface p-stack-md rounded-xl shadow-sm border-r-4 border-primary hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<img alt="Student" class="w-10 h-10 rounded-full" data-alt="A detailed digital illustration of a young male student wearing a neat school uniform. He has a studious expression and is set against a clean, softly lit background. The color scheme features light greens and whites, perfectly matching the Material Design 3 light mode aesthetic. High-quality corporate illustrative style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7OkaP3Kmd8uhT0YUNYcfd5UUQiAgIBN_vgbT3zWIurLs90GZiLysRW3DbF5dP_NYAymdzIF4DMN77SDX6XAGGmuwyS7FiW7E9GDxYFA3SWcwgsZ1gKj5svnJG3QxI0Tyf5Qqj1NXn2RMWLo1ON0LOiBRkaSWhqZsqfgUAKk9fD94YxObNrACcFPCC8s0c1o58xGtsstT_2ZGWAxHzsjYY3Civ9nJX76Q13k4ubT-E4jLDevs9N8TZ474RumetyPy9qbT_CLILxK3l"/>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<h5 class="font-title-md text-title-md text-on-surface">عمر يوسف</h5>
+<p class="font-body-md text-on-surface-variant text-sm mb-4">الصف الخامس - أ</p>
+<div class="flex justify-between text-label-sm font-label-sm text-outline border-t border-surface-variant pt-3">
+<span>الرسوم الكلية</span>
+<span class="text-on-surface font-bold">12,000 ريال</span>
+</div>
+</div>
+<!-- Student Card 2 -->
+<div class="bg-surface p-stack-md rounded-xl shadow-sm border-r-4 border-error hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<img alt="Student" class="w-10 h-10 rounded-full" data-alt="A detailed digital illustration of a young female student with a backpack, looking thoughtful and positive. She wears a modern school outfit with a subtle green tie. The background is a soft gradient of ivory and light mint, following the school's corporate identity. Sophisticated, clean character design for a modern UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBP5XuhPHeQdyTwVmIOsGscl5eZcCFuGRC0hYR280PJEIn9Ayfv-z6kmYp7feTvyTEBb9etCTBXKDUYjPp7mxNXaYiT8r-ZtfU3U5p3wjm6PqeO7dRItsgkwld2X6dVaePcuJ8P6HDqFAbRbf5FlZ5r-NJ9jym8GXfVtV3jngazTHT58iGYNxD8ZeWWcenI5IQqGK1n7LOxgjxefUibetW92zkHZbxu6yDeaRxtHceqKE--k3NNGQaSoeWvQ1LH_fxaBZUWxsvt7y_4"/>
+<span class="material-symbols-outlined text-error">warning</span>
+</div>
+<h5 class="font-title-md text-title-md text-on-surface">ليلى حسن</h5>
+<p class="font-body-md text-on-surface-variant text-sm mb-4">الصف الثالث - ب</p>
+<div class="flex justify-between text-label-sm font-label-sm text-outline border-t border-surface-variant pt-3">
+<span>المستحق</span>
+<span class="text-error font-bold">3,500 ريال</span>
+</div>
+</div>
+<!-- Student Card 3 -->
+<div class="bg-surface p-stack-md rounded-xl shadow-sm border-r-4 border-primary hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<img alt="Student" class="w-10 h-10 rounded-full" data-alt="A portrait illustration of a male student in a secondary school blazer, smiling confidently. The lighting is crisp, highlighting the clean textures of the uniform. The color palette is composed of soft whites and deep emerald greens, aligning with the educational theme. Modern and approachable aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQPOQQtPzKht7uiYwsbZBz5Qwi4gimWNlXxA1-sQuO1rj3K_lOG9ubM8J1aJLkf8RWVayFKWEX_Rj9DLk0Fc7DJ62EWHnHlZJs2pgwfBunIoC9Q8kaFw5ZePC02yuuL1FH9IXtN5Tl3fGiI44z16_SOn4zdtUYtD95wO5m-sLqCwgZR9v5Lnf1cP0DpkM4xGJtoQcH1WIS9HJnSqZTJIuoiGB9JyTOb-8koWccM42N0xeN-eenJFHeekpAEXdHVRm2DN9tr4gBYfI-"/>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<h5 class="font-title-md text-title-md text-on-surface">خالد إبراهيم</h5>
+<p class="font-body-md text-on-surface-variant text-sm mb-4">الصف التاسع - ج</p>
+<div class="flex justify-between text-label-sm font-label-sm text-outline border-t border-surface-variant pt-3">
+<span>الرسوم الكلية</span>
+<span class="text-on-surface font-bold">15,000 ريال</span>
+</div>
+</div>
+<!-- Student Card 4 -->
+<div class="bg-surface p-stack-md rounded-xl shadow-sm border-r-4 border-secondary hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<img alt="Student" class="w-10 h-10 rounded-full" data-alt="A digital art portrait of a young female student with glasses, looking engaged and academic. She wears a crisp white shirt with a green school badge. The background is a minimalist, airy office setting with plants, creating a calm and professional atmosphere. The overall feel is trustworthy and modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCETTjKmtw5oL2eUkgF3DGnGqWwHWz4g2OLr0tEkISS_7SBTtsrf_w3nGJhi-uRPoS-yzOInBddRRnh8mkMSIQikK8WUTPiyIt8afuXxVM1UWdMLooG1so-if8ebX2HkstDGX2dW-kSTWWLUlHySNHnUbxXetI1da0ntTmKRIpGj_3TtF0j3ETESO5nNmI7lLQYKh9wip-pscvF0UkGrEJhXsEqStWQF2-wcMneLx5w8yWmNgCkt2rl0oLISQnpWbZX9cSf9GHkzOMt"/>
+<span class="material-symbols-outlined text-secondary">info</span>
+</div>
+<h5 class="font-title-md text-title-md text-on-surface">مريم صقر</h5>
+<p class="font-body-md text-on-surface-variant text-sm mb-4">الصف السادس - أ</p>
+<div class="flex justify-between text-label-sm font-label-sm text-outline border-t border-surface-variant pt-3">
+<span>تم دفع 50%</span>
+<span class="text-secondary font-bold">6,000 ريال</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Mobile BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface dark:bg-inverse-surface shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] flex justify-around items-center px-2 py-3 pb-safe rounded-t-full">
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm text-label-sm">Students</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1">
+<span class="material-symbols-outlined">how_to_reg</span>
+<span class="font-label-sm text-label-sm">Attendance</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container dark:bg-primary dark:text-on-primary rounded-full px-4 py-1">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-sm text-label-sm font-bold">Fees</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1">
+<span class="material-symbols-outlined">menu</span>
+<span class="font-label-sm text-label-sm">More</span>
+</div>
+</nav>
+<!-- Contextual FAB (Only for main Fees view) -->
+<button class="fixed bottom-24 left-6 md:bottom-8 md:left-8 w-14 h-14 bg-primary-container text-on-primary-container rounded-2xl shadow-lg flex items-center justify-center active:scale-95 transition-transform duration-150 z-40">
+<span class="material-symbols-outlined text-3xl">add_card</span>
+</button>
+</body></html>

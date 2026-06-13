@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#98472a",
+                    "secondary-fixed-dim": "#92ccff",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#2b322b",
+                    "secondary-container": "#5cb8fd",
+                    "secondary": "#006397",
+                    "primary": "#006d37",
+                    "on-tertiary-container": "#772e14",
+                    "surface": "#f3fcf1",
+                    "tertiary-container": "#ff9875",
+                    "tertiary-fixed": "#ffdbd0",
+                    "surface-container": "#e8f0e5",
+                    "on-surface-variant": "#3d4a3e",
+                    "on-primary-container": "#005027",
+                    "tertiary-fixed-dim": "#ffb59d",
+                    "secondary-fixed": "#cce5ff",
+                    "surface-bright": "#f3fcf1",
+                    "on-secondary-fixed-variant": "#004b73",
+                    "surface-variant": "#dce5da",
+                    "outline-variant": "#bbcbbb",
+                    "background": "#f3fcf1",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed-dim": "#4ae183",
+                    "surface-container-high": "#e2ebe0",
+                    "on-primary-fixed-variant": "#005228",
+                    "on-tertiary-fixed-variant": "#793015",
+                    "on-secondary-fixed": "#001d31",
+                    "on-secondary-container": "#00476e",
+                    "on-background": "#161d17",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#00210c",
+                    "on-tertiary-fixed": "#390c00",
+                    "surface-tint": "#006d37",
+                    "primary-container": "#2ecc71",
+                    "on-error-container": "#93000a",
+                    "outline": "#6c7b6d",
+                    "surface-container-low": "#eef6eb",
+                    "surface-dim": "#d4dcd2",
+                    "on-surface": "#161d17",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-primary": "#4ae183",
+                    "primary-fixed": "#6bfe9c",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#ebf3e8",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#dce5da"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "gutter": "12px",
+                    "stack-md": "16px",
+                    "stack-lg": "24px",
+                    "container-margin": "16px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Cairo"],
+                    "title-lg": ["Cairo"],
+                    "headline-md": ["Cairo"],
+                    "body-md": ["Cairo"],
+                    "display-lg": ["Cairo"],
+                    "body-lg": ["Cairo"],
+                    "title-md": ["Cairo"],
+                    "label-lg": ["Cairo"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Cairo', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<header class="bg-surface shadow-sm docked full-width top-0 z-50 flex justify-between items-center px-container-margin h-16 w-full">
+<div class="flex items-center gap-gutter">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high">
+<img alt="administrator_profile_photo" data-alt="A professional headshot of a middle-aged male administrator in a clean-cut corporate office. The lighting is soft and natural, coming from a large window. He is wearing a modern navy blue suit. The atmosphere is professional, trustworthy, and aligned with a modern educational management system's aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhYyc1dEwB3O4859wH8ZePKkYPTIgQHB0C2PRBK9YWwan3ClXw3Hi6dn-LpGlOfR7TmACftS5w6bwBTt_sll8ixsZEAg0Gj_kzgxEunC_11s8XhbkQu8aUNLnwSBajLzQcELwV8H-SujzSTlb4HHcQtzqYPvHguCL1nYxBtMhxEqRLeqKCXW1BpnGbUslO8yENpkJioJc1em67GwD1WaQf6-TOVKezLqJOY-uM-L15exFP5vt_vl1rsEepiO2GvBncj_vX3LtRpD5x"/>
+</div>
+<h1 class="font-display-lg text-display-lg font-bold text-primary">EduCore Manager</h1>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 ease-in-out p-2 rounded-full">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 ease-in-out p-2 rounded-full">search</button>
+</div>
+</header>
+<div class="flex">
+<!-- Navigation Drawer (Desktop Side Navigation) -->
+<aside class="hidden md:flex flex-col h-[calc(100vh-64px)] w-80 bg-surface-container py-stack-lg sticky top-16 shadow-xl rounded-l-xl">
+<div class="px-6 mb-8">
+<div class="flex flex-col">
+<span class="font-title-lg text-title-lg font-bold text-primary">Admin User</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Principal Office</span>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-4 mx-2 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-full" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-body-md text-body-md">Academic Calendar</span>
+</a>
+<a class="flex items-center gap-4 mx-2 px-4 py-3 bg-secondary-container text-on-secondary-container font-bold rounded-full transition-all duration-200" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-body-md text-body-md">Exam Results</span>
+</a>
+<a class="flex items-center gap-4 mx-2 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-full" href="#">
+<span class="material-symbols-outlined">badge</span>
+<span class="font-body-md text-body-md">Staff Directory</span>
+</a>
+<a class="flex items-center gap-4 mx-2 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-all duration-200 rounded-full" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<span class="text-label-sm font-label-sm text-outline">v2.1.0</span>
+</div>
+</aside>
+<main class="flex-1 p-container-margin md:p-stack-lg max-w-7xl mx-auto w-full">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-stack-lg gap-gutter">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-background">بوابة الاختبارات والتقييم</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">إدارة الاختبارات النشطة وتحليل النتائج الذكي</p>
+</div>
+<button class="bg-primary text-on-primary h-12 px-6 rounded-full font-label-lg text-label-lg flex items-center gap-2 hover:opacity-90 transition-all shadow-md active:scale-95">
+<span class="material-symbols-outlined">add</span>
+                    إنشاء اختبار جديد
+                </button>
+</div>
+<!-- AI Analytics Banner (Wide Banner) -->
+<section class="mb-stack-lg relative overflow-hidden rounded-xl bg-gradient-to-l from-primary to-primary-container p-stack-lg shadow-lg">
+<div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-stack-lg">
+<div class="max-w-2xl">
+<div class="inline-flex items-center gap-2 bg-on-primary/20 text-on-primary px-3 py-1 rounded-full mb-4">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+<span class="font-label-sm text-label-sm">تحليل الذكاء الاصطناعي متاح</span>
+</div>
+<h3 class="font-display-lg text-display-lg text-on-primary mb-2">نظام التصحيح والتحليل الذكي</h3>
+<p class="font-body-lg text-body-lg text-on-primary opacity-90 leading-relaxed">احصل على تقارير تفصيلية فورية حول أداء الطلاب، اكتشف الفجوات التعليمية وتلقى توصيات مخصصة لكل فصل دراسي بناءً على نتائج الاختبارات الأخيرة.</p>
+<div class="mt-6 flex gap-gutter">
+<button class="bg-on-primary text-primary px-6 py-2 rounded-full font-label-lg text-label-lg hover:bg-surface transition-colors">عرض التحليلات</button>
+<button class="border border-on-primary text-on-primary px-6 py-2 rounded-full font-label-lg text-label-lg hover:bg-on-primary/10 transition-colors">كيف يعمل؟</button>
+</div>
+</div>
+<div class="hidden lg:block w-72 h-72">
+<img class="w-full h-full object-contain mix-blend-screen opacity-80" data-alt="A futuristic 3D visualization of neural networks and data points floating in a dark green space. The aesthetic is clean, technological, and sophisticated, representing artificial intelligence in an educational context. Soft glows and interconnected lines suggest data processing and intelligence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIzSHpdhiNg9RC1muUVG7Uwzv0an1cHZ0100Bc6ynjJI7pdi0Ftgi9219bIeTrVK7bVI-LWzLzqMHFel2Ce9IXtpR_FZfRA99S-yDVrIM-jR5g-8UyGFV2lOhAQJmdJ7Rcykj3w4u2MQ2zDipg8bEv4KRfPNWZsJghz1JNam3tIA1nc1O8psBF6AY3Y7OBLtpFabjGg2A8nLLgK7v3I4XcsDYJorm1HNxgj7Q2kMa8pkF9Mpxe187tJCZ2-5hQVylxTiJKCuUtj2kn"/>
+</div>
+</div>
+</section>
+<!-- Grid: Active Exams -->
+<section class="mb-stack-lg">
+<div class="flex items-center justify-between mb-gutter">
+<h4 class="font-title-lg text-title-lg text-on-background flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">timer</span>
+                        الاختبارات النشطة
+                    </h4>
+<a class="text-primary font-label-lg text-label-lg hover:underline" href="#">عرض الكل</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-stack-md">
+<!-- Exam Card 1 -->
+<div class="bg-surface-container-lowest p-stack-md rounded-xl shadow-sm border border-outline-variant hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-sm text-label-sm">نشط حالياً</span>
+<button class="material-symbols-outlined text-on-surface-variant">more_vert</button>
+</div>
+<h5 class="font-title-md text-title-md text-on-background mb-1">الفيزياء - الوحدة الثالثة</h5>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">الصف الثاني الثانوي - القسم العلمي</p>
+<div class="flex items-center gap-4 text-on-surface-variant mb-6">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="text-label-sm font-label-sm">45 طالب</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<span class="text-label-sm font-label-sm">60 دقيقة</span>
+</div>
+</div>
+<div class="flex gap-gutter">
+<button class="flex-1 bg-primary text-on-primary py-2 rounded-xl font-label-lg text-label-lg">تعديل</button>
+<button class="flex-1 border border-outline text-on-surface py-2 rounded-xl font-label-lg text-label-lg">النتائج</button>
+</div>
+</div>
+<!-- Exam Card 2 -->
+<div class="bg-surface-container-lowest p-stack-md rounded-xl shadow-sm border border-outline-variant hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full font-label-sm text-label-sm">مجدول غداً</span>
+<button class="material-symbols-outlined text-on-surface-variant">more_vert</button>
+</div>
+<h5 class="font-title-md text-title-md text-on-background mb-1">اللغة العربية - النحو</h5>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">الصف الأول الثانوي - مشترك</p>
+<div class="flex items-center gap-4 text-on-surface-variant mb-6">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="text-label-sm font-label-sm">120 طالب</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<span class="text-label-sm font-label-sm">45 دقيقة</span>
+</div>
+</div>
+<div class="flex gap-gutter">
+<button class="flex-1 bg-primary text-on-primary py-2 rounded-xl font-label-lg text-label-lg">تعديل</button>
+<button class="flex-1 border border-outline text-on-surface py-2 rounded-xl font-label-lg text-label-lg">النتائج</button>
+</div>
+</div>
+<!-- Exam Card 3 -->
+<div class="bg-surface-container-lowest p-stack-md rounded-xl shadow-sm border border-outline-variant hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-sm text-label-sm">نشط حالياً</span>
+<button class="material-symbols-outlined text-on-surface-variant">more_vert</button>
+</div>
+<h5 class="font-title-md text-title-md text-on-background mb-1">الكيمياء العضوية</h5>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">الصف الثالث الثانوي - القسم العلمي</p>
+<div class="flex items-center gap-4 text-on-surface-variant mb-6">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="text-label-sm font-label-sm">32 طالب</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<span class="text-label-sm font-label-sm">90 دقيقة</span>
+</div>
+</div>
+<div class="flex gap-gutter">
+<button class="flex-1 bg-primary text-on-primary py-2 rounded-xl font-label-lg text-label-lg">تعديل</button>
+<button class="flex-1 border border-outline text-on-surface py-2 rounded-xl font-label-lg text-label-lg">النتائج</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Past Exams Section -->
+<section class="mb-stack-lg">
+<div class="flex items-center justify-between mb-gutter">
+<h4 class="font-title-lg text-title-lg text-on-background flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">history</span>
+                        الاختبارات السابقة
+                    </h4>
+</div>
+<div class="bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant">
+<div class="overflow-x-auto">
+<table class="w-full text-right border-collapse">
+<thead>
+<tr class="bg-surface-container-high border-b border-outline-variant">
+<th class="p-stack-md font-label-lg text-label-lg">اسم الاختبار</th>
+<th class="p-stack-md font-label-lg text-label-lg">التاريخ</th>
+<th class="p-stack-md font-label-lg text-label-lg">متوسط الدرجات</th>
+<th class="p-stack-md font-label-lg text-label-lg">نسبة النجاح</th>
+<th class="p-stack-md font-label-lg text-label-lg">الإجراءات</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-stack-md">
+<p class="font-title-md text-title-md">اختبار منتصف الفصل - الرياضيات</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">جميع الفصول</p>
+</td>
+<td class="p-stack-md font-body-md text-body-md">15 أكتوبر 2023</td>
+<td class="p-stack-md">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md">82%</span>
+<span class="material-symbols-outlined text-primary text-[18px]">trending_up</span>
+</div>
+</td>
+<td class="p-stack-md">
+<div class="w-full max-w-[100px] bg-outline-variant rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 94%"></div>
+</div>
+<span class="text-label-sm font-label-sm mt-1 block">94%</span>
+</td>
+<td class="p-stack-md">
+<button class="text-secondary font-label-lg text-label-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+                                            النتائج
+                                        </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-stack-md">
+<p class="font-title-md text-title-md">اللغة الإنجليزية - مهارات القراءة</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">الصف الثاني</p>
+</td>
+<td class="p-stack-md font-body-md text-body-md">10 أكتوبر 2023</td>
+<td class="p-stack-md">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md">75%</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">trending_down</span>
+</div>
+</td>
+<td class="p-stack-md">
+<div class="w-full max-w-[100px] bg-outline-variant rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 88%"></div>
+</div>
+<span class="text-label-sm font-label-sm mt-1 block">88%</span>
+</td>
+<td class="p-stack-md">
+<button class="text-secondary font-label-lg text-label-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+                                            النتائج
+                                        </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Bottom Navigation for Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 pb-safe bg-surface shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] rounded-t-full">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">الرئيسية</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm text-label-sm">الطلاب</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">how_to_reg</span>
+<span class="font-label-sm text-label-sm">الاختبارات</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-sm text-label-sm">الرسوم</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">menu</span>
+<span class="font-label-sm text-label-sm">المزيد</span>
+</a>
+</nav>
+</body></html>

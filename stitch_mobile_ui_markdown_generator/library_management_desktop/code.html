@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#98472a",
+                    "secondary-fixed-dim": "#92ccff",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#2b322b",
+                    "secondary-container": "#5cb8fd",
+                    "secondary": "#006397",
+                    "primary": "#006d37",
+                    "on-tertiary-container": "#772e14",
+                    "surface": "#f3fcf1",
+                    "tertiary-container": "#ff9875",
+                    "tertiary-fixed": "#ffdbd0",
+                    "surface-container": "#e8f0e5",
+                    "on-surface-variant": "#3d4a3e",
+                    "on-primary-container": "#005027",
+                    "tertiary-fixed-dim": "#ffb59d",
+                    "secondary-fixed": "#cce5ff",
+                    "surface-bright": "#f3fcf1",
+                    "on-secondary-fixed-variant": "#004b73",
+                    "surface-variant": "#dce5da",
+                    "outline-variant": "#bbcbbb",
+                    "background": "#f3fcf1",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed-dim": "#4ae183",
+                    "surface-container-high": "#e2ebe0",
+                    "on-primary-fixed-variant": "#005228",
+                    "on-tertiary-fixed-variant": "#793015",
+                    "on-secondary-fixed": "#001d31",
+                    "on-secondary-container": "#00476e",
+                    "on-background": "#161d17",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#00210c",
+                    "on-tertiary-fixed": "#390c00",
+                    "surface-tint": "#006d37",
+                    "primary-container": "#2ecc71",
+                    "on-error-container": "#93000a",
+                    "outline": "#6c7b6d",
+                    "surface-container-low": "#eef6eb",
+                    "surface-dim": "#d4dcd2",
+                    "on-surface": "#161d17",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-primary": "#4ae183",
+                    "primary-fixed": "#6bfe9c",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#ebf3e8",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#dce5da"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "gutter": "12px",
+                    "stack-md": "16px",
+                    "stack-lg": "24px",
+                    "container-margin": "16px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Cairo"],
+                    "title-lg": ["Cairo"],
+                    "headline-md": ["Cairo"],
+                    "body-md": ["Cairo"],
+                    "display-lg": ["Cairo"],
+                    "body-lg": ["Cairo"],
+                    "title-md": ["Cairo"],
+                    "label-lg": ["Cairo"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Cairo', sans-serif; background-color: #f3fcf1; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
+    </style>
+</head>
+<body class="bg-background text-on-background">
+<!-- Top Navigation Bar -->
+<header class="bg-surface flex justify-between items-center px-container-margin h-16 w-full shadow-sm sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-display-lg font-bold text-primary">EduCore Manager</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<nav class="flex gap-6">
+<a class="text-primary font-label-lg text-label-lg border-b-2 border-primary pb-1" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-label-lg text-label-lg hover:text-primary transition-colors" href="#">Students</a>
+<a class="text-on-surface-variant font-label-lg text-label-lg hover:text-primary transition-colors" href="#">Attendance</a>
+<a class="text-on-surface-variant font-label-lg text-label-lg hover:text-primary transition-colors" href="#">Fees</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border-2 border-primary">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a middle-aged male school administrator with a warm smile, wearing a dark green academic blazer. The portrait is set against a soft-focus library background with warm sunlight filtering through windows, creating a bright and trustworthy professional atmosphere. The lighting is soft and high-key, aligning with a modern educational corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADI7XTl5tAPwWhj3kD4vK-i2FhS5gkiT55N_Fu9blO-_E0qpUu1KM3EAIz2tdSQQEBvnj7xmk7YalOVFrorOfDfYi9ytg7YQgSI9ujMi2XL0A5pKhDDAI7e6C__UZiir9BsseKNZJ9_BFeELw1MZBiVRStSduRaeDerPgiBPSFMMksTNwtzjyAM7Km3JJvK6ITOQsx0IOsLI5YqFzA9LqNj_DIBosPN0PLVvhq9c88rfSwpSb64D7ggsFll-_I3wOcIn2LHain5Vsh"/>
+</div>
+</div>
+</header>
+<div class="flex min-h-screen">
+<!-- Sidebar Drawer (Desktop) -->
+<aside class="hidden lg:flex flex-col h-screen w-80 bg-surface-container sticky top-16 py-stack-lg border-l border-outline-variant">
+<div class="px-6 mb-8">
+<h2 class="text-primary font-title-lg text-title-lg font-bold">إدارة المكتبة</h2>
+<p class="text-on-surface-variant font-body-md text-body-md">نظام الفهرسة المركزي</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="bg-secondary-container text-on-secondary-container font-bold rounded-full mx-4 px-6 py-3 flex items-center gap-4" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">لوحة التحكم</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-variant rounded-full mx-4 px-6 py-3 flex items-center gap-4 transition-all" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-body-md text-body-md">التقويم الأكاديمي</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-variant rounded-full mx-4 px-6 py-3 flex items-center gap-4 transition-all" href="#">
+<span class="material-symbols-outlined">badge</span>
+<span class="font-body-md text-body-md">دليل الموظفين</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-variant rounded-full mx-4 px-6 py-3 flex items-center gap-4 transition-all" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-body-md text-body-md">نتائج الاختبارات</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-variant rounded-full mx-4 px-6 py-3 flex items-center gap-4 transition-all mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">الإعدادات</span>
+</a>
+</nav>
+<div class="px-6 py-4 mt-auto border-t border-outline-variant opacity-60">
+<p class="text-label-sm font-label-sm">v2.1.0 • المكتب الرئيسي</p>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 p-container-margin pb-24 md:pb-8">
+<!-- Hero & Search Section -->
+<section class="mb-10">
+<div class="relative rounded-xl overflow-hidden h-48 mb-8 shadow-lg">
+<img class="w-full h-full object-cover" data-alt="A wide-angle shot of a majestic modern library with high ceilings and walls lined with books. The architecture features clean white lines and emerald green accents, reflecting a corporate educational style. Soft morning light streams through large windows, creating a serene and focused academic environment. The color palette is composed of soft greens, off-whites, and natural wood tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAazCyABkam9iYL6FIW7IQcb_W85kXv-K3d1B0Ln85oprseUfWOcCyPGiBvBR8GiLnxrZGAwDwDnAOdBkQCO-94-9DedkuGSVKbJObPVFBsS1B8G7wQO3KYXIieQ28R1msZfeksl1lwh0Iksf0pHjMLB-pMZ9ju5NaO6GIE2WHRG2_ed9QekMgDXvmvb--k7nH-LLumo5KT3XcpXyreo0s2gSR9mjwr39ZBPdiz0LDdcfjELfAvhhGIrtFilO_QpiuRB0HHQEjRpy62"/>
+<div class="absolute inset-0 bg-gradient-to-l from-primary/80 to-transparent flex items-center p-8">
+<div class="text-white max-w-md">
+<h1 class="font-display-lg text-display-lg mb-2">استكشف عالم المعرفة</h1>
+<p class="font-body-lg text-body-lg opacity-90">ابحث في أكثر من ٥٠,٠٠٠ كتاب ومصدر رقمي متاح لطلابنا.</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row gap-4 items-center">
+<div class="relative w-full md:w-1/2">
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pr-12 pl-4 py-4 rounded-xl border-none bg-surface-container-high shadow-sm focus:ring-2 focus:ring-primary font-body-md" placeholder="ابحث عن كتاب، مؤلف، أو موضوع..." type="text"/>
+</div>
+<div class="flex gap-2 w-full md:w-auto">
+<button class="bg-primary text-white px-6 py-4 rounded-xl flex items-center gap-2 shadow-md hover:bg-opacity-90 transition-all">
+<span class="material-symbols-outlined">filter_list</span>
+<span class="font-label-lg text-label-lg">تصفية</span>
+</button>
+<select class="bg-surface-container-high border-none px-6 py-4 rounded-xl font-label-lg text-label-lg focus:ring-2 focus:ring-primary flex-1 md:flex-none">
+<option>جميع التصنيفات</option>
+<option>العلوم والتكنولوجيا</option>
+<option>الأدب العربي</option>
+<option>التاريخ والجغرافيا</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Bento Grid Layout -->
+<div class="bento-grid">
+<!-- "Currently Borrowed" Feature (Large Bento Item) -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest p-6 rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant/30">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-lg text-title-lg text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">book_2</span>
+                            الكتب المستعارة حالياً
+                        </h3>
+<span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-label-sm font-label-sm">٣ كتب نشطة</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Borrowed Item 1 -->
+<div class="bg-surface p-4 rounded-xl flex gap-4 border border-outline-variant hover:shadow-md transition-shadow">
+<div class="w-20 h-28 bg-surface-dim rounded-lg overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close-up of a classic Arabic poetry book cover with elegant gold calligraphy on a deep emerald green background. The book is resting on a clean white desk surface, with soft cinematic lighting that emphasizes its premium quality and scholarly value." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSDqeEXVIJFvHvHePYN53c2dC2gANcEHxpyTSrVUT_R-gUU20ftwKlSom8NTObY8QguOJQ9-FutlaXT0HNMRZKN0uHQ_TB93-MBjqdjiXXK6PSg2MzqXVcyj9co2IXTOkzHuMSPmc1QuLRPRCfco6dW5eCQtPctpIL1T4xbGa7s5lDf4cz2LfRR5u5c2dMSimTcWkXcDPsUr3CXWbgQyLqhkEvUe8dBeM-18vMvzn4qp-15Id7TPabG4Ey2yJPZ-YdGZsQAh8cDzvJ"/>
+</div>
+<div class="flex flex-col justify-between">
+<div>
+<h4 class="font-title-md text-title-md text-on-surface">ديوان المتنبي</h4>
+<p class="text-label-sm font-label-sm text-outline">الأدب الكلاسيكي</p>
+</div>
+<div class="mt-2">
+<div class="flex justify-between text-label-sm font-label-sm mb-1">
+<span>موعد الإرجاع:</span>
+<span class="text-error font-bold">باقي يومان</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full">
+<div class="bg-error w-4/5 h-full rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Borrowed Item 2 -->
+<div class="bg-surface p-4 rounded-xl flex gap-4 border border-outline-variant hover:shadow-md transition-shadow">
+<div class="w-20 h-28 bg-surface-dim rounded-lg overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A modern science textbook titled Principles of Physics with a vibrant cover featuring abstract geometric patterns in teal and orange. The image is captured in a high-contrast style with soft shadows, making the colors pop against a neutral academic background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3TZLYufSFAqrYRopFGyoFV79Wl5nX9BAxNV53ONlPiJHWqIUh0dLC5njQE3ZRlI3oNULxkRlULRPs9OxBNltX7v-WS3EZzkcxLBNyiNMTbkPfydqfM_aan7GQfmy0LqyvS4g0Ukrctk_X7VjVMoj1x8l24iI8BghTQGfpWth89wcSrgkK9dFoyRM2_JcgoiJ9ZWXyW-67KUy44O1WWSQZt4YyejPCIiwC_N8_jLzy0N8qUh3whDgsnMoI8DMPMLIPpThdMHsK-Qhb"/>
+</div>
+<div class="flex flex-col justify-between">
+<div>
+<h4 class="font-title-md text-title-md text-on-surface">مبادئ الفيزياء</h4>
+<p class="text-label-sm font-label-sm text-outline">العلوم الأساسية</p>
+</div>
+<div class="mt-2">
+<div class="flex justify-between text-label-sm font-label-sm mb-1">
+<span>موعد الإرجاع:</span>
+<span class="text-primary font-bold">باقي ١٢ يوم</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full">
+<div class="bg-primary w-1/4 h-full rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Stats (Small Bento Item) -->
+<div class="col-span-12 lg:col-span-4 grid grid-cols-2 gap-4">
+<div class="bg-primary-container p-6 rounded-xl flex flex-col justify-center items-center text-center shadow-sm">
+<span class="material-symbols-outlined text-on-primary-container scale-150 mb-2">history_edu</span>
+<div class="text-display-lg font-display-lg text-on-primary-container">٤٥</div>
+<div class="text-label-lg font-label-lg text-on-primary-container">إجمالي القراءات</div>
+</div>
+<div class="bg-secondary-container p-6 rounded-xl flex flex-col justify-center items-center text-center shadow-sm">
+<span class="material-symbols-outlined text-on-secondary-container scale-150 mb-2">stars</span>
+<div class="text-display-lg font-display-lg text-on-secondary-container">٨</div>
+<div class="text-label-lg font-label-lg text-on-secondary-container">أوسمة الشرف</div>
+</div>
+<div class="col-span-2 bg-white p-6 rounded-xl flex items-center gap-4 shadow-sm border border-outline-variant">
+<div class="w-12 h-12 rounded-full bg-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">payments</span>
+</div>
+<div>
+<div class="text-on-surface font-title-md text-title-md">رسوم التأخير</div>
+<div class="text-tertiary font-bold text-label-lg">٠.٠٠ ريال سعودي</div>
+</div>
+<button class="mr-auto bg-surface-container text-primary p-2 rounded-lg hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+</div>
+</div>
+<!-- Main Catalog Grid -->
+<div class="col-span-12">
+<div class="flex items-center justify-between mb-6">
+<h2 class="font-headline-md text-headline-md text-on-background">كاتالوج الكتب</h2>
+<div class="flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-high text-primary"><span class="material-symbols-outlined">grid_view</span></button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-transparent text-outline hover:bg-surface-container"><span class="material-symbols-outlined">view_list</span></button>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+<!-- Book Card 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-[2/3] bg-surface-container-high rounded-xl overflow-hidden relative mb-3 shadow-sm group-hover:shadow-xl transition-all group-hover:-translate-y-1">
+<img class="w-full h-full object-cover" data-alt="A stack of several antique books with leather bindings and weathered pages. The books are stacked on a rustic wooden shelf in a library with warm, moody lighting. The scene evokes a sense of history, knowledge, and mystery, following a corporate-classic aesthetic with deep greens and warm ambers." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwIT35eDTYMqD8OZmZ9vYBpL3xvcZwZwHCAzA4n_CGe9N1DOAy0_0ZD4a7zUJtkrnNHPHYXhGe4JYDDA6stoTYA2kAaOFBjKu3rTzThmp_VozCbQx8eo2tweB2SgXZ7Y9HU0_ViViawerK0cet8TS3by9qoI3qSnDQnopBkBCA-Bnxkaz1s93ugSb_nrvC_1SafTA02tGgEg3NHEDIHj6CSlVW0FZMZ-Qwu3m71vRPVqnoQWnjXp8AgyzlZq3c8z-VQlJzmbvloUTV"/>
+<div class="absolute top-2 right-2 bg-primary/90 text-white px-2 py-1 rounded-md text-[10px] font-bold">متوفر</div>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+<button class="w-10 h-10 rounded-full bg-white text-primary flex items-center justify-center"><span class="material-symbols-outlined">info</span></button>
+<button class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center"><span class="material-symbols-outlined">add</span></button>
+</div>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface truncate">مقدمة ابن خلدون</h3>
+<p class="text-label-sm font-label-sm text-outline">ابن خلدون</p>
+</div>
+<!-- Book Card 2 -->
+<div class="group cursor-pointer">
+<div class="aspect-[2/3] bg-surface-container-high rounded-xl overflow-hidden relative mb-3 shadow-sm group-hover:shadow-xl transition-all group-hover:-translate-y-1">
+<img class="w-full h-full object-cover" data-alt="A beautiful hardcover book with a minimalist white cover featuring a single delicate illustration of an olive branch. The book is placed on a light-colored linen fabric under bright, natural daylight. The style is clean, modern, and highly legible, reflecting a sophisticated educational brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDediZrGk5y-yvHhKuxJkUCLkKyRhUct_4rQM2b07ckNr3Rbs9xGQayz2YcbLa7MLNP71YOxPuVl0GRGvgWQP1pBTPysgEDxYVqe_eXPExtMPDiX5FPMtAHRa4z_CaxdE7qM3hBDrCE7tCI9r6Lnl76bPiO3K73WqM9dvnS7aatW1QEyV-1md-R4CjbIaRb8d30XYYkpueZTPzxsl70_jW9Cp6MpQFO9eQw_ecNg4jNib_u8IkQJ0Y9vhmUvq5Tb2wlmR_-89_ze4JI"/>
+<div class="absolute top-2 right-2 bg-error/90 text-white px-2 py-1 rounded-md text-[10px] font-bold">مستعار</div>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<button class="bg-white text-on-surface px-4 py-2 rounded-full font-label-lg text-label-lg">حجز الكتاب</button>
+</div>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface truncate">عجائب الحساب</h3>
+<p class="text-label-sm font-label-sm text-outline">د. محمود صالح</p>
+</div>
+<!-- Book Card 3 -->
+<div class="group cursor-pointer">
+<div class="aspect-[2/3] bg-surface-container-high rounded-xl overflow-hidden relative mb-3 shadow-sm group-hover:shadow-xl transition-all group-hover:-translate-y-1">
+<img class="w-full h-full object-cover" data-alt="A collection of vibrant children's books with colorful, illustrated covers featuring whimsical characters and bright landscapes. The books are displayed in a clean, modern bookshelf with soft lighting that highlights the playful and educational nature of the content. Emerald green accents are used in the shelving design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHsORq0w_rA0nEsOxoAVQeFBxpCc5kT8ArLlstihYM5pPibXBzkcPF3y4qXsVBwT74tFfmQNItylQIWi7z-Fpln5n5JNhjsa0kTAoicXsZeiE83qoFi9jKjBF2ll2DDnaZdcUXCQ1A1jtwfVghgqPZri3PB5ZxG9zoG6PW3VjZEzJqRvF4s1OuncmZPiA1c_h56aCmgWTKDQaeAWM5ggniDmK6qoxTQy7s7CIhgOCkBE9qOmpueV--MKeCp9xBGfXmd7ZolzDNFSqF"/>
+<div class="absolute top-2 right-2 bg-primary/90 text-white px-2 py-1 rounded-md text-[10px] font-bold">متوفر</div>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface truncate">قصص الأنبياء</h3>
+<p class="text-label-sm font-label-sm text-outline">الأدب الديني</p>
+</div>
+<!-- Book Card 4 -->
+<div class="group cursor-pointer">
+<div class="aspect-[2/3] bg-surface-container-high rounded-xl overflow-hidden relative mb-3 shadow-sm group-hover:shadow-xl transition-all group-hover:-translate-y-1">
+<img class="w-full h-full object-cover" data-alt="A macro photo of an open science journal showing complex mathematical formulas and diagrams. The lighting is crisp and cool-toned, creating a highly professional and analytical atmosphere. The surrounding desk is clean and white, emphasizing the focus on deep study and research." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXhKegzpyiwG1L9LA7qLwOAHWVhElcfXoJXd9552HTMR_RY6R4_J4oB23Nf-gwX9-rBzbyipuVySwyLU9QGd2ei58301g8PRn2DD7O6wilYDDt6DbjsSFzh4doX79SiVu7FFBN2qHPnitQmwzKKaSE8y5TpWI9q9KJjWJXrJn9ASSlZI70V4Yu_qII97z6np_65MfXB5w18Jjku48GcnMe1KqSd1zW3mhrLGKtTuNLip0ijPc8tYPkht9W013HoRuDHXFvxuoAfV0z"/>
+<div class="absolute top-2 right-2 bg-primary/90 text-white px-2 py-1 rounded-md text-[10px] font-bold">متوفر</div>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface truncate">الذكاء الاصطناعي</h3>
+<p class="text-label-sm font-label-sm text-outline">تكنولوجيا</p>
+</div>
+<!-- Book Card 5 -->
+<div class="group cursor-pointer">
+<div class="aspect-[2/3] bg-surface-container-high rounded-xl overflow-hidden relative mb-3 shadow-sm group-hover:shadow-xl transition-all group-hover:-translate-y-1">
+<img class="w-full h-full object-cover" data-alt="A high-end architectural book featuring a sleek black cover with silver embossed lettering. It is displayed in a minimalist gallery-style setting with dramatic directional lighting that creates sharp shadows and highlights the premium textures. The aesthetic is sophisticated and corporate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjjvnJYNxzMHxMZmRm7c8I2d9J1Mliz1a8h1kBU1Rkf3-18SgnYfqr_SWmkIV7JT2uKAkyMuo9ho7t8l3dFbSpV-j1vDgp_edU1WVCsvb__fqUE89iHuQ91j3PwFOwmXUgziJ13E98hdZt5ZztEnuue-zomxTCthWjt-DEkGb0FlXY7mxO7gzAvYfvE45on4fd_1cXWhIK-qEtvcf80VlL7Av2tpWvcb51Mwt4cU02J8u4pV2n5wANRS074t1_iNoVaMI6xkr_yIuZ"/>
+<div class="absolute top-2 right-2 bg-primary/90 text-white px-2 py-1 rounded-md text-[10px] font-bold">متوفر</div>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface truncate">فنون العمارة</h3>
+<p class="text-label-sm font-label-sm text-outline">فنون</p>
+</div>
+<!-- Book Card 6 -->
+<div class="group cursor-pointer">
+<div class="aspect-[2/3] bg-surface-container-high rounded-xl overflow-hidden relative mb-3 shadow-sm group-hover:shadow-xl transition-all group-hover:-translate-y-1">
+<img class="w-full h-full object-cover" data-alt="A row of old encyclopedias with leather spines and gold lettering lined up on a dark mahogany shelf. The focus is sharp on the nearest book, with a shallow depth of field blurring the background into a warm, inviting glow. The image represents institutional reliability and deep knowledge." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKP3oqZQBpxXK3MwZPOE03WnF7d_7gowkHr_fUSBZ4Uz36jF2WpZ5tmgtkw9_1R3RSdlWJ0NyPrwOSIzPqdyxsPE738CAsdXmhVcv2nz7iKIqlib7FSi4lEMQW0fvB-00_lXvXOLQqF7mN0yoQT47Ncn3HG4ekq1DoRKnnP3tPqRbkpr_-K8GdIP4_1uGh7YTt-1mTJEWeW6E-RVJC8_YdeWlsw52tI7XAM_iafRS-QzeckhLkIBSqxncgKQ94NeElSWU2vvVqJktK"/>
+<div class="absolute top-2 right-2 bg-error/90 text-white px-2 py-1 rounded-md text-[10px] font-bold">مستعار</div>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface truncate">تاريخ الأمم</h3>
+<p class="text-label-sm font-label-sm text-outline">تاريخ</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Mobile Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 pb-safe bg-surface shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] rounded-t-full md:hidden">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">الرئيسية</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-label-sm text-label-sm">الطلاب</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">how_to_reg</span>
+<span class="font-label-sm text-label-sm">الحضور</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-sm text-label-sm">الرسوم</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">menu</span>
+<span class="font-label-sm text-label-sm">المزيد</span>
+</a>
+</nav>
+<!-- Floating Action Button (Only on Mobile for Search/Add) -->
+<button class="fixed bottom-24 left-6 md:hidden w-14 h-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+</body></html>

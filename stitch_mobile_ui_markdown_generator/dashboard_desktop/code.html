@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#98472a",
+                    "secondary-fixed-dim": "#92ccff",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#2b322b",
+                    "secondary-container": "#5cb8fd",
+                    "secondary": "#006397",
+                    "primary": "#006d37",
+                    "on-tertiary-container": "#772e14",
+                    "surface": "#f3fcf1",
+                    "tertiary-container": "#ff9875",
+                    "tertiary-fixed": "#ffdbd0",
+                    "surface-container": "#e8f0e5",
+                    "on-surface-variant": "#3d4a3e",
+                    "on-primary-container": "#005027",
+                    "tertiary-fixed-dim": "#ffb59d",
+                    "secondary-fixed": "#cce5ff",
+                    "surface-bright": "#f3fcf1",
+                    "on-secondary-fixed-variant": "#004b73",
+                    "surface-variant": "#dce5da",
+                    "outline-variant": "#bbcbbb",
+                    "background": "#f3fcf1",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed-dim": "#4ae183",
+                    "surface-container-high": "#e2ebe0",
+                    "on-primary-fixed-variant": "#005228",
+                    "on-tertiary-fixed-variant": "#793015",
+                    "on-secondary-fixed": "#001d31",
+                    "on-secondary-container": "#00476e",
+                    "on-background": "#161d17",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#00210c",
+                    "on-tertiary-fixed": "#390c00",
+                    "surface-tint": "#006d37",
+                    "primary-container": "#2ecc71",
+                    "on-error-container": "#93000a",
+                    "outline": "#6c7b6d",
+                    "surface-container-low": "#eef6eb",
+                    "surface-dim": "#d4dcd2",
+                    "on-surface": "#161d17",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-primary": "#4ae183",
+                    "primary-fixed": "#6bfe9c",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#ebf3e8",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#dce5da"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "gutter": "12px",
+                    "stack-md": "16px",
+                    "stack-lg": "24px",
+                    "container-margin": "16px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Cairo"],
+                    "title-lg": ["Cairo"],
+                    "headline-md": ["Cairo"],
+                    "body-md": ["Cairo"],
+                    "display-lg": ["Cairo"],
+                    "body-lg": ["Cairo"],
+                    "title-md": ["Cairo"],
+                    "label-lg": ["Cairo"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Cairo', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+<!-- Desktop Navigation Drawer -->
+<aside class="hidden md:flex flex-col h-screen sticky top-0 bg-surface-container w-80 rounded-l-xl shadow-xl py-stack-lg z-50">
+<div class="px-container-margin mb-stack-lg flex items-center gap-stack-md">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-primary-container flex items-center justify-center">
+<img alt="Admin Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a school administrator in a clean, brightly lit office environment. The lighting is soft and natural, emphasizing a trustworthy and organized professional persona. The overall aesthetic is clean and modern, following the school's corporate green and blue color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLUgIJjfWxtw571PncfRF_8_zhWn8mx_YoGPr2Tup6U_n-pAV_lZm9CMmNBBNQ4BNYelO3a4wofAZA12A3KVqpkSsLnIiTlJwku9AyxJh60FUXBLNuUv4ZPnCpmKNRnslkOXWChdGETz0JHwLRWZVk11QNH-vhQnNQnIVdiuUwBcoY7zerqELzwJQbc3F2DHHCApzBlkre5WLEvWQrplbygRCaxSS0eAnOPtCKXlfWQLS5fEYwOIeyZ5NobPInAzD3bg7DmQifWnAI"/>
+</div>
+<div>
+<h2 class="font-title-lg text-title-lg text-primary">Admin User</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Principal Office</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<div class="flex items-center bg-secondary-container text-on-secondary-container font-bold rounded-full mx-2 px-4 py-3 transition-all duration-200">
+<span class="material-symbols-outlined ml-3" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</div>
+<div class="flex items-center text-on-surface-variant mx-2 px-4 py-3 hover:bg-surface-container-high transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined ml-3" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-md text-body-md">Academic Calendar</span>
+</div>
+<div class="flex items-center text-on-surface-variant mx-2 px-4 py-3 hover:bg-surface-container-high transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined ml-3" data-icon="badge">badge</span>
+<span class="font-body-md text-body-md">Staff Directory</span>
+</div>
+<div class="flex items-center text-on-surface-variant mx-2 px-4 py-3 hover:bg-surface-container-high transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined ml-3" data-icon="assessment">assessment</span>
+<span class="font-body-md text-body-md">Exam Results</span>
+</div>
+<div class="mt-auto">
+<div class="flex items-center text-on-surface-variant mx-2 px-4 py-3 hover:bg-surface-container-high transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined ml-3" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</div>
+<div class="px-container-margin mt-stack-md">
+<p class="text-label-sm font-label-sm text-outline">v2.1.0</p>
+</div>
+</div>
+</nav>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface text-primary font-title-lg text-title-lg shadow-sm flex justify-between items-center px-container-margin h-16 w-full sticky top-0 z-40">
+<div class="flex items-center gap-stack-md">
+<span class="font-display-lg text-display-lg font-bold text-primary">EduCore Manager</span>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden">
+<img alt="Profile" data-alt="A professional profile avatar icon for an administrator, set against a soft, corporate background with emerald green accents. The style is minimalist and clean, representing institutional authority and efficiency. High-quality digital render with soft shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoL5tMl1rZ2ybraRHmRR8iG4OuaJFXsOTh_nMDnGpHMmibGgqqj4mBU_R13_BEiX9F7hkwKiW_2QfxrVgYJ1KlHS55QUbjtVOiGVMj3zlttmJu_b8wLR9kCVrHIlIjTPO4ZUZ1oxK36Vp4dRBylxitqCSZ37OQym-cJSGdTsM5zxJ1jAbMavIzU4Bml_x5Izam27MH08Jpz289cFuf45djG5EljQGQbDQk_FMx-ZEe5e40rLzldpIgKoNPYHgWaoXUn6jDec1Ru8ii"/>
+</div>
+</div>
+</header>
+<div class="p-container-margin space-y-stack-lg flex-1 pb-24 md:pb-8">
+<!-- Quick Stats Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
+<div class="bg-surface-container-lowest p-stack-md rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] flex items-center gap-stack-md">
+<div class="w-14 h-14 rounded-full bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl" data-icon="school">school</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant">إجمالي الطلاب</p>
+<h3 class="font-display-lg text-display-lg text-primary">1,248</h3>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-stack-md rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] flex items-center gap-stack-md">
+<div class="w-14 h-14 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl" data-icon="group">group</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant">المعلمون</p>
+<h3 class="font-display-lg text-display-lg text-secondary">86</h3>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-stack-md rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] flex items-center gap-stack-md">
+<div class="w-14 h-14 rounded-full bg-tertiary-container/20 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-3xl" data-icon="how_to_reg">how_to_reg</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant">نسبة الحضور اليوم</p>
+<h3 class="font-display-lg text-display-lg text-tertiary">94%</h3>
+</div>
+</div>
+</section>
+<!-- Main Content Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-stack-lg">
+<!-- Recent Activity Table (8 cols) -->
+<section class="lg:col-span-8 bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] overflow-hidden">
+<div class="px-container-margin py-stack-md border-b border-outline-variant flex justify-between items-center">
+<h2 class="font-title-lg text-title-lg text-on-surface">سجل النشاطات الأخيرة</h2>
+<button class="text-primary font-label-lg text-label-lg">عرض الكل</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-right border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-container-margin py-3 font-label-lg text-label-lg text-on-surface-variant">المستخدم</th>
+<th class="px-container-margin py-3 font-label-lg text-label-lg text-on-surface-variant">النشاط</th>
+<th class="px-container-margin py-3 font-label-lg text-label-lg text-on-surface-variant">الحالة</th>
+<th class="px-container-margin py-3 font-label-lg text-label-lg text-on-surface-variant">الوقت</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-container-margin py-4 flex items-center gap-stack-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed text-[10px]">أ م</div>
+<span class="font-body-md text-body-md">أحمد منصور</span>
+</td>
+<td class="px-container-margin py-4 font-body-md text-body-md">تحديث درجات الفصل الأول</td>
+<td class="px-container-margin py-4">
+<span class="bg-primary/15 text-primary px-3 py-1 rounded-full text-label-sm font-label-sm">مكتمل</span>
+</td>
+<td class="px-container-margin py-4 font-body-md text-body-md text-on-surface-variant">منذ 10 دقائق</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-container-margin py-4 flex items-center gap-stack-sm">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed text-[10px]">س ع</div>
+<span class="font-body-md text-body-md">سارة علي</span>
+</td>
+<td class="px-container-margin py-4 font-body-md text-body-md">تسجيل غياب الموظفين</td>
+<td class="px-container-margin py-4">
+<span class="bg-primary/15 text-primary px-3 py-1 rounded-full text-label-sm font-label-sm">مكتمل</span>
+</td>
+<td class="px-container-margin py-4 font-body-md text-body-md text-on-surface-variant">منذ ساعتين</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-container-margin py-4 flex items-center gap-stack-sm">
+<div class="w-8 h-8 rounded-full bg-outline-variant flex items-center justify-center text-on-surface text-[10px]">خ م</div>
+<span class="font-body-md text-body-md">خالد محمود</span>
+</td>
+<td class="px-container-margin py-4 font-body-md text-body-md">طلب صيانة معمل الحاسوب</td>
+<td class="px-container-margin py-4">
+<span class="bg-error/15 text-error px-3 py-1 rounded-full text-label-sm font-label-sm">قيد الانتظار</span>
+</td>
+<td class="px-container-margin py-4 font-body-md text-body-md text-on-surface-variant">أمس</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Upcoming Events (4 cols) -->
+<section class="lg:col-span-4 space-y-stack-md">
+<div class="bg-surface-container-lowest p-stack-md rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+<div class="flex justify-between items-center mb-stack-md">
+<h2 class="font-title-md text-title-md text-on-surface">الفعاليات القادمة</h2>
+<span class="material-symbols-outlined text-outline cursor-pointer" data-icon="more_vert">more_vert</span>
+</div>
+<div class="space-y-stack-md">
+<div class="flex gap-stack-md items-start p-3 hover:bg-surface-container transition-colors rounded-lg group">
+<div class="bg-primary text-on-primary w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0">
+<span class="text-label-sm font-label-sm">مارس</span>
+<span class="text-title-lg font-title-lg">15</span>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg text-on-surface">اجتماع مجلس الآباء</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">المسرح المدرسي، 05:00 م</p>
+</div>
+</div>
+<div class="flex gap-stack-md items-start p-3 hover:bg-surface-container transition-colors rounded-lg group">
+<div class="bg-secondary text-on-secondary w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0">
+<span class="text-label-sm font-label-sm">مارس</span>
+<span class="text-title-lg font-title-lg">20</span>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg text-on-surface">اليوم الرياضي السنوي</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">الملعب الرئيسي، 08:00 ص</p>
+</div>
+</div>
+<div class="flex gap-stack-md items-start p-3 hover:bg-surface-container transition-colors rounded-lg group">
+<div class="bg-tertiary text-on-tertiary w-12 h-12 rounded-xl flex flex-col items-center justify-center shrink-0">
+<span class="text-label-sm font-label-sm">مارس</span>
+<span class="text-title-lg font-title-lg">28</span>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg text-on-surface">بداية اختبارات الشهر</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">كافة الفصول الدراسية</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-stack-md py-3 border border-outline-variant rounded-full text-primary font-label-lg text-label-lg hover:bg-primary/5 transition-colors">إضافة فعالية جديدة</button>
+</div>
+<!-- Attendance Chart Placeholder -->
+<div class="bg-primary text-on-primary p-stack-md rounded-xl shadow-lg relative overflow-hidden h-40">
+<div class="relative z-10">
+<h2 class="font-title-md text-title-md">نظرة سريعة على الحضور</h2>
+<p class="font-body-md text-body-md opacity-90">ارتفاع بنسبة 3% عن الأسبوع الماضي</p>
+<div class="mt-stack-md flex items-end gap-1 h-12">
+<div class="w-3 bg-white/30 rounded-t h-4"></div>
+<div class="w-3 bg-white/30 rounded-t h-6"></div>
+<div class="w-3 bg-white/30 rounded-t h-8"></div>
+<div class="w-3 bg-white/60 rounded-t h-10"></div>
+<div class="w-3 bg-white rounded-t h-12"></div>
+</div>
+</div>
+<div class="absolute -bottom-4 -right-4 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
+</div>
+</section>
+</div>
+</div>
+<!-- Mobile BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 pb-safe bg-surface shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] rounded-t-full">
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-label-sm text-label-sm">Students</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="how_to_reg">how_to_reg</span>
+<span class="font-label-sm text-label-sm">Attendance</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-sm text-label-sm">Fees</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+<span class="font-label-sm text-label-sm">More</span>
+</div>
+</nav>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 md:bottom-8 left-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center z-40 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</main>
+</body></html>

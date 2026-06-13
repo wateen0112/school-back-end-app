@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#98472a",
+                    "secondary-fixed-dim": "#92ccff",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#2b322b",
+                    "secondary-container": "#5cb8fd",
+                    "secondary": "#006397",
+                    "primary": "#006d37",
+                    "on-tertiary-container": "#772e14",
+                    "surface": "#f3fcf1",
+                    "tertiary-container": "#ff9875",
+                    "tertiary-fixed": "#ffdbd0",
+                    "surface-container": "#e8f0e5",
+                    "on-surface-variant": "#3d4a3e",
+                    "on-primary-container": "#005027",
+                    "tertiary-fixed-dim": "#ffb59d",
+                    "secondary-fixed": "#cce5ff",
+                    "surface-bright": "#f3fcf1",
+                    "on-secondary-fixed-variant": "#004b73",
+                    "surface-variant": "#dce5da",
+                    "outline-variant": "#bbcbbb",
+                    "background": "#f3fcf1",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed-dim": "#4ae183",
+                    "surface-container-high": "#e2ebe0",
+                    "on-primary-fixed-variant": "#005228",
+                    "on-tertiary-fixed-variant": "#793015",
+                    "on-secondary-fixed": "#001d31",
+                    "on-secondary-container": "#00476e",
+                    "on-background": "#161d17",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#00210c",
+                    "on-tertiary-fixed": "#390c00",
+                    "surface-tint": "#006d37",
+                    "primary-container": "#2ecc71",
+                    "on-error-container": "#93000a",
+                    "outline": "#6c7b6d",
+                    "surface-container-low": "#eef6eb",
+                    "surface-dim": "#d4dcd2",
+                    "on-surface": "#161d17",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-primary": "#4ae183",
+                    "primary-fixed": "#6bfe9c",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#ebf3e8",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#dce5da"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "gutter": "12px",
+                    "stack-md": "16px",
+                    "stack-lg": "24px",
+                    "container-margin": "16px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Cairo"],
+                    "title-lg": ["Cairo"],
+                    "headline-md": ["Cairo"],
+                    "body-md": ["Cairo"],
+                    "display-lg": ["Cairo"],
+                    "body-lg": ["Cairo"],
+                    "title-md": ["Cairo"],
+                    "label-lg": ["Cairo"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg": ["30px", {"lineHeight": "38px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f3fcf1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-inverse-surface shadow-sm dark:shadow-none flex justify-between items-center px-container-margin h-16 w-full docked full-width top-0 z-50 sticky">
+<div class="flex items-center gap-stack-md">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden">
+<img alt="administrator_profile_photo" class="w-full h-full object-cover" data-alt="A professional headshot of a middle-aged male administrator in a corporate setting. He is wearing a clean white shirt and has a warm, authoritative smile. The background is a blurred modern office with soft natural light and emerald green accents that match the school's brand identity. The lighting is bright and high-key, conveying a sense of transparency and leadership." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFe0LwCP7GjksLK5aK6AwLRbh4nCrnS4OBodursuFkV308Kl9g3yHRD0VuYC3AdLip9cCYx0zEzKxWOT_RVAFLX4vuU8dHauaYCMSZPazBRtNy2YffRUFRh67BKQkboCSp-7TcgtGY6yThsm66tyWVv8rhzWdRpakUP8By6LQIs7Ol5qOPkdSAic1pfUF-IcGn9qEmBUqNzYAekfc7IZ2LYUzqRlLrPt9lwDguXzenZqq2uiW5tZbur5Qm93g7uP7uCIDdfA8iez0p"/>
+</div>
+<h1 class="font-display-lg text-display-lg font-bold text-primary dark:text-primary-fixed-dim">EduCore Manager</h1>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="material-symbols-outlined text-primary dark:text-primary-fixed-dim p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors duration-200">notifications</button>
+</div>
+</header>
+<main class="max-w-4xl mx-auto py-stack-lg px-container-margin mb-24">
+<!-- Page Title & Subtitle -->
+<div class="mb-stack-lg text-center">
+<h2 class="font-headline-md text-headline-md text-on-surface">إضافة طالب جديد</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">يرجى ملء كافة البيانات المطلوبة لإكمال عملية التسجيل</p>
+</div>
+<!-- Progress Indicator -->
+<div class="flex items-center justify-between mb-stack-lg relative px-stack-lg">
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-outline-variant -translate-y-1/2 -z-10"></div>
+<div class="flex flex-col items-center gap-stack-sm bg-background px-4">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold">١</div>
+<span class="font-label-lg text-label-lg text-primary">البيانات الشخصية</span>
+</div>
+<div class="flex flex-col items-center gap-stack-sm bg-background px-4">
+<div class="w-10 h-10 rounded-full bg-surface-container text-on-surface-variant border-2 border-outline-variant flex items-center justify-center font-bold">٢</div>
+<span class="font-label-lg text-label-lg text-on-surface-variant">البيانات المدرسية</span>
+</div>
+<div class="flex flex-col items-center gap-stack-sm bg-background px-4">
+<div class="w-10 h-10 rounded-full bg-surface-container text-on-surface-variant border-2 border-outline-variant flex items-center justify-center font-bold">٣</div>
+<span class="font-label-lg text-label-lg text-on-surface-variant">الصورة الشخصية</span>
+</div>
+</div>
+<!-- Main Form Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] overflow-hidden">
+<!-- Form Section: Personal Info -->
+<div class="p-stack-lg">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<!-- Name Input -->
+<div class="flex flex-col gap-2">
+<label class="font-label-lg text-label-lg text-on-surface">اسم الطالب (بالكامل)</label>
+<input class="w-full h-12 px-4 rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary bg-surface-container-low text-body-lg" placeholder="أدخل اسم الطالب الرباعي" type="text"/>
+</div>
+<!-- National ID -->
+<div class="flex flex-col gap-2">
+<label class="font-label-lg text-label-lg text-on-surface">الرقم القومي</label>
+<input class="w-full h-12 px-4 rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary bg-surface-container-low text-body-lg text-right" placeholder="أدخل ١٤ رقماً" type="number"/>
+</div>
+<!-- Date of Birth -->
+<div class="flex flex-col gap-2">
+<label class="font-label-lg text-label-lg text-on-surface">تاريخ الميلاد</label>
+<div class="relative">
+<input class="w-full h-12 px-4 rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary bg-surface-container-low text-body-lg" type="date"/>
+</div>
+</div>
+<!-- Gender -->
+<div class="flex flex-col gap-2">
+<label class="font-label-lg text-label-lg text-on-surface">النوع</label>
+<select class="w-full h-12 px-4 rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary bg-surface-container-low text-body-lg appearance-none">
+<option>ذكر</option>
+<option>أنثى</option>
+</select>
+</div>
+<!-- Parent Phone -->
+<div class="flex flex-col gap-2">
+<label class="font-label-lg text-label-lg text-on-surface">رقم هاتف ولي الأمر</label>
+<input class="w-full h-12 px-4 rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary bg-surface-container-low text-body-lg text-right" placeholder="٠١xxxxxxxxx" type="tel"/>
+</div>
+<!-- Address -->
+<div class="flex flex-col gap-2 md:col-span-2">
+<label class="font-label-lg text-label-lg text-on-surface">العنوان بالتفصيل</label>
+<textarea class="w-full p-4 rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary bg-surface-container-low text-body-lg" placeholder="المحافظة، المركز، اسم الشارع، رقم العقار" rows="3"></textarea>
+</div>
+</div>
+</div>
+<!-- School Illustration Section (Visual Buffer) -->
+<div class="h-48 w-full relative overflow-hidden bg-primary-container/20">
+<img alt="school_environment" class="w-full h-full object-cover mix-blend-multiply opacity-50" data-alt="A clean, minimalist shot of a modern school hallway with bright, indirect sunlight coming from large windows. The floor is polished and reflects the emerald green accent walls. There are no people, creating a calm and organized atmosphere. The composition is wide, showcasing the architectural reliability of a premier educational institution in a contemporary corporate style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3T-OFtvLb7YLmmz-PqtrO3RTOGDoQ-Pcl4lJqnqs9iqbAb0iFgJlE_-_sUwupUF_bejKccfNq-BO0nHaDMwJ6qBZI7L4kT4S83D-DYIwtguf6G3MH0RHPa3D46M3axajlaFEJ-humB0jyYu3w2DpMnb5FedNeU76d1gMTbTN3YGvZPDMzWXb5Hq0VP-TYhilvOk9zOypib5G-vZU0U25fQ_TbXXke2AMrH9rS_vChO_auv97WKWeoRbubzWX70h4QF1WcGq87hF_r"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<p class="font-title-lg text-title-lg text-on-primary-container bg-surface/80 px-6 py-2 rounded-full">بيانات المسيرة التعليمية</p>
+</div>
+</div>
+<!-- Secondary Actions Footer (Inside Card) -->
+<div class="p-6 border-t border-outline-variant flex justify-between items-center bg-surface-container-low">
+<button class="flex items-center gap-2 text-secondary font-label-lg hover:bg-secondary-container/20 px-6 py-3 rounded-full transition-colors duration-200">
+<span class="material-symbols-outlined">arrow_forward</span>
+<span>العودة للرئيسية</span>
+</button>
+<button class="flex items-center gap-2 bg-primary text-on-primary font-label-lg px-8 py-3 rounded-full hover:shadow-lg active:scale-95 transition-all duration-150">
+<span>الخطوة التالية</span>
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+</div>
+</div>
+<!-- Attendance Stats (Bento Component) -->
+<div class="mt-stack-lg grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-surface-container p-stack-md rounded-xl flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">how_to_reg</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">الطلاب المسجلين اليوم</p>
+<p class="font-title-md text-title-md text-on-surface">٢٤ طالب</p>
+</div>
+</div>
+<div class="bg-surface-container p-stack-md rounded-xl flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">إجمالي التحصيل</p>
+<p class="font-title-md text-title-md text-on-surface">١٢,٤٠٠ ج.م</p>
+</div>
+</div>
+<div class="bg-surface-container p-stack-md rounded-xl flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined">assessment</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">سعة الفصول المتبقية</p>
+<p class="font-title-md text-title-md text-on-surface">١٥ مقعد</p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 pb-safe bg-surface dark:bg-inverse-surface shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] rounded-t-full">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">الرئيسية</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container dark:bg-primary dark:text-on-primary rounded-full px-4 py-1 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
+<span class="font-label-sm text-label-sm">الطلاب</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">how_to_reg</span>
+<span class="font-label-sm text-label-sm">الحضور</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-sm text-label-sm">الرسوم</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:text-primary dark:hover:text-primary-fixed-dim active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">menu</span>
+<span class="font-label-sm text-label-sm">المزيد</span>
+</a>
+</nav>
+</body></html>
