@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-@section(title)
-{{ trans(main_trans.Dashboard_page) }}
+@section('title')
+{{ trans('main_trans.Dashboard_page') }}
 @stop
 <head>
     <meta charset="utf-8">
@@ -12,21 +12,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    @include(layouts.head)
+    @include('layouts.head')
     @livewireStyles
 </head>
 
-<body style="font-family: Cairo, sans-serif" class="bg-background text-on-background">
+<body style="font-family: 'Cairo', sans-serif" class="bg-background text-on-background">
 
-    <div class="wrapper" style="font-family: Cairo, sans-serif">
+    <div class="wrapper" style="font-family: 'Cairo', sans-serif">
 
         <!-- Preloader -->
         <div id="pre-loader">
-            <img src="{{ URL::asset(assets/images/pre-loader/loader-01.svg) }}" alt="">
+            <img src="{{ URL::asset('assets/images/pre-loader/loader-01.svg') }}" alt="">
         </div>
 
-        @include(layouts.main-header)
-        @include(layouts.main-sidebar)
+        @include('layouts.main-header')
+        @include('layouts.main-sidebar')
 
         <!-- Main content -->
         <div class="content-wrapper">
@@ -35,15 +35,15 @@
             <div class="page-title bg-surface border-b border-outline" style="border-radius: 12px; margin-bottom: 24px; padding: 20px 24px;">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h4 class="mb-0 text-title-lg" style="font-family: Cairo, sans-serif; color: #20263a; font-weight: 800;">
+                        <h4 class="mb-0 text-title-lg" style="font-family: 'Cairo', sans-serif; color: #20263a; font-weight: 800;">
                             <i class="fas fa-chart-line mr-2" style="color: #5f7cf7;"></i>لوحة تحكم المدير
                         </h4>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb pt-0 pr-0 float-left float-sm-right bg-transparent" style="margin: 0;">
                             <li class="breadcrumb-item">
-                                <a href="{{ url(/dashboard) }}" style="color: #5f7cf7; text-decoration: none; font-weight: 600;">
-                                    <i class="ti-home mr-1"></i>{{ trans(main_trans.Dashboard) }}
+                                <a href="{{ url('/dashboard') }}" style="color: #5f7cf7; text-decoration: none; font-weight: 600;">
+                                    <i class="ti-home mr-1"></i>{{ trans('main_trans.Dashboard') }}
                                 </a>
                             </li>
                             <li class="breadcrumb-item active" style="color: #7b86a6;">لوحة التحكم</li>
@@ -72,7 +72,7 @@
                             </div>
                             <p class="text-muted pt-3 mb-0 mt-2" style="border-top: 1px solid #eef1f8; padding-top: 12px;">
                                 <i class="fas fa-arrow-left mr-1" style="color: #5f7cf7;"></i>
-                                <a href="{{ route(Students.index) }}" style="color: #5f7cf7; text-decoration: none; font-weight: 600;">عرض جميع الطلاب</a>
+                                <a href="{{ route('Students.index') }}" style="color: #5f7cf7; text-decoration: none; font-weight: 600;">عرض جميع الطلاب</a>
                             </p>
                         </div>
                     </div>
@@ -95,7 +95,7 @@
                             </div>
                             <p class="text-muted pt-3 mb-0 mt-2" style="border-top: 1px solid #eef1f8; padding-top: 12px;">
                                 <i class="fas fa-arrow-left mr-1" style="color: #ff704d;"></i>
-                                <a href="{{ route(Teachers.index) }}" style="color: #ff704d; text-decoration: none; font-weight: 600;">عرض جميع المعلمين</a>
+                                <a href="{{ route('Teachers.index') }}" style="color: #ff704d; text-decoration: none; font-weight: 600;">عرض جميع المعلمين</a>
                             </p>
                         </div>
                     </div>
@@ -118,7 +118,7 @@
                             </div>
                             <p class="text-muted pt-3 mb-0 mt-2" style="border-top: 1px solid #eef1f8; padding-top: 12px;">
                                 <i class="fas fa-arrow-left mr-1" style="color: #e6a800;"></i>
-                                <a href="{{ url(add_parent) }}" style="color: #e6a800; text-decoration: none; font-weight: 600;">عرض أولياء الأمور</a>
+                                <a href="{{ url('add_parent') }}" style="color: #e6a800; text-decoration: none; font-weight: 600;">عرض أولياء الأمور</a>
                             </p>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                             </div>
                             <p class="text-muted pt-3 mb-0 mt-2" style="border-top: 1px solid #eef1f8; padding-top: 12px;">
                                 <i class="fas fa-arrow-left mr-1" style="color: #2ecc71;"></i>
-                                <a href="{{ route(Sections.index) }}" style="color: #2ecc71; text-decoration: none; font-weight: 600;">عرض الفصول</a>
+                                <a href="{{ route('Sections.index') }}" style="color: #2ecc71; text-decoration: none; font-weight: 600;">عرض الفصول</a>
                             </p>
                         </div>
                     </div>
@@ -156,7 +156,7 @@
                             <div class="tab nav-border">
                                 <div class="d-block d-md-flex justify-content-between align-items-center" style="border-bottom: 1px solid #eef1f8; padding-bottom: 16px; margin-bottom: 16px;">
                                     <div class="d-block w-100">
-                                        <h5 style="font-family: Cairo, sans-serif; color: #20263a; font-weight: 700; margin: 0;">
+                                        <h5 style="font-family: 'Cairo', sans-serif; color: #20263a; font-weight: 700; margin: 0;">
                                             <i class="fas fa-clock-rotate-left mr-2" style="color: #5f7cf7;"></i>آخر العمليات على النظام
                                         </h5>
                                     </div>
@@ -202,13 +202,13 @@
                                                     <tr style="border-bottom: 1px solid #eef1f8;">
                                                         <td style="padding: 12px 16px; color: #7b86a6; font-weight: 600;">{{ $loop->iteration }}</td>
                                                         <td style="padding: 12px 16px; font-weight: 600; color: #20263a;">
-                                                            {{ is_array($student->name) ? ($student->name[ar] ?? $student->name[en] ?? ) : $student->name }}
+                                                            {{ is_array($student->name) ? ($student->name['ar'] ?? $student->name['en'] ?? '') : $student->name }}
                                                         </td>
                                                         <td style="padding: 12px 16px; color: #7b86a6;">{{ $student->email }}</td>
                                                         <td style="padding: 12px 16px;">
                                                             @if($student->grade)
                                                                 <span style="background: rgba(95,124,247,0.1); color: #5f7cf7; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                                                                    {{ is_array($student->grade->Name) ? ($student->grade->Name[ar] ?? ) : $student->grade->Name }}
+                                                                    {{ is_array($student->grade->Name) ? ($student->grade->Name['ar'] ?? '') : $student->grade->Name }}
                                                                 </span>
                                                             @else
                                                                 <span style="color: #7b86a6;">-</span>
@@ -217,7 +217,7 @@
                                                         <td style="padding: 12px 16px;">
                                                             @if($student->classroom)
                                                                 <span style="background: rgba(255,112,77,0.1); color: #ff704d; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                                                                    {{ is_array($student->classroom->Name_Class) ? ($student->classroom->Name_Class[ar] ?? ) : $student->classroom->Name_Class }}
+                                                                    {{ is_array($student->classroom->Name_Class) ? ($student->classroom->Name_Class['ar'] ?? '') : $student->classroom->Name_Class }}
                                                                 </span>
                                                             @else
                                                                 <span style="color: #7b86a6;">-</span>
@@ -226,7 +226,7 @@
                                                         <td style="padding: 12px 16px;">
                                                             @if($student->section)
                                                                 <span style="background: rgba(46,204,113,0.1); color: #2ecc71; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                                                                    {{ is_array($student->section->Name_Section) ? ($student->section->Name_Section[ar] ?? ) : $student->section->Name_Section }}
+                                                                    {{ is_array($student->section->Name_Section) ? ($student->section->Name_Section['ar'] ?? '') : $student->section->Name_Section }}
                                                                 </span>
                                                             @else
                                                                 <span style="color: #7b86a6;">-</span>
@@ -266,10 +266,10 @@
                                                         <td style="padding: 12px 16px; font-weight: 600; color: #20263a;">{{ $teacher->Name }}</td>
                                                         <td style="padding: 12px 16px;">
                                                             <span style="background: rgba(255,112,77,0.1); color: #ff704d; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                                                                {{ $teacher->specialization->Name ?? - }}
+                                                                {{ $teacher->specialization->Name ?? '-' }}
                                                             </span>
                                                         </td>
-                                                        <td style="padding: 12px 16px; color: #7b86a6;">{{ $teacher->Joining_Date ?? - }}</td>
+                                                        <td style="padding: 12px 16px; color: #7b86a6;">{{ $teacher->Joining_Date ?? '-' }}</td>
                                                     </tr>
                                                     @empty
                                                     <tr>
@@ -306,7 +306,7 @@
                                                         <td style="padding: 12px 16px; color: #7b86a6;">{{ $parent->Phone_Father }}</td>
                                                         <td style="padding: 12px 16px;">
                                                             <span style="background: rgba(255,200,76,0.12); color: #c49000; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                                                                {{ $parent->Job_Father ?? - }}
+                                                                {{ $parent->Job_Father ?? '-' }}
                                                             </span>
                                                         </td>
                                                     </tr>
@@ -330,10 +330,10 @@
             </div>
 
             <!-- Footer -->
-            @include(layouts.footer)
+            @include('layouts.footer')
         </div>
     </div>
 
-    @include(layouts.footer-scripts)
+    @include('layouts.footer-scripts')
 </body>
 </html>
