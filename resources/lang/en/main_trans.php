@@ -34,7 +34,7 @@ return [
     'Settings'=>'Settings',
     'Users'=>'Users',
     'Copyright' => 'Copyright',
-    'Name_Programer' => 'SamirGamal MoraSoft All Rights Reserved',
+    'Name_Programer' => 'YallaCode Team All Rights Reserved',
 
     /* Accounts submenu */
     'Tuition_Fees' => 'Tuition fees',
