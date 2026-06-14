@@ -240,7 +240,6 @@ class PromotionController extends Controller
             $students = Student::where('grade_id', $request->grade_id)
                 ->where('classroom_id', $request->classroom_id)
                 ->where('section_id', $request->section_id)
-                ->where('status', 'active')
                 ->with(['grade', 'classroom', 'section'])
                 ->get();
 

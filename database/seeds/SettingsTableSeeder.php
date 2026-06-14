@@ -14,6 +14,7 @@ class SettingsTableSeeder extends Seeder
             ['key' => 'current_session', 'value' => '2021-2022'],
             ['key' => 'school_title', 'value' => 'MS'],
             ['key' => 'school_name', 'value' => 'YallaCode International Schools'],
+            ['key' => 'school_name', 'value' => 'YallaCode International Schools'],
             ['key' => 'end_first_term', 'value' => '01-12-2021'],
             ['key' => 'end_second_term', 'value' => '01-03-2022'],
             ['key' => 'phone', 'value' => '0123456789'],
