@@ -241,3 +241,108 @@ footer,
     background: #ffffff !important;
   }
 }
+
+/* ============================================================
+   YALLASCHOOL DARK SIDEBAR THEME - White Text
+   ============================================================ */
+
+/* ---- DARK SIDEBAR BACKGROUND ---- */
+.side-menu-bg {
+  background: #1a1f2e !important;
+  border-left: 1px solid #2a3045 !important;
+}
+
+/* ---- SIDEBAR MENU ITEMS - WHITE TEXT ---- */
+.side-menu > li > a {
+  color: #ffffff !important;
+  font-family: "Cairo", "Tajawal", sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  padding: 12px 20px !important;
+  border-radius: 0 10px 10px 0 !important;
+  margin: 2px 0 2px 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+.side-menu > li > a:hover {
+  background: rgba(95, 124, 247, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.side-menu > li > a:hover i {
+  color: #5f7cf7 !important;
+}
+
+/* Sidebar icons - white/light */
+.side-menu > li > a i {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 16px !important;
+  margin-left: 10px !important;
+  width: 22px;
+  text-align: center;
+}
+
+/* Active / expanded menu item */
+.side-menu > li > a[aria-expanded="true"] {
+  background: rgba(95, 124, 247, 0.2) !important;
+  color: #ffffff !important;
+}
+
+/* ---- SUBMENU - DARKER ---- */
+.side-menu li ul {
+  background: #141824 !important;
+  padding: 4px 0 !important;
+}
+
+.side-menu li ul li a {
+  color: rgba(255, 255, 255, 0.65) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  padding: 8px 48px 8px 16px !important;
+  border-radius: 0 8px 8px 0 !important;
+  margin: 1px 0 1px 8px !important;
+}
+
+.side-menu li ul li a:hover {
+  background: rgba(95, 124, 247, 0.15) !important;
+  color: #ffffff !important;
+}
+
+/* ---- MENU TITLE / DIVIDER ---- */
+.menu-title {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  padding: 16px 20px 8px !important;
+  margin-top: 8px !important;
+  border-top: 1px solid #2a3045;
+}
+
+/* ---- SIDEBAR SCROLLBAR ---- */
+.side-menu-bg::-webkit-scrollbar {
+  width: 4px;
+}
+.side-menu-bg::-webkit-scrollbar-track {
+  background: transparent;
+}
+.side-menu-bg::-webkit-scrollbar-thumb {
+  background: #2a3045;
+  border-radius: 2px;
+}
+.side-menu-bg::-webkit-scrollbar-thumb:hover {
+  background: #5f7cf7;
+}
+
+/* ---- SIDEBAR TOGGLE ARROW ---- */
+.side-menu > li > a .pull-right i {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ---- RESPONSIVE SIDEBAR ---- */
+@media (max-width: 992px) {
+  .side-menu-bg {
+    background: #1a1f2e !important;
+  }
+}
