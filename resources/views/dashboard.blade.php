@@ -14,6 +14,79 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     @include('layouts.head')
     @livewireStyles
+    <style>
+      /* ===== RTL Statistics Cards ===== */
+      .stat-card {
+        border-radius: 16px;
+        border: 1px solid #dfe5f5;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+      .stat-card:hover {
+        transform: translateY(-3px);
+      }
+      .stat-card .card-body {
+        padding: 24px;
+      }
+      .stat-card .stat-row {
+        display: flex;
+        align-items: center;
+        flex-direction: row-reverse; /* RTL: icon right, text left */
+        gap: 16px;
+      }
+      .stat-card .stat-icon-wrap {
+        flex-shrink: 0;
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .stat-card .stat-info {
+        flex: 1;
+        text-align: right; /* RTL */
+      }
+      .stat-card .stat-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #7b86a6;
+        margin-bottom: 4px;
+      }
+      .stat-card .stat-number {
+        font-size: 28px;
+        font-weight: 800;
+        margin: 0;
+        line-height: 1;
+      }
+      .stat-card .stat-footer {
+        border-top: 1px solid #eef1f8;
+        padding-top: 12px;
+        margin-top: 16px;
+        text-align: right; /* RTL */
+      }
+      .stat-card .stat-footer a {
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 13px;
+      }
+      .stat-card .stat-footer i {
+        margin-left: 6px;
+      }
+
+      /* Fade in animation */
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .fade-in {
+        animation: fadeInUp 0.5s ease-out forwards;
+        opacity: 0;
+      }
+      .fade-in:nth-child(1) { animation-delay: 0s; }
+      .fade-in:nth-child(2) { animation-delay: 0.1s; }
+      .fade-in:nth-child(3) { animation-delay: 0.2s; }
+      .fade-in:nth-child(4) { animation-delay: 0.3s; }
+    </style>
 </head>
 
 <body style="font-family: 'Cairo', sans-serif" class="bg-background text-on-background">
@@ -52,100 +125,93 @@
                 </div>
             </div>
 
-            <!-- Statistics Cards -->
+            <!-- Statistics Cards -- RTL Layout -->
             <div class="row" style="padding: 0 12px;">
 
                 <!-- Students Card -->
                 <div class="col-xl-3 col-lg-6 col-md-6 mb-30">
-                    <div class="card card-statistics h-100 fade-in" style="border-radius: 16px; border: 1px solid #dfe5f5; box-shadow: 0 2px 12px rgba(95,124,247,0.08); animation-delay: 0s;">
-                        <div class="card-body" style="padding: 24px;">
-                            <div class="clearfix">
-                                <div class="float-left">
-                                    <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(95,124,247,0.12); display: flex; align-items: center; justify-content: center;">
-                                        <i class="fas fa-user-graduate" style="font-size: 22px; color: #5f7cf7;"></i>
-                                    </div>
+                    <div class="card stat-card h-100 fade-in" style="box-shadow: 0 2px 12px rgba(95,124,247,0.08);">
+                        <div class="card-body">
+                            <div class="stat-row">
+                                <div class="stat-icon-wrap" style="background: rgba(95,124,247,0.12);">
+                                    <i class="fas fa-user-graduate" style="font-size: 22px; color: #5f7cf7;"></i>
                                 </div>
-                                <div class="float-right text-right">
-                                    <p style="font-size: 13px; font-weight: 600; color: #7b86a6; margin-bottom: 4px;">عدد الطلاب</p>
-                                    <h4 style="font-size: 28px; font-weight: 800; color: #5f7cf7; margin: 0;">{{ \App\Models\Student::count() }}</h4>
+                                <div class="stat-info">
+                                    <div class="stat-label">عدد الطلاب</div>
+                                    <div class="stat-number" style="color: #5f7cf7;">{{ \App\Models\Student::count() }}</div>
                                 </div>
                             </div>
-                            <p class="text-muted pt-3 mb-0 mt-2" style="border-top: 1px solid #eef1f8; padding-top: 12px;">
-                                <i class="fas fa-arrow-left mr-1" style="color: #5f7cf7;"></i>
-                                <a href="{{ route('Students.index') }}" style="color: #5f7cf7; text-decoration: none; font-weight: 600;">عرض جميع الطلاب</a>
-                            </p>
+                            <div class="stat-footer">
+                                <i class="fas fa-arrow-right" style="color: #5f7cf7;"></i>
+                                <a href="{{ route('Students.index') }}" style="color: #5f7cf7;">عرض جميع الطلاب</a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Teachers Card -->
                 <div class="col-xl-3 col-lg-6 col-md-6 mb-30">
-                    <div class="card card-statistics h-100 fade-in" style="border-radius: 16px; border: 1px solid #dfe5f5; box-shadow: 0 2px 12px rgba(255,112,77,0.08); animation-delay: 0.1s;">
-                        <div class="card-body" style="padding: 24px;">
-                            <div class="clearfix">
-                                <div class="float-left">
-                                    <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(255,112,77,0.12); display: flex; align-items: center; justify-content: center;">
-                                        <i class="fas fa-chalkboard-teacher" style="font-size: 22px; color: #ff704d;"></i>
-                                    </div>
+                    <div class="card stat-card h-100 fade-in" style="box-shadow: 0 2px 12px rgba(255,112,77,0.08);">
+                        <div class="card-body">
+                            <div class="stat-row">
+                                <div class="stat-icon-wrap" style="background: rgba(255,112,77,0.12);">
+                                    <i class="fas fa-chalkboard-teacher" style="font-size: 22px; color: #ff704d;"></i>
                                 </div>
-                                <div class="float-right text-right">
-                                    <p style="font-size: 13px; font-weight: 600; color: #7b86a6; margin-bottom: 4px;">عدد المعلمين</p>
-                                    <h4 style="font-size: 28px; font-weight: 800; color: #ff704d; margin: 0;">{{ \App\Models\Teacher::count() }}</h4>
+                                <div class="stat-info">
+                                    <div class="stat-label">عدد المعلمين</div>
+                                    <div class="stat-number" style="color: #ff704d;">{{ \App\Models\Teacher::count() }}</div>
                                 </div>
                             </div>
-                            <p class="text-muted pt-3 mb-0 mt-2" style="border-top: 1px solid #eef1f8; padding-top: 12px;">
-                                <i class="fas fa-arrow-left mr-1" style="color: #ff704d;"></i>
-                                <a href="{{ route('Teachers.index') }}" style="color: #ff704d; text-decoration: none; font-weight: 600;">عرض جميع المعلمين</a>
-                            </p>
+                            <div class="stat-footer">
+                                <i class="fas fa-arrow-right" style="color: #ff704d;"></i>
+                                <a href="{{ route('Teachers.index') }}" style="color: #ff704d;">عرض جميع المعلمين</a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Parents Card -->
                 <div class="col-xl-3 col-lg-6 col-md-6 mb-30">
-                    <div class="card card-statistics h-100 fade-in" style="border-radius: 16px; border: 1px solid #dfe5f5; box-shadow: 0 2px 12px rgba(255,200,76,0.08); animation-delay: 0.2s;">
-                        <div class="card-body" style="padding: 24px;">
-                            <div class="clearfix">
-                                <div class="float-left">
-                                    <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(255,200,76,0.15); display: flex; align-items: center; justify-content: center;">
-                                        <i class="fas fa-user-tie" style="font-size: 22px; color: #e6a800;"></i>
-                                    </div>
+                    <div class="card stat-card h-100 fade-in" style="box-shadow: 0 2px 12px rgba(255,200,76,0.08);">
+                        <div class="card-body">
+                            <div class="stat-row">
+                                <div class="stat-icon-wrap" style="background: rgba(255,200,76,0.15);">
+                                    <i class="fas fa-user-tie" style="font-size: 22px; color: #e6a800;"></i>
                                 </div>
-                                <div class="float-right text-right">
-                                    <p style="font-size: 13px; font-weight: 600; color: #7b86a6; margin-bottom: 4px;">أولياء الأمور</p>
-                                    <h4 style="font-size: 28px; font-weight: 800; color: #e6a800; margin: 0;">{{ \App\Models\My_Parent::count() }}</h4>
+                                <div class="stat-info">
+                                    <div class="stat-label">أولياء الأمور</div>
+                                    <div class="stat-number" style="color: #e6a800;">{{ \App\Models\My_Parent::count() }}</div>
                                 </div>
                             </div>
-                            <p class="text-muted pt-3 mb-0 mt-2" style="border-top: 1px solid #eef1f8; padding-top: 12px;">
-                                <i class="fas fa-arrow-left mr-1" style="color: #e6a800;"></i>
-                                <a href="{{ url('add_parent') }}" style="color: #e6a800; text-decoration: none; font-weight: 600;">عرض أولياء الأمور</a>
-                            </p>
+                            <div class="stat-footer">
+                                <i class="fas fa-arrow-right" style="color: #e6a800;"></i>
+                                <a href="{{ url('add_parent') }}" style="color: #e6a800;">عرض أولياء الأمور</a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Sections Card -->
                 <div class="col-xl-3 col-lg-6 col-md-6 mb-30">
-                    <div class="card card-statistics h-100 fade-in" style="border-radius: 16px; border: 1px solid #dfe5f5; box-shadow: 0 2px 12px rgba(46,204,113,0.08); animation-delay: 0.3s;">
-                        <div class="card-body" style="padding: 24px;">
-                            <div class="clearfix">
-                                <div class="float-left">
-                                    <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(46,204,113,0.12); display: flex; align-items: center; justify-content: center;">
-                                        <i class="fas fa-chalkboard" style="font-size: 22px; color: #2ecc71;"></i>
-                                    </div>
+                    <div class="card stat-card h-100 fade-in" style="box-shadow: 0 2px 12px rgba(46,204,113,0.08);">
+                        <div class="card-body">
+                            <div class="stat-row">
+                                <div class="stat-icon-wrap" style="background: rgba(46,204,113,0.12);">
+                                    <i class="fas fa-chalkboard" style="font-size: 22px; color: #2ecc71;"></i>
                                 </div>
-                                <div class="float-right text-right">
-                                    <p style="font-size: 13px; font-weight: 600; color: #7b86a6; margin-bottom: 4px;">الفصول الدراسية</p>
-                                    <h4 style="font-size: 28px; font-weight: 800; color: #2ecc71; margin: 0;">{{ \App\Models\Section::count() }}</h4>
+                                <div class="stat-info">
+                                    <div class="stat-label">الفصول الدراسية</div>
+                                    <div class="stat-number" style="color: #2ecc71;">{{ \App\Models\Section::count() }}</div>
                                 </div>
                             </div>
-                            <p class="text-muted pt-3 mb-0 mt-2" style="border-top: 1px solid #eef1f8; padding-top: 12px;">
-                                <i class="fas fa-arrow-left mr-1" style="color: #2ecc71;"></i>
-                                <a href="{{ route('Sections.index') }}" style="color: #2ecc71; text-decoration: none; font-weight: 600;">عرض الفصول</a>
-                            </p>
+                            <div class="stat-footer">
+                                <i class="fas fa-arrow-right" style="color: #2ecc71;"></i>
+                                <a href="{{ route('Sections.index') }}" style="color: #2ecc71;">عرض الفصول</a>
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <!-- Latest Activity -->
