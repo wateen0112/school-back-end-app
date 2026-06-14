@@ -1,0 +1,243 @@
+
+/* ============================================================
+   YALLASCHOOL CUSTOM THEME - Sidebar & Header
+   Matches Flutter Mobile App Color System
+   ============================================================ */
+
+/* ---- SIDEBAR ---- */
+.side-menu-bg {
+  background: #ffffff !important;
+  border-left: 1px solid #dfe5f5 !important;
+}
+
+.side-menu {
+  padding: 8px 0 !important;
+}
+
+.side-menu > li > a {
+  color: #20263a !important;
+  font-family: "Cairo", "Tajawal", sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  padding: 12px 20px !important;
+  border-radius: 0 10px 10px 0 !important;
+  margin: 2px 0 2px 8px !important;
+  transition: all 0.2s ease !important;
+  position: relative;
+}
+
+.side-menu > li > a:hover {
+  background: #f4f7ff !important;
+  color: #3149d8 !important;
+}
+
+.side-menu > li > a:hover i {
+  color: #5f7cf7 !important;
+}
+
+.side-menu > li > a i {
+  color: #5f7cf7 !important;
+  font-size: 16px !important;
+  margin-left: 10px !important;
+  width: 22px;
+  text-align: center;
+}
+
+.side-menu > li > a .right-nav-text {
+  font-weight: 600 !important;
+}
+
+/* Active / expanded menu item */
+.side-menu > li > a[aria-expanded="true"] {
+  background: #e8edff !important;
+  color: #3149d8 !important;
+}
+
+/* Submenu */
+.side-menu li ul {
+  background: #f4f7ff !important;
+  padding: 4px 0 !important;
+}
+
+.side-menu li ul li a {
+  color: #7b86a6 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  padding: 8px 48px 8px 16px !important;
+  border-radius: 0 8px 8px 0 !important;
+  margin: 1px 0 1px 8px !important;
+  transition: all 0.15s ease !important;
+}
+
+.side-menu li ul li a:hover {
+  background: #e8edff !important;
+  color: #3149d8 !important;
+}
+
+/* Menu divider / title */
+.menu-title {
+  color: #7b86a6 !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  padding: 16px 20px 8px !important;
+  margin-top: 8px !important;
+  border-top: 1px solid #eef1f8;
+}
+
+/* Sidebar scrollbar */
+.side-menu-bg::-webkit-scrollbar {
+  width: 4px;
+}
+.side-menu-bg::-webkit-scrollbar-track {
+  background: transparent;
+}
+.side-menu-bg::-webkit-scrollbar-thumb {
+  background: #dfe5f5;
+  border-radius: 2px;
+}
+
+/* ---- HEADER / NAVBAR ---- */
+.admin-header.navbar {
+  background: #ffffff !important;
+  border-bottom: 1px solid #dfe5f5 !important;
+  box-shadow: 0 1px 8px rgba(95, 124, 247, 0.06) !important;
+  height: 64px !important;
+}
+
+.admin-header .navbar-brand-wrapper {
+  background: #ffffff !important;
+  border-bottom: none !important;
+}
+
+.admin-header .nav-link {
+  color: #7b86a6 !important;
+  font-size: 18px !important;
+  transition: color 0.2s ease !important;
+}
+
+.admin-header .nav-link:hover {
+  color: #5f7cf7 !important;
+}
+
+.admin-header .button-toggle-nav {
+  color: #7b86a6 !important;
+  font-size: 20px !important;
+}
+
+.admin-header .button-toggle-nav:hover {
+  color: #5f7cf7 !important;
+}
+
+/* Notification badge */
+.admin-header .badge-danger.notification-status {
+  background-color: #ff704d !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  border: 2px solid #ffffff !important;
+}
+
+/* Language switcher */
+.admin-header .btn-light {
+  background: #f4f7ff !important;
+  border: 1px solid #dfe5f5 !important;
+  color: #20263a !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  border-radius: 8px !important;
+}
+
+.admin-header .btn-light:hover {
+  background: #e8edff !important;
+  border-color: #5f7cf7 !important;
+}
+
+/* Search box */
+.admin-header .search-box input {
+  background: #f4f7ff !important;
+  border: 1px solid #dfe5f5 !important;
+  border-radius: 10px !important;
+  color: #20263a !important;
+  font-family: "Cairo", sans-serif !important;
+}
+
+.admin-header .search-box input:focus {
+  border-color: #5f7cf7 !important;
+  box-shadow: 0 0 0 3px rgba(95, 124, 247, 0.1) !important;
+}
+
+/* User avatar */
+.admin-header .user-avatar img {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50% !important;
+  border: 2px solid #dfe5f5 !important;
+  object-fit: cover;
+}
+
+/* Wrapper background */
+.wrapper {
+  background: #f4f7ff !important;
+}
+
+/* Content area */
+.content-wrapper {
+  background: #f4f7ff !important;
+}
+
+/* Footer */
+footer,
+.footer {
+  background: #ffffff !important;
+  border-top: 1px solid #dfe5f5 !important;
+  color: #7b86a6 !important;
+}
+
+/* Widget cards icon backgrounds */
+.bg-primary-container/20 {
+  background-color: rgba(95, 124, 247, 0.12) !important;
+}
+
+.bg-secondary-container/20 {
+  background-color: rgba(255, 112, 77, 0.12) !important;
+}
+
+.bg-tertiary-container/20 {
+  background-color: rgba(255, 200, 76, 0.12) !important;
+}
+
+/* Text tertiary utility */
+.text-tertiary {
+  color: #ffc84c !important;
+}
+
+.bg-tertiary-container {
+  background-color: #fff8e6 !important;
+}
+
+/* Active tab styling */
+.nav-tabs .nav-link.active.show {
+  color: #5f7cf7 !important;
+  border-bottom: 2px solid #5f7cf7 !important;
+  background: transparent !important;
+  font-weight: 700 !important;
+}
+
+/* Card hover lift */
+.card-statistics:hover {
+  transform: translateY(-2px);
+}
+
+/* Transition utilities */
+.transition-colors {
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+/* Responsive sidebar */
+@media (max-width: 992px) {
+  .side-menu-bg {
+    background: #ffffff !important;
+  }
+}
