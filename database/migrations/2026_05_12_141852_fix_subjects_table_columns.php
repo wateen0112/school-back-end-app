@@ -23,7 +23,7 @@ class FixSubjectsTableColumns extends Migration
         DB::statement('ALTER TABLE subjects DROP FOREIGN KEY subjects_teacher_id_foreign');
         
         // Add new foreign key constraint pointing to Teachers table
-        DB::statement('ALTER TABLE subjects ADD CONSTRAINT subjects_teacher_id_foreign FOREIGN KEY (teacher_id) REFERENCES Teachers(id) ON DELETE CASCADE');
+        DB::statement('ALTER TABLE subjects ADD CONSTRAINT subjects_teacher_id_foreign FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE');
     }
 
     /**

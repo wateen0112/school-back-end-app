@@ -15,13 +15,13 @@ class PromotionController extends Controller
     {
         try {
             $promotions = promotion::with(['student', 'f_grade', 'f_classroom', 'f_section', 't_grade', 't_classroom', 't_section'])->get();
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Student promotions retrieved successfully',
                 'data' => $promotions
             ], 200);
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -103,7 +103,7 @@ class PromotionController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error promoting students',
@@ -116,13 +116,13 @@ class PromotionController extends Controller
     {
         try {
             $student = promotion::with(['student', 'f_grade', 'f_classroom', 'f_section', 't_grade', 't_classroom', 't_section'])->findOrFail($id);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Promoted student retrieved successfully',
                 'data' => $student
             ], 200);
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -135,8 +135,8 @@ class PromotionController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'to_grade_id' => 'required|exists:grades,id',
-            'to_classroom_id' => 'required|exists:classrooms,id',
+            'to_grade_id' => 'required|exists:Grades,id',
+            'to_classroom_id' => 'required|exists:Classrooms,id',
             'to_section_id' => 'required|exists:sections,id',
             'promotion_date' => 'required|date',
         ]);
@@ -151,7 +151,7 @@ class PromotionController extends Controller
 
         try {
             $student = Student::findOrFail($id);
-            
+
             $student->grade_id = $request->to_grade_id;
             $student->classroom_id = $request->to_classroom_id;
             $student->section_id = $request->to_section_id;
@@ -223,8 +223,8 @@ class PromotionController extends Controller
     public function getStudentsForPromotion(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'grade_id' => 'required|exists:grades,id',
-            'classroom_id' => 'required|exists:classrooms,id',
+            'grade_id' => 'required|exists:Grades,id',
+            'classroom_id' => 'required|exists:Classrooms,id',
             'section_id' => 'required|exists:sections,id',
         ]);
 
@@ -254,6 +254,102 @@ class PromotionController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error retrieving students for promotion',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Bulk promote selected students by their IDs.
+     * Accepts specific student_ids array and promotes only those students.
+     */
+    public function bulkPromote(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'student_ids' => 'required|array|min:1',
+            'student_ids.*' => 'integer|exists:students,id',
+            'Grade_id' => 'required|exists:Grades,id',
+            'Classroom_id' => 'required|exists:Classrooms,id',
+            'section_id' => 'required|exists:sections,id',
+            'academic_year' => 'required|string',
+            'Grade_id_new' => 'required|exists:Grades,id',
+            'Classroom_id_new' => 'required|exists:Classrooms,id',
+            'section_id_new' => 'required|exists:sections,id',
+            'academic_year_new' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $studentIds = $request->student_ids;
+
+            // Fetch only the selected students that match the source criteria
+            $students = Student::whereIn('id', $studentIds)
+                ->where('Grade_id', $request->Grade_id)
+                ->where('Classroom_id', $request->Classroom_id)
+                ->where('section_id', $request->section_id)
+                ->where('academic_year', $request->academic_year)
+                ->get();
+
+            if ($students->count() < 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No matching students found for the selected IDs and source criteria.'
+                ], 404);
+            }
+
+            $promotions = [];
+            foreach ($students as $student) {
+                Student::where('id', $student->id)->update([
+                    'Grade_id' => $request->Grade_id_new,
+                    'Classroom_id' => $request->Classroom_id_new,
+                    'section_id' => $request->section_id_new,
+                    'academic_year' => $request->academic_year_new,
+                ]);
+
+                $promotions[] = promotion::updateOrCreate(
+                    [
+                        'student_id' => $student->id,
+                        'from_grade' => $request->Grade_id,
+                        'from_Classroom' => $request->Classroom_id,
+                        'from_section' => $request->section_id,
+                    ],
+                    [
+                        'to_grade' => $request->Grade_id_new,
+                        'to_Classroom' => $request->Classroom_id_new,
+                        'to_section' => $request->section_id_new,
+                        'academic_year' => $request->academic_year,
+                        'academic_year_new' => $request->academic_year_new,
+                    ]
+                );
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Students promoted successfully',
+                'data' => [
+                    'requested_count' => count($studentIds),
+                    'promoted_count' => count($promotions),
+                    'promotions' => $promotions
+                ]
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error promoting students',
                 'error' => $e->getMessage()
             ], 500);
         }
