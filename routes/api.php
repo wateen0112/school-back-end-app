@@ -170,9 +170,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::apiResource('graduated', 'GraduatedController');
         
         // Student Promotion
-        Route::apiResource('promotion', 'PromotionController');
-        Route::post('promotion/bulk', 'PromotionController@bulkPromote');
         Route::get('promotion/students-for-promotion', 'PromotionController@getStudentsForPromotion');
+        Route::post('promotion/bulk', 'PromotionController@bulkPromote');
+        Route::apiResource('promotion', 'PromotionController');
         
         // Fees Management
         Route::apiResource('fees-invoices', 'FeesInvoicesController');
