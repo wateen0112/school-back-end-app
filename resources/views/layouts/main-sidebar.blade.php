@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="row">
-        <!-- Left Sidebar start-->
-        <div class="side-menu-fixed">
+        <!-- Sidebar start-->
+        <div class="side-menu-fixed" style="{{ App::getLocale() == 'ar' ? 'right: 0; left: auto;' : 'left: 0; right: auto;' }}">
 
             @if (auth('web')->check())
                 @include('layouts.main-sidebar.admin-main-sidebar')
@@ -21,6 +21,6 @@
 
         </div>
 
-        <!-- Left Sidebar End-->
+        <!-- Sidebar End-->
 
         <!--=================================
