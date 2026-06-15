@@ -39,9 +39,9 @@ class DashboardController extends Controller
                 ->get();
 
             // Get students by grade distribution
-            $students_by_grade = Student::select('grades.Name as grade_name', DB::raw('count(*) as count'))
-                ->join('grades', 'students.Grade_id', '=', 'grades.id')
-                ->groupBy('grades.id', 'grades.Name')
+            $students_by_grade = Student::select('Grades.Name as grade_name', DB::raw('count(*) as count'))
+                ->join('Grades', 'students.Grade_id', '=', 'Grades.id')
+                ->groupBy('Grades.id', 'Grades.Name')
                 ->get();
 
             // Get gender distribution
@@ -94,8 +94,8 @@ class DashboardController extends Controller
             $active_students = Student::where('created_at', '>=', now()->subDays(30))->count();
 
             // Get students per grade
-            $students_per_grade = Grade::select('grades.*', DB::raw('COALESCE(student_counts.count, 0) as students_count'))
-                ->leftJoin(DB::raw('(SELECT Grade_id, COUNT(*) as count FROM students GROUP BY Grade_id) as student_counts'), 'grades.id', '=', 'student_counts.Grade_id')
+            $students_per_grade = Grade::select('Grades.*', DB::raw('COALESCE(student_counts.count, 0) as students_count'))
+                ->leftJoin(DB::raw('(SELECT Grade_id, COUNT(*) as count FROM students GROUP BY Grade_id) as student_counts'), 'Grades.id', '=', 'student_counts.Grade_id')
                 ->get();
 
             return response()->json([
