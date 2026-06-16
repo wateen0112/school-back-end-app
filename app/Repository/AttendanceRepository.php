@@ -29,25 +29,55 @@ class AttendanceRepository implements AttendanceRepositoryInterface
     public function store($request)
     {
         try {
-
+            $attenddate = date('Y-m-d');
+            $teacher_id = $request->input('teacher_id', Teacher::first()->id ?? 1);
+            
+            // Get all students that should be in attendance (from the section)
+            $allStudentIds = $request->student_id ?? [];
+            
+            // Students that were explicitly submitted with a selection
+            $submittedStudentIds = array_keys($request->attendences ?? []);
+            
+            // Process students who were explicitly selected (presence or absent)
             foreach ($request->attendences as $studentid => $attendence) {
-
-                if( $attendence == 'presence' ) {
-                    $attendence_status = true;
-                } else if( $attendence == 'absent' ){
-                    $attendence_status = false;
+                $attendence_status = ($attendence == 'presence') ? true : false;
+                
+                Attendance::updateOrCreate(
+                    [
+                        'student_id' => $studentid,
+                        'attendence_date' => $attenddate
+                    ],
+                    [
+                        'student_id' => $studentid,
+                        'grade_id' => $request->grade_id,
+                        'classroom_id' => $request->classroom_id,
+                        'section_id' => $request->section_id,
+                        'teacher_id' => $teacher_id,
+                        'attendence_date' => $attenddate,
+                        'attendence_status' => $attendence_status
+                    ]
+                );
+            }
+            
+            // Mark students who were NOT selected as ABSENT
+            foreach ($allStudentIds as $studentid) {
+                if (!in_array($studentid, $submittedStudentIds)) {
+                    Attendance::updateOrCreate(
+                        [
+                            'student_id' => $studentid,
+                            'attendence_date' => $attenddate
+                        ],
+                        [
+                            'student_id' => $studentid,
+                            'grade_id' => $request->grade_id,
+                            'classroom_id' => $request->classroom_id,
+                            'section_id' => $request->section_id,
+                            'teacher_id' => $teacher_id,
+                            'attendence_date' => $attenddate,
+                            'attendence_status' => false  // absent
+                        ]
+                    );
                 }
-
-                Attendance::create([
-                    'student_id'=> $studentid,
-                    'grade_id'=> $request->grade_id,
-                    'classroom_id'=> $request->classroom_id,
-                    'section_id'=> $request->section_id,
-                    'teacher_id'=> 1,
-                    'attendence_date'=> date('Y-m-d'),
-                    'attendence_status'=> $attendence_status
-                ]);
-
             }
 
             toastr()->success(trans('messages.success'));

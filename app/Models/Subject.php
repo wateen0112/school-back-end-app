@@ -9,7 +9,7 @@ class Subject extends Model
 {
     use HasTranslations;
 
-    public $translatable = ['Name'];
+    public $translatable = ['name'];
 
     protected $fillable = ['Name','Grade_id','Classroom_id','teacher_id'];
 
@@ -18,13 +18,13 @@ class Subject extends Model
 
     public function grade()
     {
-        return $this->belongsTo('App\Models\Grade', 'Grade_id');
+        return $this->belongsTo('App\Models\Grade', 'grade_id');
     }
 
     // جلب اسم الصفوف الدراسية
     public function classroom()
     {
-        return $this->belongsTo('App\Models\Classroom', 'Classroom_id');
+        return $this->belongsTo('App\Models\Classroom', 'classroom_id');
     }
 
     // جلب اسم المعلم

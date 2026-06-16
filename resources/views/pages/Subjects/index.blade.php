@@ -2,13 +2,13 @@
 @section('css')
     @toastr_css
 @section('title')
-    قائمة المواد الدراسية
+    {{ trans('main_trans.Subjects_list') }}
 @stop
 @endsection
 @section('page-header')
     <!-- breadcrumb -->
 @section('PageTitle')
-    قائمة المواد الدراسية
+    {{ trans('main_trans.Subjects_list') }}
 @stop
 <!-- breadcrumb -->
 @endsection
@@ -42,9 +42,9 @@
                                             <tr>
                                             <td>{{$loop->iteration}}</td>
                                             <td>{{$subject->name}}</td>
-                                            <td>{{$subject->grade->Name}}</td>
-                                            <td>{{$subject->classroom->Name_Class}}</td>
-                                            <td>{{$subject->teacher->Name}}</td>
+                                            <td>{{$subject->grade?->Name ?? '-'}}</td>
+                                            <td>{{$subject->classroom?->Name_Class ?? '-'}}</td>
+                                            <td>{{$subject->teacher?->Name ?? '-'}}</td>
                                                 <td>
                                                     <a href="{{route('subjects.edit',$subject->id)}}" class="btn btn-info btn-sm" role="button" aria-pressed="true"><i class="fa fa-edit"></i></a>
                                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_subject{{ $subject->id }}" title="حذف"><i class="fa fa-trash"></i></button>
@@ -64,7 +64,7 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <p> {{ trans('My_Classes_trans.Warning_Grade') }} {{$subject->name}}</p>
+                                                            <p> {{ trans('My_Classes_trans.Warning_Grade') }} {{$subject->getTranslation('name', app()->getLocale())}}</p>
                                                             <input type="hidden" name="id"  value="{{$subject->id}}">
                                                         </div>
                                                         <div class="modal-footer">

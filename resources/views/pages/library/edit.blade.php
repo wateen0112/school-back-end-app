@@ -41,6 +41,16 @@
                                         <input type="hidden" name="id" value="{{$book->id}}" class="form-control">
                                     </div>
 
+                                    <div class="col">
+                                        <label for="teacher_id">المعلم : <span class="text-danger">*</span></label>
+                                        <select class="custom-select mr-sm-2" name="teacher_id" required>
+                                            <option selected disabled>{{trans('Parent_trans.Choose')}}...</option>
+                                            @foreach($teachers as $teacher)
+                                                <option value="{{ $teacher->id }}" {{ $book->teacher_id == $teacher->id ? 'selected' : '' }}>{{ $teacher->Name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
                                 </div>
                                 <br>
 
@@ -112,9 +122,9 @@
                         type: "GET",
                         dataType: "json",
                         success: function (data) {
-                            $('select[name="Class_id"]').empty();
+                            $('select[name="Classroom_id"]').empty();
                             $.each(data, function (key, value) {
-                                $('select[name="Class_id"]').append('<option value="' + key + '">' + value + '</option>');
+                                $('select[name="Classroom_id"]').append('<option value="' + key + '">' + value + '</option>');
                             });
                         },
                     });
