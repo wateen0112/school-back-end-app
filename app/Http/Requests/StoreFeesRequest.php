@@ -25,7 +25,7 @@ class StoreFeesRequest extends FormRequest
     {
         return [
             'title_ar' => 'required',
-            'title_en' => 'required',
+            'title_en' => 'nullable',
             'amount' => 'required|numeric',
             'Grade_id' => 'required|integer',
             'Classroom_id' => 'required|integer',
@@ -37,7 +37,6 @@ class StoreFeesRequest extends FormRequest
     {
         return [
             'title_ar.required' => trans('validation.required'),
-            'title_en.required' => trans('validation.unique'),
             'Password.required' => trans('validation.required'),
             'amount.required' => trans('validation.required'),
             'amount.numeric' => trans('validation.numeric'),

@@ -33,7 +33,7 @@ class SubjectController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'Name_ar' => 'required|string|max:255',
-            'Name_en' => 'required|string|max:255',
+            'Name_en' => 'nullable|string|max:255',
             'Grade_id' => 'required',
             'Class_id' => 'required',
             'teacher_id' => 'required|exists:teachers,id',
@@ -49,7 +49,7 @@ class SubjectController extends Controller
 
         try {
             $subject = new Subject();
-            $subject->Name = ['en' => $request->Name_en, 'ar' => $request->Name_ar];
+            $subject->Name = ['en' => $request->Name_en ?: $request->Name_ar, 'ar' => $request->Name_ar];
             $subject->Grade_id = $request->Grade_id;
             $subject->Classroom_id = $request->Class_id;
             $subject->teacher_id = $request->teacher_id;
@@ -94,7 +94,7 @@ class SubjectController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'Name_ar' => 'required|string|max:255',
-            'Name_en' => 'required|string|max:255',
+            'Name_en' => 'nullable|string|max:255',
             'Grade_id' => 'required',
             'Class_id' => 'required',
             'teacher_id' => 'required|exists:teachers,id',
@@ -110,7 +110,7 @@ class SubjectController extends Controller
 
         try {
             $subject = Subject::findOrFail($request->input('id', $id));
-            $subject->Name = ['en' => $request->Name_en, 'ar' => $request->Name_ar];
+            $subject->Name = ['en' => $request->Name_en ?: $request->Name_ar, 'ar' => $request->Name_ar];
             $subject->Grade_id = $request->Grade_id;
             $subject->Classroom_id = $request->Class_id;
             $subject->teacher_id = $request->teacher_id;

@@ -29,7 +29,7 @@ class SubjectRepository implements SubjectRepositoryInterface
     {
         try {
             $subjects = new Subject();
-            $subjects->name = ['en' => $request->Name_en, 'ar' => $request->Name_ar];
+            $subjects->name = ['en' => $request->Name_en ?: $request->Name_ar, 'ar' => $request->Name_ar];
             $subjects->grade_id = $request->Grade_id;
             $subjects->classroom_id = $request->Class_id;
             $subjects->teacher_id = $request->teacher_id;
@@ -56,7 +56,7 @@ class SubjectRepository implements SubjectRepositoryInterface
     {
         try {
             $subjects =  Subject::findorfail($request->id);
-            $subjects->name = ['en' => $request->Name_en, 'ar' => $request->Name_ar];
+            $subjects->name = ['en' => $request->Name_en ?: $request->Name_ar, 'ar' => $request->Name_ar];
             $subjects->grade_id = $request->Grade_id;
             $subjects->classroom_id = $request->Class_id;
             $subjects->teacher_id = $request->teacher_id;

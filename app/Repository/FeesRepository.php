@@ -38,7 +38,7 @@ class FeesRepository implements FeesRepositoryInterface
         try {
 
             $fees = new Fee();
-            $fees->title = ['en' => $request->title_en, 'ar' => $request->title_ar];
+            $fees->title = ['en' => $request->title_en ?: $request->title_ar, 'ar' => $request->title_ar];
             $fees->amount  =$request->amount;
             $fees->Grade_id  =$request->Grade_id;
             $fees->Classroom_id  =$request->Classroom_id;
@@ -60,7 +60,7 @@ class FeesRepository implements FeesRepositoryInterface
     {
         try {
             $fees = Fee::findorfail($request->id);
-            $fees->title = ['en' => $request->title_en, 'ar' => $request->title_ar];
+            $fees->title = ['en' => $request->title_en ?: $request->title_ar, 'ar' => $request->title_ar];
             $fees->amount  =$request->amount;
             $fees->Grade_id  =$request->Grade_id;
             $fees->Classroom_id  =$request->Classroom_id;

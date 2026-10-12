@@ -37,7 +37,7 @@ class SectionController extends Controller
     {
         try {
             $section = new Section();
-            $section->Name_Section = ['en' => $request->Name_Section_En, 'ar' => $request->Name_Section_Ar];
+            $section->Name_Section = ['en' => $request->Name_Section_En ?: $request->Name_Section_Ar, 'ar' => $request->Name_Section_Ar];
             $section->Status = 1;
             $section->Grade_id = $request->Grade_id;
             $section->Class_id = $request->Class_id;
@@ -82,17 +82,35 @@ class SectionController extends Controller
         }
     }
 
-    public function update(StoreSections $request, $id = null)
+    public function update(Request $request, $id = null)
     {
         try {
             $section = Section::findOrFail($request->input('id', $id));
-            $section->Name_Section = ['en' => $request->Name_Section_En, 'ar' => $request->Name_Section_Ar];
-            $section->Status = $request->has('Status') ? 1 : 2;
-            $section->Grade_id = $request->Grade_id;
-            $section->Class_id = $request->Class_id;
+            
+            if ($request->has('Name_Section_En') || $request->has('Name_Section_Ar')) {
+                $section->Name_Section = [
+                    'en' => $request->input('Name_Section_En', $section->Name_Section['en'] ?? '') ?: $request->input('Name_Section_Ar', $section->Name_Section['ar'] ?? ''),
+                    'ar' => $request->input('Name_Section_Ar', $section->Name_Section['ar'] ?? '')
+                ];
+            }
+            
+            if ($request->has('Status')) {
+                $section->Status = $request->Status == 1 || $request->Status == '1' ? 1 : 2;
+            }
+            
+            if ($request->has('Grade_id')) {
+                $section->Grade_id = $request->Grade_id;
+            }
+            
+            if ($request->has('Class_id')) {
+                $section->Class_id = $request->Class_id;
+            }
+            
             $section->save();
 
-            $section->teachers()->sync($request->input('teacher_id', []));
+            if ($request->has('teacher_id')) {
+                $section->teachers()->sync($request->teacher_id);
+            }
 
             return response()->json([
                 'success' => true,

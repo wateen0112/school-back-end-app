@@ -7,6 +7,7 @@ use App\Models\FundAccount;
 use App\Models\PaymentStudent;
 use App\Models\Student;
 use App\Models\StudentAccount;
+use App\Support\CacheVersion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -77,6 +78,7 @@ class PaymentController extends Controller
             $studentAccount->save();
 
             DB::commit();
+            CacheVersion::bump('accounting');
 
             return response()->json([
                 'success' => true,
@@ -159,6 +161,7 @@ class PaymentController extends Controller
                 $studentAccount->save();
             }
             DB::commit();
+            CacheVersion::bump('accounting');
 
             return response()->json([
                 'success' => true,
@@ -181,6 +184,7 @@ class PaymentController extends Controller
         try {
             $payment = PaymentStudent::findOrFail($request->input('id', $id));
             $payment->delete();
+            CacheVersion::bump('accounting');
 
             return response()->json([
                 'success' => true,

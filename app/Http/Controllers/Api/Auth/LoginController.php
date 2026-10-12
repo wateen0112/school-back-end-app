@@ -25,7 +25,8 @@ class LoginController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required|string|min:6'
+            'password' => 'required|string|min:6',
+            'type' => 'nullable|string|in:web,student,teacher,parent'
         ]);
 
         if ($validator->fails()) {
@@ -41,8 +42,12 @@ class LoginController extends Controller
             'password' => $request->password
         ];
 
-        // Try to authenticate with each guard type
-        $guards = ['web', 'student', 'teacher', 'parent'];
+        // If the client asked for a specific guard, only try that guard so the
+        // returned token always matches the requested role (e.g. teacher token).
+        // Fallback to all guards only when no type was sent.
+        $requestedGuard = $request->input('type');
+        $defaultGuards = ['web', 'student', 'teacher', 'parent'];
+        $guards = $requestedGuard ? [$requestedGuard] : $defaultGuards;
         
         foreach ($guards as $guardName) {
             if (Auth::guard($guardName)->attempt($credentials)) {
@@ -55,7 +60,7 @@ class LoginController extends Controller
                 return response()->json([
                     'success' => true,
                     'message' => 'Login successful',
-                    'user' => $user,
+                    'user' => $this->withPermissions($user),
                     'access_token' => $token->plainTextToken,
                     'bearer_token' => 'Bearer ' . $token->plainTextToken,
                     'token_type' => 'Bearer',
@@ -65,6 +70,10 @@ class LoginController extends Controller
                 ], 200);
             }
         }
+
+        \App\Services\AuditLogger::log('auth.login_failed', 'auth', null, 'فشل تسجيل الدخول', [
+            'email' => $request->email,
+        ]);
 
         return response()->json([
             'success' => false,
@@ -93,8 +102,9 @@ class LoginController extends Controller
             ], 401);
         }
         
-        if (method_exists($user, 'tokens')) {
-            $user->tokens()->delete();
+        // Revoke only the token used for this request so other devices stay signed in.
+        if (method_exists($user, 'currentAccessToken') && $user->currentAccessToken()) {
+            $user->currentAccessToken()->delete();
         }
         
         // Get the guard name based on user model
@@ -103,9 +113,6 @@ class LoginController extends Controller
         if ($guardName && Auth::guard($guardName)->check()) {
             Auth::guard($guardName)->logout();
         }
-        
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
 
         return response()->json([
             'success' => true,
@@ -124,13 +131,23 @@ class LoginController extends Controller
             ], 401);
         }
 
-        $token = $user->createToken('API Token')->accessToken;
+        // Rotate the token: revoke the one used for this request, then issue a fresh one.
+        $current = method_exists($user, 'currentAccessToken') ? $user->currentAccessToken() : null;
+
+        $token = $user->createToken('API Token');
+
+        if ($current) {
+            $current->delete();
+        }
 
         return response()->json([
             'success' => true,
             'message' => 'Token refreshed successfully',
-            'user' => $user,
-            'token' => $token
+            'user' => $this->withPermissions($user),
+            'access_token' => $token->plainTextToken,
+            'bearer_token' => 'Bearer ' . $token->plainTextToken,
+            'token_type' => 'Bearer',
+            'expires_at' => $token->accessToken->expires_at
         ], 200);
     }
 
@@ -147,7 +164,7 @@ class LoginController extends Controller
 
         return response()->json([
             'success' => true,
-            'user' => $user
+            'user' => $this->withPermissions($user)
         ], 200);
     }
 
@@ -164,6 +181,10 @@ class LoginController extends Controller
             return 'teacher';
         } elseif (strpos($userClass, 'Parent') !== false) {
             return 'parent';
+        } elseif ($user instanceof \App\User && \App\Models\Transportation\DriverProfile::where('user_id', $user->id)->where('status', 'ACTIVE')->exists()) {
+            // School bus drivers sign in with a regular staff account but get
+            // the dedicated driver experience in the mobile app.
+            return 'driver';
         } else {
             return 'admin';
         }
@@ -175,7 +196,7 @@ class LoginController extends Controller
     private function getUserGuard($user)
     {
         $userClass = get_class($user);
-        
+
         if (strpos($userClass, 'Student') !== false) {
             return 'student';
         } elseif (strpos($userClass, 'Teacher') !== false) {
@@ -185,5 +206,19 @@ class LoginController extends Controller
         } else {
             return 'web';
         }
+    }
+
+    /**
+     * Return the user array with effective permissions for dashboard admins.
+     */
+    private function withPermissions($user)
+    {
+        $data = $user->toArray();
+
+        if ($user instanceof \App\User) {
+            $data['permissions'] = $user->effectivePermissions();
+        }
+
+        return $data;
     }
 }

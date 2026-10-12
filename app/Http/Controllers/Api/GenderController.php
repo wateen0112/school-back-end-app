@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Gender;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class GenderController extends Controller
 {
     public function index()
     {
         try {
-            $genders = Gender::all();
+            $genders = Cache::remember('lookup:genders', 86400, fn () => Gender::all());
             
             return response()->json([
                 'success' => true,

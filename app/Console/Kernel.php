@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        \App\Console\Commands\SendInstallmentReminders::class,
+        \App\Console\Commands\GenerateMonthlyReports::class,
     ];
 
     /**
@@ -24,7 +25,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('installments:send-reminders')->dailyAt('08:00');
+        $schedule->command('transportation:prune-locations')->dailyAt('01:15');
+        $schedule->command('reports:generate-monthly')->monthly()->at('00:30');
     }
 
     /**

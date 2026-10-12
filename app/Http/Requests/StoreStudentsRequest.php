@@ -17,17 +17,51 @@ class StoreStudentsRequest extends FormRequest
     }
 
     /**
+     * Get the ID of the record being updated from route parameters.
+     * Works with any route parameter name (e.g., {student}, {id}, etc.)
+     *
+     * @return int|string|null
+     */
+    protected function getRouteId()
+    {
+        // Try to get ID from route parameters
+        $route = $this->route();
+        if ($route) {
+            $parameters = $route->parameters();
+            // Return the first numeric parameter (which is typically the ID)
+            foreach ($parameters as $key => $value) {
+                if (is_numeric($value)) {
+                    return $value;
+                }
+            }
+        }
+        // Fallback to input 'id'
+        return $this->input('id');
+    }
+
+    /**
+     * Check if this is an update request (has route ID)
+     *
+     * @return bool
+     */
+    protected function isUpdate()
+    {
+        return !is_null($this->getRouteId());
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules()
     {
-        return [
+        $id = $this->getRouteId();
+        
+        $rules = [
             'name_ar' => 'required',
-            'name_en' => 'required',
-            'email' => 'required|email|unique:students,email,'.$this->id,
-            'password' => 'required|string|min:6|max:255',
+            'name_en' => 'nullable',
+            'email' => 'required|email|unique:students,email,'.$id,
             'gender_id' => 'required|exists:genders,id',
             'nationalitie_id' => 'required|exists:nationalities,id',
             'blood_id' => 'required|exists:type__bloods,id',
@@ -38,5 +72,14 @@ class StoreStudentsRequest extends FormRequest
             'parent_id' => 'required|exists:my__parents,id',
             'academic_year' => 'required',
         ];
+
+        // Password is required for store, optional for update
+        if ($this->isUpdate()) {
+            $rules['password'] = 'nullable|string|min:6|max:255';
+        } else {
+            $rules['password'] = 'required|string|min:6|max:255';
+        }
+
+        return $rules;
     }
 }

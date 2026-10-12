@@ -76,9 +76,9 @@ class AddParent extends Component
             'Email' => 'required|unique:my__parents,Email,'.$this->id,
             'Password' => 'required',
             'Name_Father' => 'required',
-            'Name_Father_en' => 'required',
+            'Name_Father_en' => 'nullable',
             'Job_Father' => 'required',
-            'Job_Father_en' => 'required',
+            'Job_Father_en' => 'nullable',
             'National_ID_Father' => 'required|unique:my__parents,National_ID_Father,' . $this->id,
             'Passport_ID_Father' => 'required|unique:my__parents,Passport_ID_Father,' . $this->id,
             'Phone_Father' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
@@ -97,12 +97,12 @@ class AddParent extends Component
 
         $this->validate([
             'Name_Mother' => 'required',
-            'Name_Mother_en' => 'required',
+            'Name_Mother_en' => 'nullable',
             'National_ID_Mother' => 'required|unique:my__parents,National_ID_Mother,' . $this->id,
             'Passport_ID_Mother' => 'required|unique:my__parents,Passport_ID_Mother,' . $this->id,
             'Phone_Mother' => 'required',
             'Job_Mother' => 'required',
-            'Job_Mother_en' => 'required',
+            'Job_Mother_en' => 'nullable',
             'Nationality_Mother_id' => 'required',
             'Blood_Type_Mother_id' => 'required',
             'Religion_Mother_id' => 'required',
@@ -119,11 +119,11 @@ class AddParent extends Component
             // Father_INPUTS
             $My_Parent->Email = $this->Email;
             $My_Parent->Password = Hash::make($this->Password);
-            $My_Parent->Name_Father = ['en' => $this->Name_Father_en, 'ar' => $this->Name_Father];
+            $My_Parent->Name_Father = ['en' => $this->Name_Father_en ?: $this->Name_Father, 'ar' => $this->Name_Father];
             $My_Parent->National_ID_Father = $this->National_ID_Father;
             $My_Parent->Passport_ID_Father = $this->Passport_ID_Father;
             $My_Parent->Phone_Father = $this->Phone_Father;
-            $My_Parent->Job_Father = ['en' => $this->Job_Father_en, 'ar' => $this->Job_Father];
+            $My_Parent->Job_Father = ['en' => $this->Job_Father_en ?: $this->Job_Father, 'ar' => $this->Job_Father];
             $My_Parent->Passport_ID_Father = $this->Passport_ID_Father;
             $My_Parent->Nationality_Father_id = $this->Nationality_Father_id;
             $My_Parent->Blood_Type_Father_id = $this->Blood_Type_Father_id;
@@ -131,11 +131,11 @@ class AddParent extends Component
             $My_Parent->Address_Father = $this->Address_Father;
 
             // Mother_INPUTS
-            $My_Parent->Name_Mother = ['en' => $this->Name_Mother_en, 'ar' => $this->Name_Mother];
+            $My_Parent->Name_Mother = ['en' => $this->Name_Mother_en ?: $this->Name_Mother, 'ar' => $this->Name_Mother];
             $My_Parent->National_ID_Mother = $this->National_ID_Mother;
             $My_Parent->Passport_ID_Mother = $this->Passport_ID_Mother;
             $My_Parent->Phone_Mother = $this->Phone_Mother;
-            $My_Parent->Job_Mother = ['en' => $this->Job_Mother_en, 'ar' => $this->Job_Mother];
+            $My_Parent->Job_Mother = ['en' => $this->Job_Mother_en ?: $this->Job_Mother, 'ar' => $this->Job_Mother];
             $My_Parent->Passport_ID_Mother = $this->Passport_ID_Mother;
             $My_Parent->Nationality_Mother_id = $this->Nationality_Mother_id;
             $My_Parent->Blood_Type_Mother_id = $this->Blood_Type_Mother_id;

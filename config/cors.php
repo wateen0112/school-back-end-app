@@ -19,7 +19,13 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    // Explicit allow-list of origins (comma-separated in CORS_ALLOWED_ORIGINS).
+    // The wildcard "*" is intentionally NOT permitted so browser clients must
+    // come from a known frontend origin.
+    'allowed_origins' => array_values(array_filter(array_map('trim', explode(
+        ',',
+        env('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://localhost:5173')
+    )))),
 
     'allowed_origins_patterns' => [],
 

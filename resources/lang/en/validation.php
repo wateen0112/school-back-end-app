@@ -135,6 +135,8 @@ return [
         ],
     ],
 
+    'classroom_belongs_to_grade' => 'The selected classroom does not belong to the selected grade.',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes

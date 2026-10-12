@@ -40,6 +40,7 @@ class LibraryController extends Controller
             'Grade_id' => 'required',
             'Classroom_id' => 'required',
             'section_id' => 'required|exists:sections,id',
+            'teacher_id' => 'required|exists:teachers,id',
         ]);
 
         if ($validator->fails()) {
@@ -56,7 +57,7 @@ class LibraryController extends Controller
             $library->Grade_id = $request->Grade_id;
             $library->Classroom_id = $request->Classroom_id;
             $library->section_id = $request->section_id;
-            $library->teacher_id = $request->input('teacher_id', 1);
+            $library->teacher_id = $request->teacher_id;
 
             if ($request->hasFile('file_name')) {
                 $file = $request->file('file_name');
@@ -110,6 +111,7 @@ class LibraryController extends Controller
             'Grade_id' => 'required',
             'Classroom_id' => 'required',
             'section_id' => 'required|exists:sections,id',
+            'teacher_id' => 'required|exists:teachers,id',
         ]);
 
         if ($validator->fails()) {
@@ -126,7 +128,7 @@ class LibraryController extends Controller
             $library->Grade_id = $request->Grade_id;
             $library->Classroom_id = $request->Classroom_id;
             $library->section_id = $request->section_id;
-            $library->teacher_id = $request->input('teacher_id', 1);
+            $library->teacher_id = $request->teacher_id;
 
             if ($request->hasFile('file_name')) {
                 Storage::disk('upload_attachments')->delete('attachments/library/' . $library->file_name);

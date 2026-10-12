@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Type_Blood;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class BloodTypeController extends Controller
 {
     public function index()
     {
         try {
-            $bloodTypes = Type_Blood::all();
+            $bloodTypes = Cache::remember('lookup:blood_types', 86400, fn () => Type_Blood::all());
             
             return response()->json([
                 'success' => true,

@@ -7,21 +7,42 @@ use Illuminate\Support\Facades\DB;
 
 class ClassroomTableSeeder extends Seeder
 {
-
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
     public function run()
     {
         DB::table('Classrooms')->delete();
-        $classrooms = [
-            ['en'=> 'First grade', 'ar'=> 'الصف الاول'],
-            ['en'=> 'Second grade', 'ar'=> 'الصف الثاني'],
-            ['en'=> 'Third grade', 'ar'=> 'الصف الثالث'],
+
+        $grades = Grade::orderBy('id')->get();
+
+        $classroomNames = [
+            [
+                ['en' => 'Grade 1', 'ar' => 'الصف الأول الابتدائي'],
+                ['en' => 'Grade 2', 'ar' => 'الصف الثاني الابتدائي'],
+                ['en' => 'Grade 3', 'ar' => 'الصف الثالث الابتدائي'],
+            ],
+            [
+                ['en' => 'Grade 7', 'ar' => 'الصف الأول المتوسط'],
+                ['en' => 'Grade 8', 'ar' => 'الصف الثاني المتوسط'],
+                ['en' => 'Grade 9', 'ar' => 'الصف الثالث المتوسط'],
+            ],
+            [
+                ['en' => 'Grade 10', 'ar' => 'الصف الأول الثانوي'],
+                ['en' => 'Grade 11', 'ar' => 'الصف الثاني الثانوي'],
+                ['en' => 'Grade 12', 'ar' => 'الصف الثالث الثانوي'],
+            ],
         ];
 
-        foreach ($classrooms as $classroom) {
-            Classroom::create([
-            'Name_Class' => $classroom,
-            'Grade_id' => Grade::all()->unique()->random()->id
-            ]);
+        foreach ($grades as $index => $grade) {
+            foreach ($classroomNames[$index] as $name) {
+                Classroom::create([
+                    'Name_Class' => $name,
+                    'Grade_id' => $grade->id,
+                ]);
+            }
         }
     }
 }

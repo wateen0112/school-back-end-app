@@ -13,6 +13,7 @@ class Student extends Authenticatable
     use SoftDeletes, HasTranslations, HasApiTokens;
     public $translatable = ['name'];
     protected $guarded =[];
+    protected $hidden = ['password', 'remember_token'];
 
     // علاقة بين الطلاب والانواع لجلب اسم النوع في جدول الطلاب
 
@@ -70,6 +71,12 @@ class Student extends Authenticatable
         return $this->belongsTo('App\Models\My_Parent', 'parent_id');
     }
 
+    // Transportation extension profile (one-to-one, transportation module only)
+    public function transportProfile()
+    {
+        return $this->hasOne(\App\Models\Transportation\StudentTransportProfile::class, 'student_id');
+    }
+
     // علاقة بين جدول سدادت الطلاب وجدول الطلاب لجلب اجمالي المدفوعات والمتبقي
     public function student_account()
     {
@@ -80,6 +87,26 @@ class Student extends Authenticatable
     public function attendance()
     {
         return $this->hasMany('App\Models\Attendance', 'student_id');
+    }
+
+    public function studentInstallments()
+    {
+        return $this->hasMany('App\Models\StudentInstallment', 'student_id');
+    }
+
+    public function degrees()
+    {
+        return $this->hasMany('App\Models\Degree', 'student_id');
+    }
+
+    public function studentAnswers()
+    {
+        return $this->hasMany('App\Models\StudentAnswer', 'student_id');
+    }
+
+    public function paperExamMarks()
+    {
+        return $this->hasMany('App\Models\PaperExamMark', 'student_id');
     }
 
 }

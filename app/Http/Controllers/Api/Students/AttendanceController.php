@@ -14,7 +14,14 @@ class AttendanceController extends Controller
     public function index(Request $request)
     {
         try {
-            $attendance = Attendance::with(['students', 'grade', 'classroom', 'section'])
+            $attendance = Attendance::with([
+                    'students' => function ($query) {
+                        $query->select('id', 'name', 'Grade_id', 'Classroom_id', 'section_id');
+                    },
+                    'grade',
+                    'classroom',
+                    'section',
+                ])
                 ->when($request->filled('grade_id'), function ($query) use ($request) {
                     $query->where('grade_id', $request->grade_id);
                 })
@@ -46,6 +53,59 @@ class AttendanceController extends Controller
         }
     }
 
+    /**
+     * Return attendance records for the authenticated parent's children only.
+     */
+    public function parentAttendance(Request $request)
+    {
+        try {
+            $parent = $request->user();
+
+            if (! $parent) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthenticated.',
+                ], 401);
+            }
+
+            $studentIds = $parent->students()->pluck('id');
+
+            if ($studentIds->isEmpty()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'No children linked to this parent',
+                    'data' => [],
+                ], 200);
+            }
+
+            $attendance = Attendance::whereIn('student_id', $studentIds)
+                ->with([
+                    'students' => function ($query) {
+                        $query->select('id', 'name', 'Grade_id', 'Classroom_id', 'section_id');
+                    },
+                    'grade',
+                    'classroom',
+                    'section',
+                ])
+                ->orderBy('attendence_date', 'desc')
+                ->orderBy('id', 'desc')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Parent attendance records retrieved successfully',
+                'data' => $attendance,
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving parent attendance records',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -72,7 +132,7 @@ class AttendanceController extends Controller
                     'grade_id' => $request->grade_id,
                     'classroom_id' => $request->classroom_id,
                     'section_id' => $request->section_id,
-                    'teacher_id' => $request->input('teacher_id', 1),
+                    'teacher_id' => auth()->id() ?? $request->input('teacher_id', 1),
                     'attendence_date' => date('Y-m-d'),
                     'attendence_status' => $attendanceStatus,
                 ]);
@@ -180,15 +240,21 @@ class AttendanceController extends Controller
 
     public function bulkStore(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'attendance_records' => 'required|array',
-            'attendance_records.*.student_id' => 'required|exists:students,id',
-            'attendance_records.*.grade_id' => 'required|exists:grades,id',
-            'attendance_records.*.classroom_id' => 'required|exists:classrooms,id',
-            'attendance_records.*.section_id' => 'required|exists:sections,id',
-            'attendance_records.*.attendance_date' => 'required|date',
-            'attendance_records.*.attendance_status' => 'required|in:present,absent,late,excused',
-            'attendance_records.*.notes' => 'nullable|string|max:255',
+        $input = $request->all();
+        // Accept both "records" and the legacy "attendance_records" payload key
+        if (! isset($input['records']) && isset($input['attendance_records'])) {
+            $input['records'] = $input['attendance_records'];
+        }
+
+        $validator = Validator::make($input, [
+            'records' => 'required|array',
+            'records.*.student_id' => 'required|exists:students,id',
+            'records.*.grade_id' => 'required|exists:grades,id',
+            'records.*.classroom_id' => 'required|exists:classrooms,id',
+            'records.*.section_id' => 'required|exists:sections,id',
+            'records.*.attendance_date' => 'required|date',
+            'records.*.attendance_status' => 'required|in:present,absent,late,excused',
+            'records.*.notes' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -201,31 +267,40 @@ class AttendanceController extends Controller
 
         try {
             $createdAttendance = [];
+            $updatedAttendance = [];
             $errors = [];
 
-            foreach ($request->attendance_records as $record) {
+            foreach ($input['records'] as $record) {
                 try {
-                    // Check if attendance already exists
-                    $existingAttendance = Attendance::where('student_id', $record['student_id'])
-                        ->where('attendance_date', $record['attendance_date'])
-                        ->first();
+                    $attendanceDate = $record['attendance_date'];
 
-                    if ($existingAttendance) {
-                        $errors[] = "Attendance already exists for student {$record['student_id']} on {$record['attendance_date']}";
-                        continue;
+                    $teacherId = $request->input('teacher_id');
+                    if (! $teacherId) {
+                        $user = auth()->user();
+                        $teacherId = ($user instanceof \App\Models\Teacher) ? $user->id : 1;
                     }
 
-                    $attendance = new Attendance();
-                    $attendance->student_id = $record['student_id'];
-                    $attendance->grade_id = $record['grade_id'];
-                    $attendance->classroom_id = $record['classroom_id'];
-                    $attendance->section_id = $record['section_id'];
-                    $attendance->attendance_date = $record['attendance_date'];
-                    $attendance->attendance_status = $record['attendance_status'];
-                    $attendance->notes = $record['notes'] ?? null;
-                    $attendance->save();
+                    $attendanceStatus = in_array($record['attendance_status'], ['present', 'presence', true, 1], true);
 
-                    $createdAttendance[] = $attendance;
+                    $attendance = Attendance::updateOrCreate(
+                        [
+                            'student_id' => $record['student_id'],
+                            'attendence_date' => $attendanceDate,
+                        ],
+                        [
+                            'grade_id' => $record['grade_id'],
+                            'classroom_id' => $record['classroom_id'],
+                            'section_id' => $record['section_id'],
+                            'teacher_id' => $teacherId,
+                            'attendence_status' => $attendanceStatus,
+                        ]
+                    );
+
+                    if ($attendance->wasRecentlyCreated) {
+                        $createdAttendance[] = $attendance;
+                    } else {
+                        $updatedAttendance[] = $attendance;
+                    }
                 } catch (\Exception $e) {
                     $errors[] = "Error processing student {$record['student_id']}: " . $e->getMessage();
                 }
@@ -236,7 +311,8 @@ class AttendanceController extends Controller
                 'message' => 'Bulk attendance processed successfully',
                 'data' => [
                     'created_count' => count($createdAttendance),
-                    'attendance_records' => $createdAttendance,
+                    'updated_count' => count($updatedAttendance),
+                    'attendance_records' => array_merge($createdAttendance, $updatedAttendance),
                     'errors' => $errors
                 ]
             ], 201);

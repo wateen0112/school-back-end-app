@@ -10,11 +10,16 @@
   border-left: 1px solid #dfe5f5 !important;
 }
 
+*,option{
+  font-family: "Cairo", "Tajawal", sans-serif !important;
+}
 .side-menu {
+
   padding: 8px 0 !important;
 }
 
 .side-menu > li > a {
+
   color: #20263a !important;
   font-family: "Cairo", "Tajawal", sans-serif !important;
   font-size: 14px !important;

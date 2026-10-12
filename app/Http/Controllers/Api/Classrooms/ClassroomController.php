@@ -36,7 +36,7 @@ class ClassroomController extends Controller
         try {
             $classrooms = collect($request->List_Classes)->map(function ($item) {
                 $classroom = new Classroom();
-                $classroom->Name_Class = ['en' => $item['Name_class_en'], 'ar' => $item['Name']];
+                $classroom->Name_Class = ['en' => $item['Name_class_en'] ?: $item['Name'], 'ar' => $item['Name']];
                 $classroom->Grade_id = $item['Grade_id'];
                 $classroom->save();
 
@@ -82,7 +82,7 @@ class ClassroomController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'Name' => 'required|string|max:255',
-            'Name_en' => 'required|string|max:255',
+            'Name_en' => 'nullable|string|max:255',
             'Grade_id' => 'required|exists:grades,id',
         ]);
 
@@ -96,7 +96,7 @@ class ClassroomController extends Controller
 
         try {
             $classroom = Classroom::findOrFail($request->input('id', $id));
-            $classroom->Name_Class = ['en' => $request->Name_en, 'ar' => $request->Name];
+            $classroom->Name_Class = ['en' => $request->Name_en ?: $request->Name, 'ar' => $request->Name];
             $classroom->Grade_id = $request->Grade_id;
             $classroom->save();
 

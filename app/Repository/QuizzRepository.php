@@ -29,7 +29,7 @@ class QuizzRepository implements QuizzRepositoryInterface
         try {
 
             $quizzes = new Quizze();
-            $quizzes->name = ['en' => $request->Name_en, 'ar' => $request->Name_ar];
+            $quizzes->name = ['en' => $request->Name_en ?: $request->Name_ar, 'ar' => $request->Name_ar];
             $quizzes->subject_id = $request->subject_id;
             $quizzes->grade_id = $request->Grade_id;
             $quizzes->classroom_id = $request->Classroom_id;
@@ -57,7 +57,7 @@ class QuizzRepository implements QuizzRepositoryInterface
     {
         try {
             $quizz = Quizze::findorFail($request->id);
-            $quizz->name = ['en' => $request->Name_en, 'ar' => $request->Name_ar];
+            $quizz->name = ['en' => $request->Name_en ?: $request->Name_ar, 'ar' => $request->Name_ar];
             $quizz->subject_id = $request->subject_id;
             $quizz->grade_id = $request->Grade_id;
             $quizz->classroom_id = $request->Classroom_id;

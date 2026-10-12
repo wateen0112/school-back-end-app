@@ -17,22 +17,66 @@ class StoreTeachers extends FormRequest
     }
 
     /**
+     * Get the ID of the record being updated from route parameters.
+     * Works with any route parameter name (e.g., {teacher}, {id}, etc.)
+     *
+     * @return int|string|null
+     */
+    protected function getRouteId()
+    {
+        // Try to get ID from route parameters
+        $route = $this->route();
+        if ($route) {
+            $parameters = $route->parameters();
+            // Return the first numeric parameter (which is typically the ID)
+            foreach ($parameters as $key => $value) {
+                if (is_numeric($value)) {
+                    return $value;
+                }
+            }
+        }
+        // Fallback to input 'id'
+        return $this->input('id');
+    }
+
+    /**
+     * Check if this is an update request (has route ID)
+     *
+     * @return bool
+     */
+    protected function isUpdate()
+    {
+        return !is_null($this->getRouteId());
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules()
     {
-        return [
-            'Email' => 'required|unique:teachers,Email,'.$this->id,
-            'Password' => 'required',
+        $id = $this->getRouteId();
+        
+        $rules = [
+            'Email' => 'required|unique:teachers,Email,'.$id,
             'Name_ar' => 'required',
-            'Name_en' => 'required',
+            'Name_en' => 'nullable',
             'Specialization_id' => 'required|exists:specializations,id',
             'Gender_id' => 'required|exists:genders,id',
             'Joining_Date' => 'required|date|date_format:Y-m-d',
             'Address' => 'required',
+            'Salary' => 'nullable|numeric|min:0',
         ];
+
+        // Password is required for store, optional for update
+        if ($this->isUpdate()) {
+            $rules['Password'] = 'nullable';
+        } else {
+            $rules['Password'] = 'required';
+        }
+
+        return $rules;
     }
 
     public function messages()
@@ -42,7 +86,6 @@ class StoreTeachers extends FormRequest
             'Email.unique' => trans('validation.unique'),
             'Password.required' => trans('validation.required'),
             'Name_ar.required' => trans('validation.required'),
-            'Name_en.required' => trans('validation.required'),
             'Specialization_id.required' => trans('validation.required'),
             'Gender_id.required' => trans('validation.required'),
             'Joining_Date.required' => trans('validation.required'),

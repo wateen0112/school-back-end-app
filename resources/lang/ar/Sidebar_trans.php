@@ -14,6 +14,6 @@ return [
     Messages => الرسائل,
     Profile => الملف الشخصي,
     Projects => المشاريع,
-    Settings => الإعدادات,
+    // Settings => الإعدادات,
 
 ];

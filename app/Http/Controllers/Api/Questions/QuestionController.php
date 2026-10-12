@@ -134,6 +134,53 @@ class QuestionController extends Controller
         }
     }
 
+    public function bulkStore(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'quizze_id' => 'required|exists:quizzes,id',
+            'questions' => 'required|array|min:1',
+            'questions.*.title' => 'required|string|max:500',
+            'questions.*.answers' => 'required|string|max:500',
+            'questions.*.right_answer' => 'required|string|max:500',
+            'questions.*.score' => 'required|integer|min:1',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $questions = [];
+            foreach ($request->questions as $q) {
+                $question = new Question();
+                $question->title = $q['title'];
+                $question->answers = $q['answers'];
+                $question->right_answer = $q['right_answer'];
+                $question->score = $q['score'];
+                $question->quizze_id = $request->quizze_id;
+                $question->save();
+                $questions[] = $question;
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => count($questions) . ' questions created successfully',
+                'data' => $questions
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error creating questions',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function destroy(Request $request, $id = null)
     {
         try {

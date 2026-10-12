@@ -33,7 +33,7 @@ class QuizzController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'Name_ar' => 'required|string|max:255',
-            'Name_en' => 'required|string|max:255',
+            'Name_en' => 'nullable|string|max:255',
             'subject_id' => 'required|exists:subjects,id',
             'Grade_id' => 'required',
             'Classroom_id' => 'required',
@@ -51,7 +51,7 @@ class QuizzController extends Controller
 
         try {
             $quiz = new Quizze();
-            $quiz->name = ['en' => $request->Name_en, 'ar' => $request->Name_ar];
+            $quiz->name = ['en' => $request->Name_en ?: $request->Name_ar, 'ar' => $request->Name_ar];
             $quiz->subject_id = $request->subject_id;
             $quiz->grade_id = $request->Grade_id;
             $quiz->classroom_id = $request->Classroom_id;
@@ -98,7 +98,7 @@ class QuizzController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'Name_ar' => 'required|string|max:255',
-            'Name_en' => 'required|string|max:255',
+            'Name_en' => 'nullable|string|max:255',
             'subject_id' => 'required|exists:subjects,id',
             'Grade_id' => 'required',
             'Classroom_id' => 'required',
@@ -116,7 +116,7 @@ class QuizzController extends Controller
 
         try {
             $quiz = Quizze::findOrFail($request->input('id', $id));
-            $quiz->name = ['en' => $request->Name_en, 'ar' => $request->Name_ar];
+            $quiz->name = ['en' => $request->Name_en ?: $request->Name_ar, 'ar' => $request->Name_ar];
             $quiz->subject_id = $request->subject_id;
             $quiz->grade_id = $request->Grade_id;
             $quiz->classroom_id = $request->Classroom_id;

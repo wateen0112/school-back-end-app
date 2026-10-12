@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Students;
 
 use App\Http\Controllers\Controller;
-use App\Models\OnlineClasse;
+use App\Models\online_classe;
 use App\Models\Grade;
 use App\Models\Classroom;
 use App\Models\Section;
@@ -16,7 +16,7 @@ class OnlineClasseController extends Controller
     public function index()
     {
         try {
-            $onlineClasses = OnlineClasse::with(['grade', 'classroom', 'section', 'subject', 'teacher'])->get();
+            $onlineClasses = online_classe::with(['grade', 'classroom', 'section'])->get();
             
             return response()->json([
                 'success' => true,
@@ -39,13 +39,13 @@ class OnlineClasseController extends Controller
             'Grade_id' => 'required|exists:grades,id',
             'Classroom_id' => 'required|exists:classrooms,id',
             'section_id' => 'required|exists:sections,id',
-            'subject_id' => 'required|exists:subjects,id',
-            'teacher_id' => 'required|exists:teachers,id',
-            'meeting_link' => 'required|url',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date|after:start_time',
             'topic' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'meeting_id' => 'required|string|max:255',
+            'start_at' => 'required|date',
+            'duration' => 'required|integer|min:1',
+            'password' => 'nullable|string|max:255',
+            'start_url' => 'nullable|url',
+            'join_url' => 'nullable|url',
         ]);
 
         if ($validator->fails()) {
@@ -57,23 +57,25 @@ class OnlineClasseController extends Controller
         }
 
         try {
-            $onlineClass = new OnlineClasse();
+            $onlineClass = new online_classe();
+            $onlineClass->integration = false;
+            $onlineClass->created_by = 'admin';
             $onlineClass->Grade_id = $request->Grade_id;
             $onlineClass->Classroom_id = $request->Classroom_id;
             $onlineClass->section_id = $request->section_id;
-            $onlineClass->subject_id = $request->subject_id;
-            $onlineClass->teacher_id = $request->teacher_id;
-            $onlineClass->meeting_link = $request->meeting_link;
-            $onlineClass->start_time = $request->start_time;
-            $onlineClass->end_time = $request->end_time;
-            $onlineClass->topic = ['en' => $request->topic, 'ar' => $request->topic];
-            $onlineClass->description = ['en' => $request->description, 'ar' => $request->description];
+            $onlineClass->topic = $request->topic;
+            $onlineClass->meeting_id = $request->meeting_id;
+            $onlineClass->start_at = $request->start_at;
+            $onlineClass->duration = $request->duration;
+            $onlineClass->password = $request->password;
+            $onlineClass->start_url = $request->start_url;
+            $onlineClass->join_url = $request->join_url;
             $onlineClass->save();
 
             return response()->json([
                 'success' => true,
                 'message' => 'Online class created successfully',
-                'data' => $onlineClass->load(['grade', 'classroom', 'section', 'subject', 'teacher'])
+                'data' => $onlineClass->load(['grade', 'classroom', 'section'])
             ], 201);
 
         } catch (\Exception $e) {
@@ -88,7 +90,7 @@ class OnlineClasseController extends Controller
     public function show($id)
     {
         try {
-            $onlineClass = OnlineClasse::with(['grade', 'classroom', 'section', 'subject', 'teacher'])->findOrFail($id);
+            $onlineClass = online_classe::with(['grade', 'classroom', 'section'])->findOrFail($id);
             
             return response()->json([
                 'success' => true,
@@ -111,13 +113,13 @@ class OnlineClasseController extends Controller
             'Grade_id' => 'required|exists:grades,id',
             'Classroom_id' => 'required|exists:classrooms,id',
             'section_id' => 'required|exists:sections,id',
-            'subject_id' => 'required|exists:subjects,id',
-            'teacher_id' => 'required|exists:teachers,id',
-            'meeting_link' => 'required|url',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date|after:start_time',
             'topic' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'meeting_id' => 'required|string|max:255',
+            'start_at' => 'required|date',
+            'duration' => 'required|integer|min:1',
+            'password' => 'nullable|string|max:255',
+            'start_url' => 'nullable|url',
+            'join_url' => 'nullable|url',
         ]);
 
         if ($validator->fails()) {
@@ -129,23 +131,23 @@ class OnlineClasseController extends Controller
         }
 
         try {
-            $onlineClass = OnlineClasse::findOrFail($id);
+            $onlineClass = online_classe::findOrFail($id);
             $onlineClass->Grade_id = $request->Grade_id;
             $onlineClass->Classroom_id = $request->Classroom_id;
             $onlineClass->section_id = $request->section_id;
-            $onlineClass->subject_id = $request->subject_id;
-            $onlineClass->teacher_id = $request->teacher_id;
-            $onlineClass->meeting_link = $request->meeting_link;
-            $onlineClass->start_time = $request->start_time;
-            $onlineClass->end_time = $request->end_time;
-            $onlineClass->topic = ['en' => $request->topic, 'ar' => $request->topic];
-            $onlineClass->description = ['en' => $request->description, 'ar' => $request->description];
+            $onlineClass->topic = $request->topic;
+            $onlineClass->meeting_id = $request->meeting_id;
+            $onlineClass->start_at = $request->start_at;
+            $onlineClass->duration = $request->duration;
+            $onlineClass->password = $request->password;
+            $onlineClass->start_url = $request->start_url;
+            $onlineClass->join_url = $request->join_url;
             $onlineClass->save();
 
             return response()->json([
                 'success' => true,
                 'message' => 'Online class updated successfully',
-                'data' => $onlineClass->load(['grade', 'classroom', 'section', 'subject', 'teacher'])
+                'data' => $onlineClass->load(['grade', 'classroom', 'section'])
             ], 200);
 
         } catch (\Exception $e) {
@@ -160,7 +162,7 @@ class OnlineClasseController extends Controller
     public function destroy($id)
     {
         try {
-            $onlineClass = OnlineClasse::findOrFail($id);
+            $onlineClass = online_classe::findOrFail($id);
             $onlineClass->delete();
 
             return response()->json([
@@ -207,13 +209,13 @@ class OnlineClasseController extends Controller
             'Grade_id' => 'required|exists:grades,id',
             'Classroom_id' => 'required|exists:classrooms,id',
             'section_id' => 'required|exists:sections,id',
-            'subject_id' => 'required|exists:subjects,id',
-            'teacher_id' => 'required|exists:teachers,id',
-            'meeting_link' => 'required|url',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date|after:start_time',
             'topic' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'meeting_id' => 'required|string|max:255',
+            'start_at' => 'required|date',
+            'duration' => 'required|integer|min:1',
+            'password' => 'nullable|string|max:255',
+            'start_url' => 'nullable|url',
+            'join_url' => 'nullable|url',
         ]);
 
         if ($validator->fails()) {
@@ -225,23 +227,25 @@ class OnlineClasseController extends Controller
         }
 
         try {
-            $onlineClass = new OnlineClasse();
+            $onlineClass = new online_classe();
+            $onlineClass->integration = false;
+            $onlineClass->created_by = 'admin';
             $onlineClass->Grade_id = $request->Grade_id;
             $onlineClass->Classroom_id = $request->Classroom_id;
             $onlineClass->section_id = $request->section_id;
-            $onlineClass->subject_id = $request->subject_id;
-            $onlineClass->teacher_id = $request->teacher_id;
-            $onlineClass->meeting_link = $request->meeting_link;
-            $onlineClass->start_time = $request->start_time;
-            $onlineClass->end_time = $request->end_time;
-            $onlineClass->topic = ['en' => $request->topic, 'ar' => $request->topic];
-            $onlineClass->description = ['en' => $request->description, 'ar' => $request->description];
+            $onlineClass->topic = $request->topic;
+            $onlineClass->meeting_id = $request->meeting_id;
+            $onlineClass->start_at = $request->start_at;
+            $onlineClass->duration = $request->duration;
+            $onlineClass->password = $request->password;
+            $onlineClass->start_url = $request->start_url;
+            $onlineClass->join_url = $request->join_url;
             $onlineClass->save();
 
             return response()->json([
                 'success' => true,
                 'message' => 'Online class created indirectly successfully',
-                'data' => $onlineClass->load(['grade', 'classroom', 'section', 'subject', 'teacher'])
+                'data' => $onlineClass->load(['grade', 'classroom', 'section'])
             ], 201);
 
         } catch (\Exception $e) {

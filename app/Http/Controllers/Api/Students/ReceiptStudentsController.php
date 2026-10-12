@@ -8,6 +8,9 @@ use App\Models\ReceiptStudent;
 use App\Models\Student;
 use App\Models\Fee_invoice;
 use App\Models\StudentAccount;
+use App\Models\StudentInstallment;
+use App\Repository\StudentInstallmentRepositoryInterface;
+use App\Support\CacheVersion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -38,8 +41,10 @@ class ReceiptStudentsController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'student_id' => 'required|exists:students,id',
-            'Debit' => 'required|numeric',
+            'debit' => 'required_without:Debit|numeric',
+            'Debit' => 'required_without:debit|numeric',
             'description' => 'required|string',
+            'student_installment_id' => 'nullable|exists:student_installments,id',
         ]);
 
         if ($validator->fails()) {
@@ -50,47 +55,32 @@ class ReceiptStudentsController extends Controller
             ], 422);
         }
 
-        DB::beginTransaction();
         try {
-            $receipt = new ReceiptStudent();
-            $receipt->date = date('Y-m-d');
-            $receipt->student_id = $request->student_id;
-            $receipt->Debit = $request->Debit;
-            $receipt->description = $request->description;
-            $receipt->save();
-
-            $fundAccount = new FundAccount();
-            $fundAccount->date = date('Y-m-d');
-            $fundAccount->receipt_id = $receipt->id;
-            $fundAccount->Debit = $request->Debit;
-            $fundAccount->credit = 0.00;
-            $fundAccount->description = $request->description;
-            $fundAccount->save();
-
-            $studentAccount = new StudentAccount();
-            $studentAccount->date = date('Y-m-d');
-            $studentAccount->type = 'receipt';
-            $studentAccount->receipt_id = $receipt->id;
-            $studentAccount->student_id = $request->student_id;
-            $studentAccount->Debit = 0.00;
-            $studentAccount->credit = $request->Debit;
-            $studentAccount->description = $request->description;
-            $studentAccount->save();
-
-            DB::commit();
+            $receipt = $this->createReceipt($request);
+            $installment = $this->resolveInstallment($receipt);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Student receipt created successfully',
-                'data' => $receipt->load('student')
+                'message' => 'Receipt created and installment updated successfully',
+                'data' => [
+                    'receipt' => [
+                        'id' => $receipt->id,
+                        'date' => $receipt->date,
+                        'debit' => $receipt->Debit,
+                    ],
+                    'installment' => $installment ? [
+                        'id' => $installment->id,
+                        'paid_amount' => $installment->paid_amount,
+                        'remaining_amount' => $installment->remaining_amount,
+                        'status' => $installment->status,
+                    ] : null,
+                ],
             ], 201);
 
         } catch (\Exception $e) {
-            DB::rollBack();
             return response()->json([
                 'success' => false,
-                'message' => 'Error creating student receipt',
-                'error' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 500);
         }
     }
@@ -119,8 +109,10 @@ class ReceiptStudentsController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'student_id' => 'required|exists:students,id',
-            'Debit' => 'required|numeric',
+            'debit' => 'required_without:Debit|numeric',
+            'Debit' => 'required_without:debit|numeric',
             'description' => 'required|string',
+            'student_installment_id' => 'nullable|exists:student_installments,id',
         ]);
 
         if ($validator->fails()) {
@@ -131,49 +123,32 @@ class ReceiptStudentsController extends Controller
             ], 422);
         }
 
-        DB::beginTransaction();
         try {
-            $receipt = ReceiptStudent::findOrFail($request->input('id', $id));
-            $receipt->date = date('Y-m-d');
-            $receipt->student_id = $request->student_id;
-            $receipt->Debit = $request->Debit;
-            $receipt->description = $request->description;
-            $receipt->save();
-
-            $fundAccount = FundAccount::where('receipt_id', $receipt->id)->first();
-            if ($fundAccount) {
-                $fundAccount->date = date('Y-m-d');
-                $fundAccount->Debit = $request->Debit;
-                $fundAccount->credit = 0.00;
-                $fundAccount->description = $request->description;
-                $fundAccount->save();
-            }
-
-            $studentAccount = StudentAccount::where('receipt_id', $receipt->id)->first();
-            if ($studentAccount) {
-                $studentAccount->date = date('Y-m-d');
-                $studentAccount->type = 'receipt';
-                $studentAccount->student_id = $request->student_id;
-                $studentAccount->Debit = 0.00;
-                $studentAccount->credit = $request->Debit;
-                $studentAccount->description = $request->description;
-                $studentAccount->save();
-            }
-
-            DB::commit();
+            $receipt = $this->updateReceipt($request, $id);
+            $installment = $this->resolveInstallment($receipt);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Student receipt updated successfully',
-                'data' => $receipt->load('student')
+                'message' => 'Receipt updated and installment updated successfully',
+                'data' => [
+                    'receipt' => [
+                        'id' => $receipt->id,
+                        'date' => $receipt->date,
+                        'debit' => $receipt->Debit,
+                    ],
+                    'installment' => $installment ? [
+                        'id' => $installment->id,
+                        'paid_amount' => $installment->paid_amount,
+                        'remaining_amount' => $installment->remaining_amount,
+                        'status' => $installment->status,
+                    ] : null,
+                ],
             ], 200);
 
         } catch (\Exception $e) {
-            DB::rollBack();
             return response()->json([
                 'success' => false,
-                'message' => 'Error updating student receipt',
-                'error' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 500);
         }
     }
@@ -183,6 +158,7 @@ class ReceiptStudentsController extends Controller
         try {
             $receipt = ReceiptStudent::findOrFail($request->input('id', $id));
             $receipt->delete();
+            CacheVersion::bump('accounting');
 
             return response()->json([
                 'success' => true,
@@ -252,6 +228,149 @@ class ReceiptStudentsController extends Controller
                 'message' => 'Error retrieving invoice receipts',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    private function createReceipt(Request $request)
+    {
+        $amount = $request->has('Debit') ? $request->Debit : $request->debit;
+        $studentInstallmentId = $request->input('student_installment_id');
+
+        $this->validateInstallment($studentInstallmentId, $request->student_id);
+
+        DB::beginTransaction();
+        try {
+            $receipt = new ReceiptStudent();
+            $receipt->date = date('Y-m-d');
+            $receipt->student_id = $request->student_id;
+            $receipt->student_installment_id = $studentInstallmentId;
+            $receipt->Debit = $amount;
+            $receipt->description = $request->description;
+            $receipt->save();
+
+            $fundAccount = new FundAccount();
+            $fundAccount->date = date('Y-m-d');
+            $fundAccount->receipt_id = $receipt->id;
+            $fundAccount->Debit = $amount;
+            $fundAccount->credit = 0.00;
+            $fundAccount->description = $request->description;
+            $fundAccount->save();
+
+            $studentAccount = new StudentAccount();
+            $studentAccount->date = date('Y-m-d');
+            $studentAccount->type = 'receipt';
+            $studentAccount->receipt_id = $receipt->id;
+            $studentAccount->student_installment_id = $studentInstallmentId;
+            $studentAccount->student_id = $request->student_id;
+            $studentAccount->Debit = 0.00;
+            $studentAccount->credit = $amount;
+            $studentAccount->description = $request->description;
+            $studentAccount->save();
+
+            if ($studentInstallmentId) {
+                $studentInstallment = StudentInstallment::find($studentInstallmentId);
+                if ($studentInstallment) {
+                    app(StudentInstallmentRepositoryInterface::class)->updatePaymentStatus($studentInstallment);
+                }
+            }
+
+            DB::commit();
+            CacheVersion::bump('accounting');
+
+            return $receipt;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    private function updateReceipt(Request $request, $id = null)
+    {
+        $amount = $request->has('Debit') ? $request->Debit : $request->debit;
+        $studentInstallmentId = $request->input('student_installment_id');
+
+        DB::beginTransaction();
+        try {
+            $receipt = ReceiptStudent::findOrFail($request->input('id', $id));
+            $oldStudentInstallmentId = $receipt->student_installment_id;
+
+            $this->validateInstallment($studentInstallmentId, $request->student_id);
+
+            $receipt->date = date('Y-m-d');
+            $receipt->student_id = $request->student_id;
+            $receipt->student_installment_id = $studentInstallmentId;
+            $receipt->Debit = $amount;
+            $receipt->description = $request->description;
+            $receipt->save();
+
+            $fundAccount = FundAccount::where('receipt_id', $receipt->id)->first();
+            if ($fundAccount) {
+                $fundAccount->date = date('Y-m-d');
+                $fundAccount->Debit = $amount;
+                $fundAccount->credit = 0.00;
+                $fundAccount->description = $request->description;
+                $fundAccount->save();
+            }
+
+            $studentAccount = StudentAccount::where('receipt_id', $receipt->id)->first();
+            if ($studentAccount) {
+                $studentAccount->date = date('Y-m-d');
+                $studentAccount->type = 'receipt';
+                $studentAccount->student_id = $request->student_id;
+                $studentAccount->student_installment_id = $studentInstallmentId;
+                $studentAccount->Debit = 0.00;
+                $studentAccount->credit = $amount;
+                $studentAccount->description = $request->description;
+                $studentAccount->save();
+            }
+
+            $repository = app(StudentInstallmentRepositoryInterface::class);
+
+            if ($studentInstallmentId) {
+                $studentInstallment = StudentInstallment::find($studentInstallmentId);
+                if ($studentInstallment) {
+                    $repository->updatePaymentStatus($studentInstallment);
+                }
+            }
+
+            if ($oldStudentInstallmentId && $oldStudentInstallmentId != $studentInstallmentId) {
+                $oldStudentInstallment = StudentInstallment::find($oldStudentInstallmentId);
+                if ($oldStudentInstallment) {
+                    $repository->updatePaymentStatus($oldStudentInstallment);
+                }
+            }
+
+            DB::commit();
+            CacheVersion::bump('accounting');
+
+            return $receipt;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    private function resolveInstallment(ReceiptStudent $receipt)
+    {
+        if (! $receipt->student_installment_id) {
+            return null;
+        }
+
+        return StudentInstallment::find($receipt->student_installment_id);
+    }
+
+    private function validateInstallment($studentInstallmentId, $studentId)
+    {
+        if (! $studentInstallmentId) {
+            return;
+        }
+
+        $installment = StudentInstallment::where('id', $studentInstallmentId)
+            ->where('student_id', $studentId)
+            ->first();
+
+        if (! $installment) {
+            throw new \Exception(__('messages.invalid_student_installment'));
         }
     }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ProcessingFee;
 use App\Models\Student;
 use App\Models\StudentAccount;
+use App\Support\CacheVersion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -68,6 +69,7 @@ class ProcessingFeeController extends Controller
             $studentAccount->save();
 
             DB::commit();
+            CacheVersion::bump('accounting');
 
             return response()->json([
                 'success' => true,
@@ -142,6 +144,7 @@ class ProcessingFeeController extends Controller
             }
 
             DB::commit();
+            CacheVersion::bump('accounting');
 
             return response()->json([
                 'success' => true,
@@ -164,6 +167,7 @@ class ProcessingFeeController extends Controller
         try {
             $processingFee = ProcessingFee::findOrFail($request->input('id', $id));
             $processingFee->delete();
+            CacheVersion::bump('accounting');
 
             return response()->json([
                 'success' => true,

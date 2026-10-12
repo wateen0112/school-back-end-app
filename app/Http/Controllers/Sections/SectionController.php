@@ -37,7 +37,7 @@ class SectionController extends Controller
 
       $validated = $request->validated();
       $Sections = new Section();
-      $Sections->Name_Section = ['ar' => $request->Name_Section_Ar, 'en' => $request->Name_Section_En];
+      $Sections->Name_Section = ['ar' => $request->Name_Section_Ar, 'en' => $request->Name_Section_En ?: $request->Name_Section_Ar];
       $Sections->Grade_id = $request->Grade_id;
       $Sections->Class_id = $request->Class_id;
       $Sections->Status = 1;
@@ -68,7 +68,7 @@ class SectionController extends Controller
       $validated = $request->validated();
       $Sections = Section::findOrFail($request->id);
 
-      $Sections->Name_Section = ['ar' => $request->Name_Section_Ar, 'en' => $request->Name_Section_En];
+      $Sections->Name_Section = ['ar' => $request->Name_Section_Ar, 'en' => $request->Name_Section_En ?: $request->Name_Section_Ar];
       $Sections->Grade_id = $request->Grade_id;
       $Sections->Class_id = $request->Class_id;
 

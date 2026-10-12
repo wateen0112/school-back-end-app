@@ -47,11 +47,11 @@ class ProfileController extends Controller
         $information = Student::findorFail($id);
 
         if (!empty($request->password)) {
-            $information->name = ['en' => $request->Name_en, 'ar' => $request->Name_ar];
+            $information->name = ['en' => $request->Name_en ?: $request->Name_ar, 'ar' => $request->Name_ar];
             $information->password = Hash::make($request->password);
             $information->save();
         } else {
-            $information->name = ['en' => $request->Name_en, 'ar' => $request->Name_ar];
+            $information->name = ['en' => $request->Name_en ?: $request->Name_ar, 'ar' => $request->Name_ar];
             $information->save();
         }
         toastr()->success(trans('messages.Update'));

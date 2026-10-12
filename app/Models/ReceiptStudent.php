@@ -10,4 +10,9 @@ class ReceiptStudent extends Model
     {
         return $this->belongsTo('App\Models\Student', 'student_id');
     }
+
+    public function studentInstallment()
+    {
+        return $this->belongsTo('App\Models\StudentInstallment', 'student_installment_id');
+    }
 }

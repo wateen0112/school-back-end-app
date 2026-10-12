@@ -34,7 +34,7 @@ class GradeController extends Controller
     {
         try {
             $grade = new Grade();
-            $grade->Name = ['en' => $request->Name_en, 'ar' => $request->Name];
+            $grade->Name = ['en' => $request->Name_en ?: $request->Name, 'ar' => $request->Name];
             $grade->Notes = $request->Notes;
             $grade->save();
 
@@ -77,7 +77,7 @@ class GradeController extends Controller
     {
         try {
             $grade = Grade::findOrFail($request->input('id', $id));
-            $grade->Name = ['en' => $request->Name_en, 'ar' => $request->Name];
+            $grade->Name = ['en' => $request->Name_en ?: $request->Name, 'ar' => $request->Name];
             $grade->Notes = $request->Notes;
             $grade->save();
 

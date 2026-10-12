@@ -44,7 +44,7 @@ class GradeController extends Controller
           ];
           $Grade->setTranslations('Name', $translations);
           */
-          $Grade->Name = ['en' => $request->Name_en, 'ar' => $request->Name];
+          $Grade->Name = ['en' => $request->Name_en ?: $request->Name, 'ar' => $request->Name];
           $Grade->Notes = $request->Notes;
           $Grade->save();
           toastr()->success(trans('messages.success'));

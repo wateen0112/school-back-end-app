@@ -39,7 +39,7 @@ class StudentRepository implements StudentRepositoryInterface{
     {
         try {
             $Edit_Students = Student::findorfail($request->id);
-            $Edit_Students->name = ['ar' => $request->name_ar, 'en' => $request->name_en];
+            $Edit_Students->name = ['ar' => $request->name_ar, 'en' => $request->name_en ?: $request->name_ar];
             $Edit_Students->email = $request->email;
             $Edit_Students->password = Hash::make($request->password);
             $Edit_Students->gender_id = $request->gender_id;

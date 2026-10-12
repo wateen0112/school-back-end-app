@@ -35,7 +35,7 @@ class FeesController extends Controller
     {
         try {
             $fee = new Fee();
-            $fee->title = ['en' => $request->title_en, 'ar' => $request->title_ar];
+            $fee->title = ['en' => $request->title_en ?: $request->title_ar, 'ar' => $request->title_ar];
             $fee->amount = $request->amount;
             $fee->Grade_id = $request->Grade_id;
             $fee->Classroom_id = $request->Classroom_id;
@@ -83,7 +83,7 @@ class FeesController extends Controller
     {
         try {
             $fee = Fee::findOrFail($request->input('id', $id));
-            $fee->title = ['en' => $request->title_en, 'ar' => $request->title_ar];
+            $fee->title = ['en' => $request->title_en ?: $request->title_ar, 'ar' => $request->title_ar];
             $fee->amount = $request->amount;
             $fee->Grade_id = $request->Grade_id;
             $fee->Classroom_id = $request->Classroom_id;

@@ -8,6 +8,7 @@ use App\Models\Image;
 use App\Models\Student;
 use App\Models\Classroom;
 use App\Models\Section;
+use App\Models\Subject;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -23,10 +24,39 @@ class StudentController extends Controller
                 ->when($request->filled('Grade_id') || $request->filled('grade_id'), function ($query) use ($request) {
                     $query->where('Grade_id', $request->input('Grade_id', $request->input('grade_id')));
                 })
+                ->when($request->filled('Classroom_id') || $request->filled('classroom_id'), function ($query) use ($request) {
+                    $query->where('Classroom_id', $request->input('Classroom_id', $request->input('classroom_id')));
+                })
                 ->when($request->filled('section_id') || $request->filled('department_id'), function ($query) use ($request) {
                     $query->where('section_id', $request->input('section_id', $request->input('department_id')));
                 })
-                ->get();
+                ->when($request->filled('search'), function ($query) use ($request) {
+                    $search = $request->input('search');
+                    $query->where(function ($q) use ($search) {
+                        $q->where('email', 'like', "%{$search}%")
+                            // name is translatable (stored as JSON {"en":..., "ar":...})
+                            ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(name, '$.\"en\"')) LIKE ?", ["%{$search}%"])
+                            ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(name, '$.\"ar\"')) LIKE ?", ["%{$search}%"]);
+                    });
+                })
+                ->when($request->filled('subject_id'), function ($query) use ($request) {
+                    $subject = Subject::find($request->subject_id);
+                    if ($subject) {
+                        $query->where('Grade_id', $subject->Grade_id)
+                            ->where('Classroom_id', $subject->Classroom_id);
+                    }
+                });
+
+            // A parent may only see their own children
+            $user = auth()->user();
+            if ($user) {
+                $userClass = get_class($user);
+                if (strpos($userClass, 'My_Parent') !== false || strpos($userClass, 'Parent') !== false) {
+                    $students->where('parent_id', $user->id);
+                }
+            }
+
+            $students = $students->get();
             
             // Format image URLs for each student
             $students->each(function ($student) {
@@ -56,7 +86,7 @@ class StudentController extends Controller
         DB::beginTransaction();
         try {
             $student = new Student();
-            $student->name = ['en' => $request->name_en, 'ar' => $request->name_ar];
+            $student->name = ['en' => $request->name_en ?: $request->name_ar, 'ar' => $request->name_ar];
             $student->email = $request->email;
             $student->password = Hash::make($request->password);
             $student->gender_id = $request->gender_id;
@@ -68,6 +98,7 @@ class StudentController extends Controller
             $student->section_id = $request->section_id;
             $student->parent_id = $request->parent_id;
             $student->academic_year = $request->academic_year;
+            $student->school_id = \App\Services\Scoping\SchoolContext::effectiveSchoolId($request->user());
             $student->save();
 
             if ($request->hasFile('photos')) {
@@ -131,9 +162,11 @@ class StudentController extends Controller
     {
         try {
             $student = Student::findOrFail($request->input('id', $id));
-            $student->name = ['en' => $request->name_en, 'ar' => $request->name_ar];
+            $student->name = ['en' => $request->name_en ?: $request->name_ar, 'ar' => $request->name_ar];
             $student->email = $request->email;
-            $student->password = Hash::make($request->password);
+            if ($request->filled('password')) {
+                $student->password = Hash::make($request->password);
+            }
             $student->gender_id = $request->gender_id;
             $student->nationalitie_id = $request->nationalitie_id;
             $student->blood_id = $request->blood_id;

@@ -30,4 +30,24 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'ai' => [
+        'provider' => env('AI_PROVIDER', 'gemini'),
+        'include_unassigned_records' => env('AI_INCLUDE_UNASSIGNED_RECORDS', false),
+    ],
+
+    'gemini' => [
+        'key' => env('GEMINI_API_KEY', ''),
+        'model' => env('GEMINI_MODEL', 'gemini-1.5-flash'),
+        'base_url' => env('GEMINI_BASE_URL', 'https://generativelanguage.googleapis.com'),
+        'proxy' => env('GEMINI_PROXY'),
+    ],
+
+    'kimi' => [
+        'key' => env('KIMI_API_KEY', ''),
+        'model' => env('KIMI_MODEL', 'kimi-k2.6'),
+        'base_url' => env('KIMI_BASE_URL', 'https://api.moonshot.ai/v1'),
+        'proxy' => env('KIMI_PROXY'),
+        'temperature' => env('KIMI_TEMPERATURE', 1.0),
+    ],
+
 ];

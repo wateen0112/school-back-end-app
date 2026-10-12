@@ -115,11 +115,11 @@ class ChildrenController extends Controller
         $information = My_Parent::findorFail($id);
 
         if (!empty($request->password)) {
-            $information->Name_Father = ['en' => $request->Name_en, 'ar' => $request->Name_ar];
+            $information->Name_Father = ['en' => $request->Name_en ?: $request->Name_ar, 'ar' => $request->Name_ar];
             $information->password = Hash::make($request->password);
             $information->save();
         } else {
-            $information->Name_Father = ['en' => $request->Name_en, 'ar' => $request->Name_ar];
+            $information->Name_Father = ['en' => $request->Name_en ?: $request->Name_ar, 'ar' => $request->Name_ar];
             $information->save();
         }
         toastr()->success(trans('messages.Update'));

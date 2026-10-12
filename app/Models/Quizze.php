@@ -9,6 +9,10 @@ class Quizze extends Model
 {
     use HasTranslations;
     public $translatable = ['name'];
+    protected $guarded = [];
+    protected $casts = [
+        'time_limit' => 'integer',
+    ];
 
     public function teacher()
     {
@@ -44,5 +48,15 @@ class Quizze extends Model
     public function degree()
     {
         return $this->hasMany('App\Models\Degree');
+    }
+
+    public function questions()
+    {
+        return $this->hasMany('App\Models\Question');
+    }
+
+    public function studentAnswers()
+    {
+        return $this->hasMany('App\Models\StudentAnswer');
     }
 }

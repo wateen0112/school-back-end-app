@@ -9,7 +9,7 @@ class Section extends Model
 {
     use HasTranslations;
     public $translatable = ['Name_Section'];
-    protected $fillable=['Name_Section','Grade_id','Class_id'];
+    protected $fillable=['Name_Section','Status','Grade_id','Class_id'];
 
     protected $table = 'sections';
     public $timestamps = true;
@@ -26,6 +26,19 @@ class Section extends Model
     public function teachers()
     {
         return $this->belongsToMany('App\Models\Teacher','teacher_section');
+    }
+
+    // المواد والمعلمين المخصصين لهذا القسم
+    public function subjectTeachers()
+    {
+        return $this->hasMany(SectionSubjectTeacher::class, 'section_id');
+    }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'section_subject_teacher')
+            ->withPivot('teacher_id')
+            ->withTimestamps();
     }
 
     public function Grades()

@@ -126,6 +126,13 @@ return [
             'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
         ],
 
+        // Fail fast instead of hanging the request when Redis is unreachable
+        // (e.g. Docker Desktop stopped): a slow refusal turns every API call
+        // into a 30s timeout, which looks like "the app is broken".
+        'read_timeout' => env('REDIS_READ_TIMEOUT', 2),
+        'timeout' => env('REDIS_CONNECT_TIMEOUT', 2),
+        'persistent' => env('REDIS_PERSISTENT', false),
+
         'default' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
