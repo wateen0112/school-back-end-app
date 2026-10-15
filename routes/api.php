@@ -182,8 +182,8 @@ Route::group(['middleware' => 'auth.any'], function () {
     Route::post('Attendance/bulk', 'Api\Students\AttendanceController@bulkStore')->name('api.web.Attendance.bulk');
     Route::put('Attendance/{Attendance}', 'Api\Students\AttendanceController@update')->name('api.web.Attendance.update');
     Route::delete('Attendance/{Attendance}', 'Api\Students\AttendanceController@destroy')->name('api.web.Attendance.destroy');
-    Route::post('attendance', 'Api\Students\AttendanceController@store');
-    Route::post('attendance/bulk', 'Api\Students\AttendanceController@bulkStore');
+    Route::post('attendance', 'Api\Students\AttendanceController@store')->middleware('academic.context');
+    Route::post('attendance/bulk', 'Api\Students\AttendanceController@bulkStore')->middleware('academic.context');
     Route::put('attendance/bulk', 'Api\Students\AttendanceController@bulkStore');
     Route::put('attendance/{attendance}', 'Api\Students\AttendanceController@update');
     Route::delete('attendance/{attendance}', 'Api\Students\AttendanceController@destroy');
@@ -302,8 +302,8 @@ Route::group(['middleware' => 'auth.any'], function () {
     // Evaluations - Available to all authenticated users (teachers create, parents read)
     Route::get('evaluations', 'Api\Students\EvaluationController@index');
     Route::get('evaluations/{evaluation}', 'Api\Students\EvaluationController@show');
-    Route::post('evaluations', 'Api\Students\EvaluationController@store');
-    Route::post('evaluations/bulk', 'Api\Students\EvaluationController@bulkStore');
+    Route::post('evaluations', 'Api\Students\EvaluationController@store')->middleware('academic.context');
+    Route::post('evaluations/bulk', 'Api\Students\EvaluationController@bulkStore')->middleware('academic.context');
     Route::put('evaluations/{evaluation}', 'Api\Students\EvaluationController@update');
     Route::delete('evaluations/{evaluation}', 'Api\Students\EvaluationController@destroy');
     Route::get('evaluations/report/student/{studentId}', 'Api\Students\EvaluationController@reportByStudent');
@@ -324,12 +324,12 @@ Route::group(['middleware' => 'auth.any'], function () {
     // Paper Exams - Read & Write (available to teachers, admins, students, parents based on role)
     Route::get('paper-exams', 'Api\PaperExams\PaperExamController@index');
     Route::get('paper-exams/{id}', 'Api\PaperExams\PaperExamController@show');
-    Route::post('paper-exams', 'Api\PaperExams\PaperExamController@store');
+    Route::post('paper-exams', 'Api\PaperExams\PaperExamController@store')->middleware('academic.context');
     Route::put('paper-exams/{id}', 'Api\PaperExams\PaperExamController@update');
     Route::delete('paper-exams/{id}', 'Api\PaperExams\PaperExamController@destroy');
     Route::get('paper-exams/{id}/students', 'Api\PaperExams\PaperExamController@students');
-    Route::post('paper-exams/{id}/marks', 'Api\PaperExams\PaperExamController@saveMarks');
-    Route::post('paper-exams/{id}/publish', 'Api\PaperExams\PaperExamController@publish');
+    Route::post('paper-exams/{id}/marks', 'Api\PaperExams\PaperExamController@saveMarks')->middleware('academic.context');
+    Route::post('paper-exams/{id}/publish', 'Api\PaperExams\PaperExamController@publish')->middleware('academic.context');
     // Teacher-specific paper exam endpoints
     Route::get('teacher/paper-exams/subjects', 'Api\PaperExams\PaperExamController@teacherSubjects');
     Route::get('teacher/paper-exams/{subjectId}', 'Api\PaperExams\PaperExamController@teacherExamsBySubject');
@@ -376,6 +376,8 @@ Route::group(['middleware' => 'auth.any'], function () {
     Route::get('salaries', 'Api\Accounting\SalaryController@index');
     Route::get('salaries/employees', 'Api\Accounting\SalaryController@employees');
     Route::get('salaries/{salary}', 'Api\Accounting\SalaryController@show');
+    Route::get('teachers/{teacher}/salary-plan', 'Api\Teachers\TeacherSalaryPlanController@show');
+    Route::get('teacher-work-hours', 'Api\Teachers\TeacherWorkHourController@index');
     Route::get('accounting/summary', 'Api\Accounting\AccountingReportController@summary');
     Route::get('accounting/profit-loss', 'Api\Accounting\AccountingReportController@profitLoss');
     Route::get('accounting/upcoming-salaries', 'Api\Accounting\AccountingReportController@upcomingSalaries');
@@ -419,6 +421,8 @@ Route::get('genders/{id}', 'Api\GenderController@show');
     Route::get('/scheduling/academic-years/{academicYear}', 'Api\Scheduling\AcademicYearController@show')->name('api.web.scheduling.academic-years.show');
     Route::get('/scheduling/academic-years/{academicYear}/calendar', 'Api\Scheduling\AcademicYearController@calendar')->name('api.web.scheduling.academic-years.calendar');
     Route::get('/scheduling/academic-years/{academicYear}/weeks', 'Api\Scheduling\AcademicYearController@weeks')->name('api.web.scheduling.academic-years.weeks');
+    Route::get('/scheduling/academic-years/{academicYear}/terms', 'Api\Scheduling\AcademicTermController@index')->name('api.web.scheduling.academic-terms.index');
+    Route::get('/academic-context', 'Api\Scheduling\AcademicTermController@context')->name('api.web.academic-context');
     Route::get('/scheduling/holidays', 'Api\Scheduling\HolidayController@index')->name('api.web.scheduling.holidays.index');
     Route::get('/scheduling/schedule-periods', 'Api\Scheduling\SchedulePeriodController@index')->name('api.web.scheduling.schedule-periods.index');
     Route::get('/scheduling/schedule-periods/{academicYear}', 'Api\Scheduling\SchedulePeriodController@index')->name('api.web.scheduling.schedule-periods.by-year');
@@ -557,7 +561,7 @@ Route::group(['middleware' => ['auth:api', 'permission']], function () {
     Route::post('Students', 'Api\Students\StudentController@store')->name('api.web.Students.store');
     Route::put('Students/{Student}', 'Api\Students\StudentController@update')->name('api.web.Students.update');
     Route::delete('Students/{Student}', 'Api\Students\StudentController@destroy')->name('api.web.Students.destroy');
-    Route::post('students', 'Api\Students\StudentController@store');
+    Route::post('students', 'Api\Students\StudentController@store')->middleware('academic.context');
     Route::put('students/{student}', 'Api\Students\StudentController@update');
     Route::delete('students/{student}', 'Api\Students\StudentController@destroy');
     Route::post('Upload_attachment', 'Api\Students\StudentController@Upload_attachment')->name('api.web.Upload_attachment');
@@ -587,10 +591,10 @@ Route::group(['middleware' => ['auth:api', 'permission']], function () {
     Route::post('Promotion', 'Api\Students\PromotionController@store')->name('api.web.Promotion.store');
     Route::put('Promotion/{Promotion}', 'Api\Students\PromotionController@update')->name('api.web.Promotion.update');
     Route::delete('Promotion/{Promotion}', 'Api\Students\PromotionController@destroy')->name('api.web.Promotion.destroy');
-    Route::post('promotion', 'Api\Students\PromotionController@store');
+    Route::post('promotion', 'Api\Students\PromotionController@store')->middleware('academic.context');
     Route::put('promotion/{promotion}', 'Api\Students\PromotionController@update');
     Route::delete('promotion/{promotion}', 'Api\Students\PromotionController@destroy');
-    Route::post('promotion/bulk', 'Api\Students\PromotionController@bulkPromote');
+    Route::post('promotion/bulk', 'Api\Students\PromotionController@bulkPromote')->middleware('academic.context');
 
     // Fees Invoices - Write
     Route::post('Fees_Invoices', 'Api\Students\FeesInvoicesController@store')->name('api.web.Fees_Invoices.store');
@@ -650,6 +654,13 @@ Route::group(['middleware' => ['auth:api', 'permission']], function () {
         Route::put('salaries/{salary}', 'Api\Accounting\SalaryController@update');
         Route::delete('salaries/{salary}', 'Api\Accounting\SalaryController@destroy');
         Route::put('salaries/employees/{type}/{id}', 'Api\Accounting\SalaryController@updateBaseSalary');
+        Route::put('teachers/{teacher}/salary-plan', 'Api\Teachers\TeacherSalaryPlanController@update');
+    });
+
+    // Teacher work hours - Write (hourly-contract payroll input)
+    Route::group(['middleware' => 'permission:work_hours.manage'], function () {
+        Route::post('teacher-work-hours', 'Api\Teachers\TeacherWorkHourController@store');
+        Route::delete('teacher-work-hours/{workHour}', 'Api\Teachers\TeacherWorkHourController@destroy');
     });
 
 // Library - Write
@@ -667,6 +678,7 @@ Route::group(['middleware' => ['auth:api', 'permission']], function () {
     Route::put('weekly-programs/{weeklyProgram}', 'Api\WeeklyPrograms\WeeklyProgramController@update')->name('api.web.weekly-programs.update');
     Route::delete('weekly-programs/{weeklyProgram}', 'Api\WeeklyPrograms\WeeklyProgramController@destroy')->name('api.web.weekly-programs.destroy');
     Route::post('weekly-programs/bulk-delete', 'Api\WeeklyPrograms\WeeklyProgramController@bulkDestroy')->name('api.web.weekly-programs.bulk-delete');
+    Route::post('weekly-programs/reset', 'Api\WeeklyPrograms\WeeklyProgramController@resetSection')->name('api.web.weekly-programs.reset');
     Route::post('weekly-programs/notify', 'Api\WeeklyPrograms\WeeklyProgramController@notify')->name('api.web.weekly-programs.notify');
 
     // Timetable Scenarios
@@ -710,9 +722,9 @@ Route::group(['middleware' => ['auth:api', 'permission']], function () {
     Route::post('Quizzes', 'Api\Quizzes\QuizzController@store')->name('api.web.Quizzes.store');
     Route::put('Quizzes/{Quizzes}', 'Api\Quizzes\QuizzController@update')->name('api.web.Quizzes.update');
     Route::delete('Quizzes/{Quizzes}', 'Api\Quizzes\QuizzController@destroy')->name('api.web.Quizzes.destroy');
-    Route::post('quizzes', 'Api\Quizzes\QuizzController@store');
-    Route::put('quizzes/{quizz}', 'Api\Quizzes\QuizzController@update');
-    Route::delete('quizzes/{quizz}', 'Api\Quizzes\QuizzController@destroy');
+    Route::post('quizzes', 'Api\Quizzes\QuizzController@store')->middleware('academic.context');
+    Route::put('quizzes/{quizz}', 'Api\Quizzes\QuizzController@update')->middleware('academic.context');
+    Route::delete('quizzes/{quizz}', 'Api\Quizzes\QuizzController@destroy')->middleware('academic.context');
 
     // Questions - Write
     Route::post('questions', 'Api\Questions\QuestionController@store')->name('api.web.questions.store');
@@ -765,7 +777,7 @@ Route::group(['middleware' => ['auth:api', 'permission']], function () {
     Route::post('Grades', 'Api\Grades\GradeController@store')->name('api.web.Grades.store');
     Route::put('Grades/{Grade}', 'Api\Grades\GradeController@update')->name('api.web.Grades.update');
     Route::delete('Grades/{Grade}', 'Api\Grades\GradeController@destroy')->name('api.web.Grades.destroy');
-    Route::post('grades', 'Api\Grades\GradeController@store');
+    Route::post('grades', 'Api\Grades\GradeController@store')->middleware('academic.context');
     Route::put('grades/{grade}', 'Api\Grades\GradeController@update');
     Route::delete('grades/{grade}', 'Api\Grades\GradeController@destroy');
 
@@ -872,6 +884,7 @@ Route::group(['middleware' => ['auth:api', 'permission']], function () {
         Route::put('/scheduling/academic-years/{academicYear}', 'Api\Scheduling\AcademicYearController@update')->name('api.web.scheduling.academic-years.update');
         Route::delete('/scheduling/academic-years/{academicYear}', 'Api\Scheduling\AcademicYearController@destroy')->name('api.web.scheduling.academic-years.destroy');
         Route::post('/scheduling/academic-years/{academicYear}/set-active', 'Api\Scheduling\AcademicYearController@setActive')->name('api.web.scheduling.academic-years.set-active');
+        Route::post('/scheduling/academic-terms/{academicTerm}/set-current', 'Api\Scheduling\AcademicTermController@setCurrent')->name('api.web.scheduling.academic-terms.set-current');
         Route::put('/scheduling/schedule-periods/{academicYear}', 'Api\Scheduling\SchedulePeriodController@update')->name('api.web.scheduling.schedule-periods.update');
     });
 

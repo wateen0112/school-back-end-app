@@ -42,6 +42,11 @@ class SalaryPaymentService
                 'paid_by'        => $actorId,
             ]);
 
+            // Custom-contract installments are settled with their payment.
+            if ($payment->installment_id) {
+                $payment->installment()->update(['status' => 'paid']);
+            }
+
             $payment->fundEntry()->create([
                 'date'        => $payment->paid_at,
                 'credit'      => $payment->amount,

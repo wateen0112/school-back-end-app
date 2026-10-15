@@ -165,13 +165,24 @@ class AnnualCalendarService
      */
     public function syncPeriods(AcademicYear $year): int
     {
-        SchedulePeriod::where('academic_year_id', $year->id)->delete();
+        // Only the global rows (all days) are rebuilt from the year config;
+        // per-day overrides are preserved.
+        SchedulePeriod::where('academic_year_id', $year->id)->whereNull('day_of_week')->delete();
         $rows = $this->buildPeriods($year);
         foreach ($rows as $row) {
-            SchedulePeriod::create(['academic_year_id' => $year->id] + $row);
+            SchedulePeriod::create(['academic_year_id' => $year->id, 'day_of_week' => null] + $row);
         }
 
         return count($rows);
+    }
+
+    /**
+     * Periods effective on a specific weekday: global rows with per-day
+     * overrides applied on top (matched by period_number).
+     */
+    public function periodsForDay(AcademicYear $year, int $dayOfWeek)
+    {
+        return SchedulePeriod::forDay($year->id, $dayOfWeek);
     }
 
     /**

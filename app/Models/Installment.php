@@ -17,7 +17,7 @@ class Installment extends Model
 
     protected $casts = [
         'amount' => 'float',
-        'due_date' => 'date',
+        'due_date' => 'date:Y-m-d',
         'sort_order' => 'integer',
     ];
 

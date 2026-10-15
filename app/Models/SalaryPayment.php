@@ -19,11 +19,13 @@ class SalaryPayment extends Model
         'payment_method',
         'notes',
         'paid_by',
+        'source',
+        'installment_id',
     ];
 
     protected $casts = [
-        'due_date' => 'date',
-        'paid_at' => 'date',
+        'due_date' => 'date:Y-m-d',
+        'paid_at' => 'date:Y-m-d',
     ];
 
     /** Employee: teacher (teachers) or staff (users). */
@@ -39,6 +41,11 @@ class SalaryPayment extends Model
     public function paidBy()
     {
         return $this->belongsTo(User::class, 'paid_by');
+    }
+
+    public function installment()
+    {
+        return $this->belongsTo(TeacherCustomInstallment::class, 'installment_id');
     }
 
     public function fundEntry()

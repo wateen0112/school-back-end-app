@@ -67,6 +67,14 @@ class StoreTeachers extends FormRequest
             'Joining_Date' => 'required|date|date_format:Y-m-d',
             'Address' => 'required',
             'Salary' => 'nullable|numeric|min:0',
+            'salary_type' => 'nullable|in:monthly,hourly,custom',
+            'hour_rate' => 'required_if:salary_type,hourly|nullable|numeric|min:0.01',
+            'custom_salary_amount' => 'required_if:salary_type,custom|nullable|numeric|min:0.01',
+            'custom_installments' => 'nullable|array',
+            'custom_installments.*.amount' => 'required_with:custom_installments|numeric|min:0.01',
+            'custom_installments.*.due_date' => 'required_with:custom_installments|date',
+            'custom_installments.*.title' => 'nullable|string|max:255',
+            'custom_installments.*.notes' => 'nullable|string',
         ];
 
         // Password is required for store, optional for update

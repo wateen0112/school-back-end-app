@@ -12,4 +12,11 @@ return [
     'teacher'=>'معلم',
     'staff'=>'موظف إداري',
     'salary_payment_description'=>'صرف راتب :name - :month/:year',
+    'work_hours_only_hourly'=>'لا يمكن تسجيل ساعات العمل إلا للمعلمين أصحاب العقود بالساعات.',
+    'work_hours_invalid_window'=>'الفترة الزمنية المحددة يجب أن تعطي بين 0.01 و 24 ساعة.',
+    'work_hours_conflict'=>'تعارض في التوقيت: الفترة من :start إلى :end مغطاة بالفعل بسجل سابق في هذا اليوم.',
+    'work_hours_stored'=>'تم تسجيل ساعات العمل بنجاح.',
+    'work_hours_deleted'=>'تم حذف سجل الساعات بنجاح.',
+    'work_hours_not_found'=>'سجل الساعات غير موجود.',
+    'work_hours_retrieved'=>'تم استرجاع ساعات العمل بنجاح.',
 ];

@@ -44,6 +44,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth.any' => \App\Http\Middleware\AuthenticateAnyApiUser::class,
             'is.super.admin' => \App\Http\Middleware\EnsureSuperAdmin::class,
             'permission' => \App\Http\Middleware\EnsurePermission::class,
+            'academic.context' => \App\Http\Middleware\EnsureActiveAcademicContext::class,
             'localize' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes::class,
             'localizationRedirect' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
             'localeSessionRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,

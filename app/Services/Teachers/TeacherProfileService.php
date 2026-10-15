@@ -16,6 +16,13 @@ use Illuminate\Support\Facades\Validator;
  */
 class TeacherProfileService
 {
+    protected TeacherSalaryPlanService $salaryPlans;
+
+    public function __construct()
+    {
+        $this->salaryPlans = new TeacherSalaryPlanService();
+    }
+
     /**
      * Validation rules for a teacher update (mirrors StoreTeachers).
      *
@@ -32,6 +39,14 @@ class TeacherProfileService
             'Joining_Date'      => 'required|date|date_format:Y-m-d',
             'Address'           => 'required|string|max:500',
             'Salary'            => 'nullable|numeric|min:0',
+            'salary_type'       => 'nullable|in:monthly,hourly,custom',
+            'hour_rate'         => 'required_if:salary_type,hourly|nullable|numeric|min:0.01',
+            'custom_salary_amount' => 'required_if:salary_type,custom|nullable|numeric|min:0.01',
+            'custom_installments' => 'nullable|array',
+            'custom_installments.*.amount' => 'required_with:custom_installments|numeric|min:0.01',
+            'custom_installments.*.due_date' => 'required_with:custom_installments|date',
+            'custom_installments.*.title' => 'nullable|string|max:255',
+            'custom_installments.*.notes' => 'nullable|string',
             'Password'          => 'nullable|string|min:6',
         ];
     }
@@ -55,10 +70,6 @@ class TeacherProfileService
         $teacher->Gender_id = $data['Gender_id'];
         $teacher->Joining_Date = $data['Joining_Date'];
         $teacher->Address = $data['Address'];
-        $teacher->salary = isset($data['Salary']) && $data['Salary'] !== null && $data['Salary'] !== ''
-            ? $data['Salary']
-            : null;
-
         if (! empty($data['Password'])) {
             $teacher->password = Hash::make($data['Password']);
         }
@@ -69,6 +80,9 @@ class TeacherProfileService
 
         $teacher->save();
 
-        return $teacher->fresh(['specializations', 'genders']);
+        // Salary contract (type / hour rate / custom installments).
+        $this->salaryPlans->apply($teacher, $data);
+
+        return $teacher->fresh(['specializations', 'genders', 'customInstallments']);
     }
 }

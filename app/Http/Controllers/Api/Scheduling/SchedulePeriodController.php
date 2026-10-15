@@ -21,7 +21,14 @@ class SchedulePeriodController extends Controller
                 ->when(! $academicYear && (! $request->has('academic_year_id') || ! $request->filled('academic_year_id')), function ($q) use ($schoolId) {
                     $q->whereHas('academicYear', fn ($w) => $w->forSchool($schoolId)->active());
                 })
+                // Effective periods for one weekday (day rows override global rows).
+                ->when($request->filled('day_of_week'), function ($q) use ($request) {
+                    $day = (int) $request->day_of_week;
+                    $q->where(fn ($w) => $w->whereNull('day_of_week')->orWhere('day_of_week', $day));
+                })
                 ->orderBy('academic_year_id')
+                ->orderByRaw('day_of_week is null') // day-specific rows first so overrides win
+                ->orderBy('day_of_week')
                 ->orderBy('period_number')
                 ->get();
 
@@ -49,12 +56,26 @@ class SchedulePeriodController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'periods'                 => ['required', 'array', 'min:1'],
-                'periods.*.period_number' => ['required', 'integer', 'distinct', 'between:1,30'],
+                'periods.*.period_number' => ['required', 'integer', 'between:1,30'],
+                'periods.*.day_of_week'   => ['nullable', 'integer', 'between:0,6'],
                 'periods.*.start_time'    => ['required', 'date_format:H:i'],
                 'periods.*.end_time'      => ['required', 'date_format:H:i', 'after:periods.*.start_time'],
                 'periods.*.type'          => ['required', 'in:' . SchedulePeriod::TYPE_LESSON . ',' . SchedulePeriod::TYPE_BREAK],
                 'periods.*.note'          => ['nullable', 'string', 'max:100'],
             ]);
+
+            // The same period order may repeat per day, but not twice
+            // within the same (day, period_number) combination.
+            $validator->after(function ($v) use ($request) {
+                $seen = [];
+                foreach ($request->input('periods', []) as $i => $period) {
+                    $key = ($period['day_of_week'] ?? 'all').'|'.$period['period_number'];
+                    if (isset($seen[$key])) {
+                        $v->errors()->add("periods.$i.period_number", 'Duplicate period number for the same day.');
+                    }
+                    $seen[$key] = true;
+                }
+            });
 
             if ($validator->fails()) {
                 throw new \Illuminate\Validation\ValidationException($validator);
@@ -66,6 +87,7 @@ class SchedulePeriodController extends Controller
                 return SchedulePeriod::create([
                     'academic_year_id' => $academicYear->id,
                     'period_number'    => $period['period_number'],
+                    'day_of_week'      => $period['day_of_week'] ?? null,
                     'start_time'       => $this->toSeconds($period['start_time']),
                     'end_time'         => $this->toSeconds($period['end_time']),
                     'type'             => $period['type'],

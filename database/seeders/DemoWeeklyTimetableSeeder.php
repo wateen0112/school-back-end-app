@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\AcademicYear;
 use App\Models\Grade;
+use App\Models\SchedulePeriod;
 use App\Models\Section;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -21,14 +23,20 @@ use Illuminate\Support\Facades\DB;
  *
  * Schedule layout
  * ---------------
- * Six periods a day, Sunday..Thursday (day_of_week 0..4), and eight subjects per
- * section. Two subjects rest each day in a rotating pair, so over the week six
- * subjects get four lessons and two get three (6*4 + 2*3 = 30 lessons per section).
+ * The slot grid is read from the active academic year's configured
+ * `schedule_periods`: the working days come from the year and each `lesson`
+ * period becomes one row. Configured `break` periods are skipped, so no lesson
+ * is ever placed on a break. When the year has no configured periods, a
+ * hardcoded six-period fallback is used.
+ *
+ * Eight subjects are assigned per section; when there are more subjects than
+ * periods the surplus rests, rotating so the rest is spread evenly across the
+ * week (e.g. 8 subjects over 6 periods => 6*4 + 2*3 = 30 lessons per section).
  *
  * Sections are grouped by their *assignment signature* (subject -> teacher). Every
  * section in a group shares the same teachers, and the grid is built as a Latin
  * rectangle: the k-th active subject of a group of n sections meets section s in
- * period (k + s) mod 6. Because s varies over distinct values that land on distinct
+ * period (k + s) mod n. Because s varies over distinct values that land on distinct
  * periods, a teacher is never scheduled in two sections at the same time — which is
  * the whole point, since one teacher here serves all five sections of a class.
  *
@@ -45,10 +53,13 @@ use Illuminate\Support\Facades\DB;
  */
 class DemoWeeklyTimetableSeeder extends Seeder
 {
-    /** Sunday .. Thursday, matching day_of_week where 0 = Sunday. */
+    /** Fallback days (Sunday .. Thursday) used when the academic year has none. */
     private const DAYS = [0, 1, 2, 3, 4];
 
-    /** [start, end] for the six daily periods, with a five minute gap between them. */
+    /**
+     * Fallback [start, end] daily periods used only when the database has no
+     * configured schedule_periods for the active academic year.
+     */
     private const PERIODS = [
         ['08:00', '08:45'],
         ['08:50', '09:35'],
@@ -61,8 +72,19 @@ class DemoWeeklyTimetableSeeder extends Seeder
     /** Minimum subjects a section needs before a real rotating grid is possible. */
     private const MIN_SUBJECTS = 6;
 
+    /** @var array<int, int> Working days to schedule (loaded from the academic year). */
+    private $days = self::DAYS;
+
+    /** @var array<int, array{0: string, 1: string}> Lesson periods, breaks excluded. */
+    private $periods = self::PERIODS;
+
+    /** Where the slot grid came from, for the run report. */
+    private $periodSource = 'hardcoded fallback';
+
     public function run()
     {
+        $this->loadPeriods();
+
         $this->purgeOrphanAssignments();
 
         $this->wipe();
@@ -77,6 +99,55 @@ class DemoWeeklyTimetableSeeder extends Seeder
         $this->seedScenarios($groups);
 
         $this->report($rows, $groups);
+    }
+
+    /**
+     * Load the slot grid from the active academic year's configured periods,
+     * falling back to the hardcoded layout when none exist. Only `lesson` rows
+     * are used, so configured breaks become natural gaps (no lesson lands on a
+     * break) and the working days come from the year as well.
+     */
+    private function loadPeriods(): void
+    {
+        try {
+            $year = AcademicYear::query()
+                ->where('status', AcademicYear::STATUS_ACTIVE)
+                ->orderByDesc('is_current')
+                ->orderByDesc('id')
+                ->first();
+
+            if (! $year) {
+                $this->command?->warn('No active academic year; using hardcoded periods.');
+
+                return;
+            }
+
+            $lessons = SchedulePeriod::query()
+                ->where('academic_year_id', $year->id)
+                ->whereNull('day_of_week')
+                ->where('type', SchedulePeriod::TYPE_LESSON)
+                ->orderBy('period_number')
+                ->get();
+
+            if ($lessons->isEmpty()) {
+                $this->command?->warn("Academic year #{$year->id} has no lesson periods; using hardcoded periods.");
+
+                return;
+            }
+
+            $this->periods = $lessons->map(fn ($p) => [
+                substr($p->start_time, 0, 5),
+                substr($p->end_time, 0, 5),
+            ])->all();
+
+            if (is_array($year->working_days) && count($year->working_days) > 0) {
+                $this->days = array_values(array_map('intval', $year->working_days));
+            }
+
+            $this->periodSource = "academic year #{$year->id} schedule_periods";
+        } catch (\Throwable $e) {
+            $this->command?->warn('Could not load schedule periods ('.$e->getMessage().'); using hardcoded periods.');
+        }
     }
 
     /**
@@ -140,15 +211,17 @@ class DemoWeeklyTimetableSeeder extends Seeder
 
         $groups = [];
         $skipped = 0;
+        // The Latin rectangle needs one subject per lesson period.
+        $minSubjects = max(self::MIN_SUBJECTS, count($this->periods));
 
         foreach ($sections as $section) {
             $rows = $assignments->get($section->id, collect());
 
-            // A teacher-less subject cannot be timetabled, and fewer than six
-            // subjects leaves no rotation (the grid needs one per period).
+            // A teacher-less subject cannot be timetabled, and fewer subjects
+            // than periods leaves no rotation (the grid needs one per period).
             $usable = $rows->filter(fn ($r) => $r->teacher_id !== null)->values();
 
-            if ($usable->count() < self::MIN_SUBJECTS) {
+            if ($usable->count() < $minSubjects) {
                 $skipped++;
 
                 continue;
@@ -175,7 +248,7 @@ class DemoWeeklyTimetableSeeder extends Seeder
         }
 
         if ($skipped > 0) {
-            $this->command?->warn("Skipped {$skipped} sections: fewer than ".self::MIN_SUBJECTS.' assigned subjects with a teacher.');
+            $this->command?->warn("Skipped {$skipped} sections: fewer than {$minSubjects} assigned subjects with a teacher.");
         }
 
         return $groups;
@@ -190,7 +263,7 @@ class DemoWeeklyTimetableSeeder extends Seeder
     {
         $rows = [];
         $now = now();
-        $periodCount = count(self::PERIODS);
+        $periodCount = count($this->periods);
 
         foreach ($groups as $group) {
             $subjects = $group['subjects'];
@@ -204,13 +277,13 @@ class DemoWeeklyTimetableSeeder extends Seeder
             foreach ($chunks as $chunkNo => $chunk) {
                 $phase = ($chunkNo * 2) % $periodCount;
 
-                foreach (self::DAYS as $day) {
+                foreach ($this->days as $day) {
                     $active = $this->activeSubjectsForDay($day, $subjects, $periodCount);
 
                     foreach ($chunk as $localIndex => $sectionId) {
                         $sectionIndex = ($localIndex + $phase) % $periodCount;
 
-                        foreach (self::PERIODS as $periodIndex => [$start, $end]) {
+                        foreach ($this->periods as $periodIndex => [$start, $end]) {
                             // Latin rectangle: exactly one subject owns this cell, and
                             // each active subject lands on a different period in every
                             // section, so a shared teacher is never double-booked.
@@ -317,9 +390,10 @@ class DemoWeeklyTimetableSeeder extends Seeder
                 'metadata'     => json_encode([
                     'generated_by'       => 'DemoWeeklyTimetableSeeder',
                     'sections'           => $sectionCount,
-                    'days'               => count(self::DAYS),
-                    'periods_per_day'    => count(self::PERIODS),
-                    'lessons_per_section' => count(self::DAYS) * count(self::PERIODS),
+                    'days'               => count($this->days),
+                    'periods_per_day'    => count($this->periods),
+                    'period_source'      => $this->periodSource,
+                    'lessons_per_section' => count($this->days) * count($this->periods),
                 ], JSON_UNESCAPED_UNICODE),
                 'created_at'   => now(),
                 'updated_at'   => now(),
@@ -334,6 +408,9 @@ class DemoWeeklyTimetableSeeder extends Seeder
     private function report(array $rows, array $groups): void
     {
         $conflicts = $this->teacherConflicts($rows);
+
+        $this->command?->info('Slot grid from: '.$this->periodSource.
+            ' ('.count($this->days).' days x '.count($this->periods).' lesson periods).');
 
         $this->command?->info(count($rows).' lessons seeded across '.count($groups).' teacher group(s).');
 

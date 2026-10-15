@@ -8,6 +8,8 @@ use App\Models\TimetableScenario;
 use App\Models\SubjectWeeklyRequirement;
 use App\Models\Section;
 use App\Models\Subject;
+use App\Models\AcademicYear;
+use App\Models\SchedulePeriod;
 use App\Services\TimetableOptimizationService;
 use App\Services\TimetableValidationService;
 use App\Services\SubjectYearlyPlanService;
@@ -56,6 +58,49 @@ class ScenarioController extends Controller
                 'message' => 'Error retrieving scenarios',
                 'error'   => $e->getMessage(),
             ], 500);
+        }
+    }
+
+    /**
+     * Resolve per-day lesson slots from the active academic year's schedule
+     * periods so generated timetables align with the configured periods.
+     * Returns [days, day_slots]; both empty when no periods are configured
+     * (the optimizer then falls back to school-settings slots).
+     */
+    private function resolvePeriodPlan(): array
+    {
+        try {
+            $year = AcademicYear::query()
+                ->where('status', AcademicYear::STATUS_ACTIVE)
+                ->orderByDesc('is_current')
+                ->orderByDesc('id')
+                ->first();
+
+            if (!$year || !SchedulePeriod::where('academic_year_id', $year->id)->exists()) {
+                return [[], []];
+            }
+
+            $days = is_array($year->working_days) && count($year->working_days)
+                ? array_values(array_map('intval', $year->working_days))
+                : [0, 1, 2, 3, 4];
+
+            $daySlots = [];
+            foreach ($days as $day) {
+                $slots = [];
+                foreach (SchedulePeriod::forDay($year->id, $day) as $period) {
+                    if (($period->type ?? null) !== SchedulePeriod::TYPE_LESSON) {
+                        continue;
+                    }
+                    $slots[substr($period->start_time, 0, 5)] = substr($period->end_time, 0, 5);
+                }
+                if (!empty($slots)) {
+                    $daySlots[$day] = $slots;
+                }
+            }
+
+            return empty($daySlots) ? [[], []] : [array_keys($daySlots), $daySlots];
+        } catch (\Throwable $e) {
+            return [[], []];
         }
     }
 
@@ -126,10 +171,13 @@ class ScenarioController extends Controller
             $generated = ['programs' => [], 'warnings' => [], 'stats' => []];
             if ($scenario->section_id) {
                 $optimizer = new TimetableOptimizationService();
+                [$days, $daySlots] = $this->resolvePeriodPlan();
                 $generated = $optimizer->generate((int) $scenario->section_id, [
                     'scenario_id'     => $scenario->id,
                     'preserve_locked' => false,
                     'strict_availability' => $request->boolean('strict_availability', false),
+                    'days'            => $days,
+                    'day_slots'       => $daySlots,
                 ]);
 
                 DB::beginTransaction();
@@ -307,10 +355,13 @@ class ScenarioController extends Controller
             }
 
             $optimizer = new TimetableOptimizationService();
+            [$days, $daySlots] = $this->resolvePeriodPlan();
             $result = $optimizer->generate($sectionId, [
                 'scenario_id' => $scenarioId,
                 'preserve_locked' => !$clearExisting,
                 'strict_availability' => $request->boolean('strict_availability', false),
+                'days' => $days,
+                'day_slots' => $daySlots,
             ]);
 
             // Save the generated programs
@@ -722,6 +773,7 @@ class ScenarioController extends Controller
             $maxVersion = TimetableScenario::where('grade_id', $gradeId)->max('version') ?? 0;
 
             $optimizer = new TimetableOptimizationService();
+            [$days, $daySlots] = $this->resolvePeriodPlan();
             $alternatives = [];
 
             DB::beginTransaction();
@@ -743,6 +795,8 @@ class ScenarioController extends Controller
                     'preserve_locked'   => false,
                     'seed'              => ($i * 97 + $sectionId) % 999983,
                     'strict_availability' => $strict,
+                    'days'              => $days,
+                    'day_slots'         => $daySlots,
                 ]);
 
                 foreach ($result['programs'] as $programData) {
@@ -814,11 +868,14 @@ class ScenarioController extends Controller
                 ->delete();
 
             $optimizer = new TimetableOptimizationService();
+            [$days, $daySlots] = $this->resolvePeriodPlan();
             $result = $optimizer->generate($sectionId, [
                 'scenario_id'       => $scenario->id,
                 'preserve_locked'   => false,
                 'existing_programs' => $existingPrograms,
                 'seed'              => $request->filled('seed') ? (int) $request->seed : null,
+                'days'              => $days,
+                'day_slots'         => $daySlots,
             ]);
 
             foreach ($result['programs'] as $programData) {

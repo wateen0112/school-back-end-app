@@ -78,17 +78,49 @@ class AttendanceController extends Controller
                 ], 200);
             }
 
-            $attendance = Attendance::whereIn('student_id', $studentIds)
+            // Keep the payload small: only the columns the mobile app renders,
+            // and only the most recent records unless the client asks for more.
+            // (Multi-hundred-KB JSON responses through the PHP dev server get
+            // corrupted mid-stream and fail to decode in the app.)
+            $limit = (int) $request->input('limit', 100);
+            $limit = $limit > 0 ? min($limit, 500) : 100;
+
+            $query = Attendance::whereIn('student_id', $studentIds)
+                ->select(
+                    'id',
+                    'student_id',
+                    'grade_id',
+                    'classroom_id',
+                    'section_id',
+                    'attendence_date',
+                    'attendence_status'
+                )
                 ->with([
                     'students' => function ($query) {
                         $query->select('id', 'name', 'Grade_id', 'Classroom_id', 'section_id');
                     },
-                    'grade',
-                    'classroom',
-                    'section',
-                ])
-                ->orderBy('attendence_date', 'desc')
+                    'grade' => function ($query) {
+                        $query->select('id', 'Name');
+                    },
+                    'classroom' => function ($query) {
+                        $query->select('id', 'Name_Class');
+                    },
+                    'section' => function ($query) {
+                        $query->select('id', 'Name_Section');
+                    },
+                ]);
+
+            if ($request->filled('student_id') && in_array((int) $request->student_id, $studentIds->all())) {
+                $query->where('student_id', (int) $request->student_id);
+            }
+
+            if ($request->filled('date') || $request->filled('attendence_date')) {
+                $query->where('attendence_date', $request->input('date', $request->input('attendence_date')));
+            }
+
+            $attendance = $query->orderBy('attendence_date', 'desc')
                 ->orderBy('id', 'desc')
+                ->limit($limit)
                 ->get();
 
             return response()->json([

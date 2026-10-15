@@ -9,7 +9,7 @@ class PaperExam extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'exam_date' => 'date',
+        'exam_date' => 'date:Y-m-d',
         'max_score' => 'decimal:2',
     ];
 

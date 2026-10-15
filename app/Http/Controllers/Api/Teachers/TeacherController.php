@@ -9,6 +9,7 @@ use App\Models\WeeklyProgram;
 use App\Services\Pending\PendingActionRegistry;
 use App\Services\Pending\PendingRequestService;
 use App\Services\Teachers\TeacherProfileService;
+use App\Services\Teachers\TeacherSalaryPlanService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -61,15 +62,17 @@ class TeacherController extends Controller
             $teacher->Gender_id = $request->Gender_id;
             $teacher->Joining_Date = $request->Joining_Date;
             $teacher->Address = $request->Address;
-            $teacher->salary = $request->filled('Salary') ? $request->Salary : null;
             $schoolId = ($request->user() instanceof \App\User) ? $request->user()->school_id : ($request->filled('school_id') ? $request->school_id : null);
             $teacher->school_id = $schoolId;
             $teacher->save();
 
+            // Salary contract (type / hour rate / custom installments).
+            (new TeacherSalaryPlanService())->apply($teacher, $request->all());
+
             return response()->json([
                 'success' => true,
                 'message' => 'Teacher created successfully',
-                'data' => $teacher->load(['specializations', 'genders'])
+                'data' => $teacher->load(['specializations', 'genders', 'customInstallments'])
             ], 201);
 
         } catch (\Exception $e) {
@@ -87,6 +90,7 @@ class TeacherController extends Controller
             $teacher = Teacher::with([
                 'specializations',
                 'genders',
+                'customInstallments',
                 'sectionSubjects.subject',
                 'sectionSubjects.section.Grades',
                 'sectionSubjects.section.My_classs',

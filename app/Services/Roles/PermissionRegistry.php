@@ -52,6 +52,7 @@ class PermissionRegistry
             ['key' => 'processing_fee.manage',    'label_ar' => 'رسوم المعالجة',          'label_en' => 'Processing Fees',        'group' => 'finance', 'group_label' => 'المالية',           'path' => '/processing-fee'],
             ['key' => 'expenses.manage',          'label_ar' => 'المصروفات',              'label_en' => 'Expenses',               'group' => 'finance', 'group_label' => 'المالية',           'path' => '/expenses'],
             ['key' => 'salaries.manage',          'label_ar' => 'الرواتب',                'label_en' => 'Salaries',               'group' => 'finance', 'group_label' => 'المالية',           'path' => '/salaries'],
+            ['key' => 'work_hours.manage',        'label_ar' => 'ساعات عمل المعلمين',     'label_en' => 'Teacher Work Hours',     'group' => 'teachers', 'group_label' => 'المعلمون',          'path' => '/work-hours'],
             ['key' => 'accounting_reports.manage', 'label_ar' => 'الأرباح والخسائر',      'label_en' => 'Profit & Loss',          'group' => 'finance', 'group_label' => 'المالية',           'path' => '/profit-loss'],
             ['key' => 'library.manage',           'label_ar' => 'المكتبة',                'label_en' => 'Library',                'group' => 'library', 'group_label' => 'المكتبة',           'path' => '/library'],
             ['key' => 'notifications.manage',     'label_ar' => 'الإشعارات',              'label_en' => 'Notifications',          'group' => 'notifications', 'group_label' => 'الإشعارات',   'path' => '/notifications'],

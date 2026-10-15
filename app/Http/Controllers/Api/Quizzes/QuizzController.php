@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Validator;
 
 class QuizzController extends Controller
 {
+    protected \App\Services\Scheduling\AcademicContextService $academicContext;
+
+    public function __construct()
+    {
+        $this->academicContext = new \App\Services\Scheduling\AcademicContextService();
+    }
+
     public function index()
     {
         try {
@@ -50,6 +57,10 @@ class QuizzController extends Controller
         }
 
         try {
+            // Every quiz is bound to the active academic year/term.
+            $context = $this->academicContext->require();
+            $term = $this->academicContext->validateTermBinding($request->input('academic_term_id') ? (int) $request->academic_term_id : null);
+
             $quiz = new Quizze();
             $quiz->name = ['en' => $request->Name_en ?: $request->Name_ar, 'ar' => $request->Name_ar];
             $quiz->subject_id = $request->subject_id;
@@ -57,6 +68,8 @@ class QuizzController extends Controller
             $quiz->classroom_id = $request->Classroom_id;
             $quiz->section_id = $request->section_id;
             $quiz->teacher_id = $request->teacher_id;
+            $quiz->academic_year_id = $context['year']->id;
+            $quiz->academic_term_id = $term->id;
             $quiz->save();
 
             return response()->json([
@@ -65,6 +78,11 @@ class QuizzController extends Controller
                 'data' => $quiz->load(['subject', 'teacher', 'grade', 'classroom', 'section'])
             ], 201);
 
+        } catch (\Symfony\Component\HttpKernel\Exception\HttpException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], $e->getStatusCode());
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

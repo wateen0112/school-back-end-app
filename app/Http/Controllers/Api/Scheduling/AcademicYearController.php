@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Scheduling;
 
 use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
+use App\Services\Scheduling\AcademicTermService;
 use App\Services\Scheduling\AnnualCalendarService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Validator;
@@ -11,8 +12,11 @@ use Illuminate\Support\Facades\Validator as ValidatorFacade;
 
 class AcademicYearController extends Controller
 {
+    private AcademicTermService $termService;
+
     public function __construct(private AnnualCalendarService $calendar)
     {
+        $this->termService = new AcademicTermService();
     }
 
     public function index(Request $request)
@@ -48,7 +52,7 @@ class AcademicYearController extends Controller
             return $guard;
         }
 
-        $academicYear->load('weeks')->load('periods');
+        $academicYear->load('weeks')->load('periods')->load('terms');
 
         return response()->json([
             'success' => true,
@@ -192,18 +196,19 @@ class AcademicYearController extends Controller
         }
 
         try {
-            $schoolId = $this->resolveSchoolId($request);
-            AcademicYear::query()
-                ->forSchool($schoolId)
-                ->where('id', '!=', $academicYear->id)
-                ->update(['status' => AcademicYear::STATUS_DRAFT]);
-
-            $academicYear->update(['status' => AcademicYear::STATUS_ACTIVE]);
+            // Activation is atomic: the two default terms (Term 1 & Term 2)
+            // are generated in the same transaction — a term failure rolls
+            // the whole activation back. Optional per-term date ranges may
+            // be supplied via `terms.TERM_1.start_date/end_date` etc.
+            $academicYear = $this->termService->activate(
+                $academicYear,
+                $request->input('terms', [])
+            );
 
             return response()->json([
                 'success' => true,
-                'message' => 'تم تفعيل السنة الدراسية بنجاح',
-                'data'    => $academicYear->fresh(),
+                'message' => 'تم تفعيل السنة الدراسية وإنشاء الفصول الدراسية بنجاح',
+                'data'    => $academicYear,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

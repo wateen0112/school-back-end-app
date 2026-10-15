@@ -14,6 +14,6 @@ class UsageMetric extends Model
     ];
 
     protected $casts = [
-        'recorded_on' => 'date',
+        'recorded_on' => 'date:Y-m-d',
     ];
 }

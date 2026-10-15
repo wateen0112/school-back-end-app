@@ -117,7 +117,17 @@ class PaperExamController extends Controller
                 'notes' => 'nullable|string',
             ]);
 
-            $exam = PaperExam::create($validated);
+            // Bind the exam to the active academic year/term (423 without a
+            // context, 422 when an explicit term ID does not match it).
+            $context = $this->academicContext()->require();
+            $term = $this->academicContext()->validateTermBinding(
+                $request->input('academic_term_id') ? (int) $request->academic_term_id : null
+            );
+
+            $exam = PaperExam::create($validated + [
+                'academic_year_id' => $context['year']->id,
+                'academic_term_id' => $term->id,
+            ]);
 
             $exam->load(['subject', 'teacher', 'grade', 'classroom', 'section']);
 
@@ -126,6 +136,11 @@ class PaperExamController extends Controller
                 'message' => 'Paper exam created successfully',
                 'data' => $exam,
             ], 201);
+        } catch (\Symfony\Component\HttpKernel\Exception\HttpException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], $e->getStatusCode());
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -133,6 +148,11 @@ class PaperExamController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    private function academicContext(): \App\Services\Scheduling\AcademicContextService
+    {
+        return new \App\Services\Scheduling\AcademicContextService();
     }
 
     /**

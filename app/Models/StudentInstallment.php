@@ -25,7 +25,7 @@ class StudentInstallment extends Model
         'amount' => 'float',
         'paid_amount' => 'float',
         'remaining_amount' => 'float',
-        'due_date' => 'date',
+        'due_date' => 'date:Y-m-d',
         'paid_at' => 'datetime',
         'reminder_sent_at' => 'datetime',
         'overdue_sent_at' => 'datetime',

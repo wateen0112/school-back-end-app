@@ -189,7 +189,7 @@ class AccountingReportController extends Controller
                                 'employee_name' => $p->employee_name,
                                 'employee_type' => $p->employee_type,
                                 'amount' => $p->amount,
-                                'due_date' => $p->due_date,
+                                'due_date' => $p->due_date?->toDateString(),
                                 'period_year' => $p->period_year,
                                 'period_month' => $p->period_month,
                                 'is_overdue' => $p->due_date->isPast(),

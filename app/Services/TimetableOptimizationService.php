@@ -40,6 +40,13 @@ class TimetableOptimizationService
     private $timeSlots = [];
 
     /**
+     * Optional per-day slots derived from the academic-year schedule periods:
+     * [day_of_week => [start => end]]. When non-empty it takes precedence over
+     * the uniform $timeSlots set (which is kept as a union for shared helpers).
+     */
+    private $daySlots = [];
+
+    /**
      * Teacher availability matrix: [teacher_id][day] => ['start','end','is_available','is_preferred'].
      */
     private $availability = [];
@@ -93,6 +100,42 @@ class TimetableOptimizationService
     }
 
     /**
+     * Use explicit per-day slots (from academic-year schedule periods).
+     *
+     * @param array $daySlots [day_of_week => [start => end]]
+     */
+    public function setDaySlots(array $daySlots)
+    {
+        $this->daySlots = $daySlots;
+
+        $union = [];
+        foreach ($daySlots as $slots) {
+            foreach ($slots as $start => $end) {
+                $union[$start] = $end;
+            }
+        }
+        ksort($union);
+
+        if (!empty($union)) {
+            $this->timeSlots = $union;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Slots available on a given day (per-day when configured, else uniform).
+     */
+    private function slotsFor(int $day): array
+    {
+        if (!empty($this->daySlots)) {
+            return $this->daySlots[$day] ?? [];
+        }
+
+        return $this->timeSlots;
+    }
+
+    /**
      * Generate an optimized timetable for a section.
      *
      * @param int $sectionId
@@ -116,8 +159,17 @@ class TimetableOptimizationService
 
         // Apply school working hours / days / breaks.
         $this->schoolSettings = SchoolScheduleSetting::first();
-        $this->daysInWeek = $this->resolveWorkingDays();
-        $this->applyBreaksToSlots();
+
+        // Academic-year schedule periods take precedence when supplied.
+        if (!empty($options['day_slots'])) {
+            $this->setDaySlots($options['day_slots']);
+            $this->daysInWeek = !empty($options['days'])
+                ? array_values(array_map('intval', $options['days']))
+                : $this->resolveWorkingDays();
+        } else {
+            $this->daysInWeek = $this->resolveWorkingDays();
+            $this->applyBreaksToSlots();
+        }
 
         $this->loadTeacherData($sectionId);
 
@@ -377,7 +429,7 @@ class TimetableOptimizationService
         $grid = [];
         foreach ($this->daysInWeek as $day) {
             $grid[$day] = [];
-            foreach ($this->timeSlots as $start => $end) {
+            foreach ($this->slotsFor($day) as $start => $end) {
                 $grid[$day][$start] = null;
             }
         }
@@ -486,7 +538,7 @@ class TimetableOptimizationService
             $subjectDayCount = $this->countSubjectInDay($grid, $day, $subjectId);
             if ($subjectDayCount >= $info['max_per_day']) continue;
 
-            foreach ($this->timeSlots as $time => $end) {
+            foreach ($this->slotsFor($day) as $time => $end) {
                 if ($grid[$day][$time] !== null) continue;
 
                 // HARD: subject consecutive constraint — when consecutive
@@ -494,7 +546,7 @@ class TimetableOptimizationService
                 // directly before/after another period of the SAME subject
                 // (not multiple periods of it on the same day).
                 if (!$info['allow_consecutive']) {
-                    $slotKeys = array_keys($this->timeSlots);
+                    $slotKeys = array_keys($this->slotsFor($day));
                     $idx = array_search($time, $slotKeys, true);
                     if ($idx !== false) {
                         $prev = $idx > 0 ? $grid[$day][$slotKeys[$idx - 1]] : null;
@@ -536,7 +588,7 @@ class TimetableOptimizationService
             return false;
         }
 
-        $slotEnd = $this->timeSlots[$time] ?? $time;
+        $slotEnd = $this->slotsFor($day)[$time] ?? $time;
         $avail = $this->availability[$teacherId][$day] ?? null;
 
         if ($avail) {
@@ -567,7 +619,7 @@ class TimetableOptimizationService
         // sections + lessons already placed in this grid).
         if ($pref && !empty($pref['max_periods_per_day'])) {
             $dayCount = isset($this->busyMap[$teacherId][$day]) ? count($this->busyMap[$teacherId][$day]) : 0;
-            foreach ($this->timeSlots as $t => $e) {
+            foreach ($this->slotsFor($day) as $t => $e) {
                 if (isset($grid[$day][$t]) && $grid[$day][$t] && $grid[$day][$t]['teacher_id'] == $teacherId) {
                     $dayCount++;
                 }
@@ -586,7 +638,7 @@ class TimetableOptimizationService
      */
     private function consecutiveRunLength(int $day, string $time, int $teacherId, array $grid): int
     {
-        $slotKeys = array_keys($this->timeSlots);
+        $slotKeys = array_keys($this->slotsFor($day));
         $indices = [];
 
         if (isset($this->busyMap[$teacherId][$day])) {
@@ -595,7 +647,7 @@ class TimetableOptimizationService
                 if ($idx !== false) $indices[$idx] = true;
             }
         }
-        foreach ($this->timeSlots as $t => $e) {
+        foreach ($this->slotsFor($day) as $t => $e) {
             if (isset($grid[$day][$t]) && $grid[$day][$t] && $grid[$day][$t]['teacher_id'] == $teacherId) {
                 $idx = array_search($t, $slotKeys, true);
                 if ($idx !== false) $indices[$idx] = true;
@@ -643,8 +695,8 @@ class TimetableOptimizationService
 
         // Soft: prefer mornings (first half of slots get a bonus).
         // Kept small so it never overrides an explicit teacher preference.
-        $slotIndex = array_search($time, array_keys($this->timeSlots));
-        if ($slotIndex !== false && $slotIndex < ceil(count($this->timeSlots) / 2)) {
+        $slotIndex = array_search($time, array_keys($this->slotsFor($day)));
+        if ($slotIndex !== false && $slotIndex < ceil(count($this->slotsFor($day)) / 2)) {
             $score += 4;
         }
 
@@ -704,7 +756,7 @@ class TimetableOptimizationService
         // Soft: keep each day's lessons contiguous — heavily penalize any
         // empty slot that would sit BETWEEN this lesson and the lessons
         // already placed that day (prevents gaps inside the school day).
-        $slotKeys = array_keys($this->timeSlots);
+        $slotKeys = array_keys($this->slotsFor($day));
         $idx = array_search($time, $slotKeys, true);
         if ($idx !== false) {
             $placedIdx = [];
@@ -741,7 +793,7 @@ class TimetableOptimizationService
     {
         $count = 0;
         foreach ($this->daysInWeek as $day) {
-            foreach ($this->timeSlots as $time => $end) {
+            foreach ($this->slotsFor($day) as $time => $end) {
                 if ($grid[$day][$time] === null) $count++;
             }
         }
@@ -751,7 +803,7 @@ class TimetableOptimizationService
     private function countDaySlots(array $grid, int $day): int
     {
         $count = 0;
-        foreach ($this->timeSlots as $time => $end) {
+        foreach ($this->slotsFor($day) as $time => $end) {
             if (isset($grid[$day][$time]) && $grid[$day][$time] !== null) $count++;
         }
         return $count;
@@ -760,7 +812,7 @@ class TimetableOptimizationService
     private function countSubjectInDay(array $grid, int $day, int $subjectId): int
     {
         $count = 0;
-        foreach ($this->timeSlots as $time => $end) {
+        foreach ($this->slotsFor($day) as $time => $end) {
             if (isset($grid[$day][$time]) && $grid[$day][$time] && $grid[$day][$time]['subject_id'] == $subjectId) {
                 $count++;
             }
@@ -777,7 +829,7 @@ class TimetableOptimizationService
         foreach ($grid as $day => $slots) {
             foreach ($slots as $time => $cell) {
                 if ($cell === null) continue;
-                $end = $this->timeSlots[$time] ?? $time;
+                $end = $this->slotsFor((int) $day)[$time] ?? $time;
                 $programs[] = [
                     'section_id' => $sectionId,
                     'day_of_week' => $day,

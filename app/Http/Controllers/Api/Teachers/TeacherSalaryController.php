@@ -32,14 +32,16 @@ class TeacherSalaryController extends Controller
                         'period_year' => $p->period_year,
                         'period_month' => $p->period_month,
                         'amount' => $p->amount,
-                        'due_date' => $p->due_date,
-                        'paid_at' => $p->paid_at,
+                        'due_date' => $p->due_date?->toDateString(),
+                        'paid_at' => $p->paid_at?->toDateString(),
                         'status' => $p->status,
                         'payment_method' => $p->payment_method,
                         'notes' => $p->notes,
                         'is_overdue' => $p->status === 'pending' && $p->due_date->isPast(),
                     ];
                 });
+
+            $salaryType = $teacher->salary_type ?: 'monthly';
 
             $nextDue = $payments->firstWhere('status', 'pending');
 
@@ -48,9 +50,21 @@ class TeacherSalaryController extends Controller
                 'message' => 'Teacher salary retrieved successfully',
                 'data' => [
                     'base_salary' => $teacher->salary,
+                    'salary_type' => $salaryType,
+                    'hour_rate' => $teacher->hour_rate,
+                    'custom_salary_amount' => $teacher->custom_salary_amount,
+                    'custom_installments' => $salaryType === 'custom'
+                        ? $teacher->customInstallments()->get()->map(fn ($i) => [
+                            'id' => $i->id,
+                            'title' => $i->title,
+                            'amount' => (float) $i->amount,
+                            'due_date' => $i->due_date?->toDateString(),
+                            'status' => $i->status,
+                        ])->values()
+                        : null,
                     'next_due' => $nextDue ? [
                         'amount' => $nextDue->amount,
-                        'due_date' => $nextDue->due_date,
+                        'due_date' => $nextDue->due_date?->toDateString(),
                         'period_year' => $nextDue->period_year,
                         'period_month' => $nextDue->period_month,
                         'is_overdue' => $nextDue->due_date->isPast(),

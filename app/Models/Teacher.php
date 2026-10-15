@@ -14,6 +14,16 @@ class Teacher extends  Authenticatable
     public $translatable = ['Name'];
     
     protected $hidden=['password'];
+
+    protected $casts = [
+        'salary_type' => 'string',
+        'hour_rate' => 'decimal:2',
+        'custom_salary_amount' => 'decimal:2',
+    ];
+
+    public const SALARY_MONTHLY = 'monthly';
+    public const SALARY_HOURLY = 'hourly';
+    public const SALARY_CUSTOM = 'custom';
     // علاقة بين المعلمين والتخصصات لجلب اسم التخصص
     public function specializations()
     {
@@ -90,6 +100,18 @@ class Teacher extends  Authenticatable
         $permissions = $this->effectivePermissions();
 
         return in_array('*', $permissions, true) || in_array($key, $permissions, true);
+    }
+
+    /** Non-fixed installments of a custom salary contract. */
+    public function customInstallments()
+    {
+        return $this->hasMany(TeacherCustomInstallment::class, 'teacher_id')->orderBy('due_date');
+    }
+
+    /** Logged work hours (hourly contracts). */
+    public function workHours()
+    {
+        return $this->hasMany(TeacherWorkHour::class, 'teacher_id')->orderByDesc('work_date');
     }
 
     /** Monthly payroll entries for this teacher. */

@@ -446,6 +446,48 @@ class WeeklyProgramController extends Controller
     }
 
     /**
+     * إعادة ضبط البرنامج الأسبوعي لقسم: حذف كل الحصص ليُعاد بناؤها من الإعدادات.
+     * عند تمرير scenario_id يُقتصر الحذف على حصص ذلك السيناريو.
+     */
+    public function resetSection(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'section_id'  => 'required|integer|exists:sections,id',
+                'scenario_id' => 'nullable|integer|exists:timetable_scenarios,id',
+            ]);
+
+            $query = WeeklyProgram::where('section_id', $validated['section_id']);
+
+            if ($request->exists('scenario_id')) {
+                $scenarioId = $validated['scenario_id'] ?? null;
+                $query->where('scenario_id', $scenarioId);
+            }
+
+            $count = $query->delete();
+            CacheVersion::bump('weekly_program');
+
+            return response()->json([
+                'success' => true,
+                'message' => "تم إعادة ضبط البرنامج الأسبوعي (حذف {$count} حصة)",
+                'deleted' => $count,
+            ], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed for reset',
+                'errors'  => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error resetting weekly program',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
      * حصص اليوم لكل قسم: الحصة الحالية والحصص القادمة، متزامنة مع الوقت الحالي.
      */
     public function today(Request $request)

@@ -23,16 +23,18 @@ class AcademicYear extends Model
         'periods_count',
         'breaks',
         'status',
+        'is_current',
         'created_by',
     ];
 
     protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date',
+        'start_date' => 'date:Y-m-d',
+        'end_date' => 'date:Y-m-d',
         'working_days' => 'array',
         'breaks' => 'array',
         'period_duration_min' => 'integer',
         'periods_count' => 'integer',
+        'is_current' => 'boolean',
     ];
 
     public const STATUS_DRAFT = 'draft';
@@ -47,6 +49,11 @@ class AcademicYear extends Model
     public function school()
     {
         return $this->belongsTo(School::class, 'school_id');
+    }
+
+    public function terms()
+    {
+        return $this->hasMany(AcademicTerm::class)->orderBy('term_code');
     }
 
     public function weeks()
@@ -67,6 +74,29 @@ class AcademicYear extends Model
     public function scopeActive($query)
     {
         return $query->where('status', self::STATUS_ACTIVE);
+    }
+
+    public function scopeCurrent($query)
+    {
+        return $query->where('is_current', true);
+    }
+
+    /** The current active year + current active term, or null when locked. */
+    public static function activeContext(): ?array
+    {
+        $year = static::query()
+            ->where('status', self::STATUS_ACTIVE)
+            ->where('is_current', true)
+            ->with('terms')
+            ->first();
+
+        if (! $year) {
+            return null;
+        }
+
+        $term = $year->terms->firstWhere('is_current', true);
+
+        return ($term && $term->status === AcademicTerm::STATUS_ACTIVE) ? ['year' => $year, 'term' => $term] : null;
     }
 
     public function scopeForSchool($query, ?int $schoolId)

@@ -28,12 +28,23 @@ class SalaryController extends Controller
     public function employees()
     {
         try {
-            $teachers = Teacher::whereNotNull('salary')->get()->map(function ($t) {
+            $teachers = Teacher::where(function ($q) {
+                // Salaried (monthly), hourly and custom-contract teachers.
+                $q->whereNotNull('salary')
+                    ->orWhere('salary_type', 'hourly')
+                    ->orWhere('salary_type', 'custom');
+            })->get()->map(function ($t) {
                 return [
                     'employee_type' => 'teacher',
                     'employee_id' => $t->id,
                     'name' => $t->Name,
                     'salary' => $t->salary,
+                    'salary_type' => $t->salary_type ?: 'monthly',
+                    'hour_rate' => $t->hour_rate,
+                    'custom_salary_amount' => $t->custom_salary_amount,
+                    'custom_installments_pending' => $t->salary_type === 'custom'
+                        ? (int) $t->customInstallments()->pending()->count()
+                        : null,
                     'role_label' => trans('messages.teacher'),
                 ];
             });
@@ -144,7 +155,7 @@ class SalaryController extends Controller
                     'employee_id' => $candidate['employee_id'],
                     'period_year' => $year,
                     'period_month' => $month,
-                ])->exists();
+                ])->where('source', 'monthly')->exists();
 
                 if ($exists) {
                     $skipped++;
@@ -159,9 +170,69 @@ class SalaryController extends Controller
                     'amount' => $candidate['salary'],
                     'due_date' => $dueDate,
                     'status' => 'pending',
+                    'source' => 'monthly',
                     'payment_method' => $request->payment_method,
                 ]);
                 $created++;
+            }
+
+            // Hourly teachers: pay = worked hours in the period × hour rate.
+            foreach (Teacher::where('salary_type', 'hourly')->whereNotNull('hour_rate')->get() as $teacher) {
+                $hours = (float) $teacher->workHours()
+                    ->whereYear('work_date', $year)
+                    ->whereMonth('work_date', $month)
+                    ->sum('hours');
+
+                $exists = SalaryPayment::where([
+                    'employee_type' => 'teacher',
+                    'employee_id' => $teacher->id,
+                    'period_year' => $year,
+                    'period_month' => $month,
+                ])->where('source', 'hours')->exists();
+
+                if ($exists || $hours <= 0) {
+                    $skipped++;
+                    continue;
+                }
+
+                SalaryPayment::create([
+                    'employee_type' => 'teacher',
+                    'employee_id' => $teacher->id,
+                    'period_year' => $year,
+                    'period_month' => $month,
+                    'amount' => round($hours * (float) $teacher->hour_rate, 2),
+                    'due_date' => $dueDate,
+                    'status' => 'pending',
+                    'source' => 'hours',
+                    'payment_method' => $request->payment_method,
+                    'notes' => sprintf('%s hours × %s (hour rate)', rtrim(rtrim(number_format($hours, 2, '.', ''), '0'), '.'), $teacher->hour_rate),
+                ]);
+                $created++;
+            }
+
+            // Custom contracts: turn every pending installment into a payment.
+            foreach (Teacher::where('salary_type', 'custom')->with('customInstallments')->get() as $teacher) {
+                foreach ($teacher->customInstallments->where('status', 'pending') as $installment) {
+                    if ($installment->salaryPayment()->exists()) {
+                        $skipped++;
+                        continue;
+                    }
+
+                    SalaryPayment::create([
+                        'employee_type' => 'teacher',
+                        'employee_id' => $teacher->id,
+                        'period_year' => (int) $installment->due_date->format('Y'),
+                        'period_month' => (int) $installment->due_date->format('m'),
+                        'amount' => $installment->amount,
+                        'due_date' => $installment->due_date->toDateString(),
+                        'status' => 'pending',
+                        'source' => 'custom',
+                        'installment_id' => $installment->id,
+                        'payment_method' => $request->payment_method,
+                        'notes' => $installment->title ?: sprintf('Custom salary installment #%d', $installment->id),
+                    ]);
+                    $created++;
+                }
             }
 
             DB::commit();
@@ -321,6 +392,11 @@ class SalaryController extends Controller
             }
 
             $payment->update($request->only(['amount', 'due_date', 'status', 'payment_method', 'notes']));
+
+            // Releasing a custom payment frees its installment back to pending.
+            if ($payment->installment_id && $payment->status === 'cancelled') {
+                $payment->installment()->update(['status' => 'pending']);
+            }
             CacheVersion::bump('accounting');
 
             return response()->json([
@@ -345,6 +421,9 @@ class SalaryController extends Controller
                 ], 409);
             }
 
+            if ($payment->installment_id) {
+                $payment->installment()->update(['status' => 'pending']);
+            }
             $payment->delete();
             CacheVersion::bump('accounting');
 
@@ -412,7 +491,11 @@ class SalaryController extends Controller
     /** @return array<int, array{employee_type: string, employee_id: int, salary: float}> */
     private function payrollCandidates(): array
     {
-        $teachers = Teacher::whereNotNull('salary')->get(['id', 'salary'])->map(fn ($t) => [
+        // Only monthly-contract teachers are flat-amount candidates; hourly
+        // and custom contracts are computed separately in generate().
+        $teachers = Teacher::whereNotNull('salary')
+            ->where(fn ($q) => $q->whereNull('salary_type')->orWhere('salary_type', 'monthly'))
+            ->get(['id', 'salary'])->map(fn ($t) => [
             'employee_type' => 'teacher',
             'employee_id' => $t->id,
             'salary' => $t->salary,
@@ -437,9 +520,17 @@ class SalaryController extends Controller
             'period_year' => $payment->period_year,
             'period_month' => $payment->period_month,
             'amount' => $payment->amount,
-            'due_date' => $payment->due_date,
-            'paid_at' => $payment->paid_at,
+            'due_date' => $payment->due_date?->toDateString(),
+            'paid_at' => $payment->paid_at?->toDateString(),
             'status' => $payment->status,
+            'source' => $payment->source ?: 'monthly',
+            'installment_id' => $payment->installment_id,
+            'worked_hours' => $payment->source === 'hours'
+                ? (float) ($payment->employee?->workHours()
+                    ->whereYear('work_date', $payment->period_year)
+                    ->whereMonth('work_date', $payment->period_month)
+                    ->sum('hours') ?? 0)
+                : null,
             'payment_method' => $payment->payment_method,
             'notes' => $payment->notes,
             'is_overdue' => $payment->status === 'pending' && $payment->due_date->isPast(),

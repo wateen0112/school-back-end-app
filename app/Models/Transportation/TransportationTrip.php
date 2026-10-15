@@ -17,7 +17,7 @@ class TransportationTrip extends Model
     ];
 
     protected $casts = [
-        'trip_date' => 'date',
+        'trip_date' => 'date:Y-m-d',
         'scheduled_start_time' => 'datetime:H:i',
         'started_at' => 'datetime',
         'ended_at' => 'datetime',
