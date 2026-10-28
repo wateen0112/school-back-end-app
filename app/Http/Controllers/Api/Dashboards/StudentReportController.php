@@ -40,6 +40,7 @@ class StudentReportController extends Controller
             })
             ->when($request->filled('student_id'), fn ($query) => $query->where('student_id', $request->integer('student_id')))
             ->withCount('student as students_count')
+            ->orderByDesc('progress_score')
             ->latest('year')
             ->latest('month')
             ->latest('id')

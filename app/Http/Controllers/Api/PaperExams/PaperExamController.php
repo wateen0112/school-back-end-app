@@ -57,6 +57,9 @@ class PaperExamController extends Controller
             if ($request->filled('status')) {
                 $query->where('status', $request->status);
             }
+            if ($request->filled('exam_type')) {
+                $query->where('exam_type', $request->exam_type);
+            }
 
             $exams = $query->orderBy('exam_date', 'desc')->get();
 
@@ -107,6 +110,7 @@ class PaperExamController extends Controller
         try {
             $validated = $request->validate([
                 'title' => 'required|string|max:255',
+                'exam_type' => 'required|in:' . implode(',', PaperExam::EXAM_TYPES),
                 'exam_date' => 'required|date',
                 'subject_id' => 'required|exists:subjects,id',
                 'teacher_id' => 'required|exists:teachers,id',
@@ -123,6 +127,17 @@ class PaperExamController extends Controller
             $term = $this->academicContext()->validateTermBinding(
                 $request->input('academic_term_id') ? (int) $request->academic_term_id : null
             );
+
+            // Fallback: pull the max score from the subject-grade settings
+            // (العلامة العظمى المرتبطة بعلاقة مادة-صف) when not provided.
+            if (!isset($validated['max_score']) || $validated['max_score'] === null) {
+                $setting = \App\Models\SubjectGradeSetting::where('subject_id', $validated['subject_id'])
+                    ->where('grade_id', $validated['grade_id'])
+                    ->first();
+                if ($setting) {
+                    $validated['max_score'] = $setting->max_mark;
+                }
+            }
 
             $exam = PaperExam::create($validated + [
                 'academic_year_id' => $context['year']->id,
@@ -165,6 +180,7 @@ class PaperExamController extends Controller
 
             $validated = $request->validate([
                 'title' => 'sometimes|string|max:255',
+                'exam_type' => 'sometimes|in:' . implode(',', PaperExam::EXAM_TYPES),
                 'exam_date' => 'sometimes|date',
                 'subject_id' => 'sometimes|exists:subjects,id',
                 'teacher_id' => 'sometimes|exists:teachers,id',

@@ -37,6 +37,15 @@ class SettingController extends Controller
         $validator = Validator::make($request->all(), [
             'school_name' => 'nullable|string|max:255',
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'school_governorate' => 'nullable|string|max:255',
+            'school_principal' => 'nullable|string|max:255',
+            'school_title' => 'nullable|string|max:255',
+            'current_session' => 'nullable|string|max:255',
+            'end_first_term' => 'nullable|string|max:255',
+            'end_second_term' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:255',
+            'school_email' => 'nullable|email|max:255',
+            'address' => 'nullable|string|max:500',
         ]);
 
         if ($validator->fails()) {
@@ -48,11 +57,17 @@ class SettingController extends Controller
         }
 
         try {
-            if ($request->filled('school_name')) {
-                Setting::updateOrCreate(
-                    ['key' => 'school_name'],
-                    ['value' => $request->school_name]
-                );
+            // حفظ جميع الحقول النصية للمدرسة (المحافظة، المدير، العنوان، ...)
+            $textKeys = [
+                'school_name', 'school_title', 'current_session',
+                'end_first_term', 'end_second_term', 'phone',
+                'school_email', 'address',
+                'school_governorate', 'school_principal',
+            ];
+            foreach ($textKeys as $key) {
+                if ($request->filled($key)) {
+                    Setting::updateOrCreate(['key' => $key], ['value' => $request->input($key)]);
+                }
             }
 
             if ($request->hasFile('logo')) {

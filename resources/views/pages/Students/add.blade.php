@@ -49,6 +49,29 @@
                         </div>
 
                         <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>اسم الجد :</label>
+                                    <input  type="text" name="grandfather_name"  class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>رقم البطاقة (الرقم الوطني) :</label>
+                                    <input  type="text" name="national_id"  class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>مكان الإقامة :</label>
+                                    <input  type="text" name="residence_address"  class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{{trans('Students_trans.email')}} : </label>

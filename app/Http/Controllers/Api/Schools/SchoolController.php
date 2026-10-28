@@ -87,6 +87,8 @@ class SchoolController extends Controller
             'password' => 'required|string|min:8',
             'phone' => 'nullable|string|max:30',
             'address' => 'nullable|string',
+            'governorate' => 'nullable|string|max:255',
+            'principal_name' => 'nullable|string|max:255',
             'status' => 'nullable|string|in:active,inactive,pending',
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg|max:4096',
             'theme' => 'nullable|array',
@@ -111,6 +113,8 @@ class SchoolController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'address' => $request->address,
+                'governorate' => $request->governorate,
+                'principal_name' => $request->principal_name,
                 'status' => $request->status ?: 'active',
                 'logo' => $request->hasFile('logo') ? $this->storeLogo($request->file('logo')) : null,
                 'theme' => $request->has('theme') ? School::normalizeTheme($request->input('theme')) : School::THEME_DEFAULTS,
@@ -165,6 +169,8 @@ class SchoolController extends Controller
             'email' => 'nullable|email|max:255|unique:schools,email,'.$school->id.'|unique:users,email',
             'phone' => 'nullable|string|max:30',
             'address' => 'nullable|string',
+            'governorate' => 'nullable|string|max:255',
+            'principal_name' => 'nullable|string|max:255',
             'status' => 'nullable|string|in:active,inactive,pending',
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg|max:4096',
             'remove_logo' => 'nullable|boolean',
@@ -191,7 +197,7 @@ class SchoolController extends Controller
             $school->name = $translations;
         }
 
-        $school->fill($request->only(['email', 'phone', 'address', 'status']));
+        $school->fill($request->only(['email', 'phone', 'address', 'governorate', 'principal_name', 'status']));
 
         if ($request->hasFile('logo')) {
             if ($school->getOriginal('logo')) {
@@ -499,6 +505,8 @@ class SchoolController extends Controller
             'email' => $school->email,
             'phone' => $school->phone,
             'address' => $school->address,
+            'governorate' => $school->governorate,
+            'principal_name' => $school->principal_name,
             'status' => $school->trashed() ? 'deleted' : ($school->status ?? 'active'),
             'suspended_at' => $school->suspended_at?->toISOString(),
             'archived_at' => $school->archived_at?->toISOString(),

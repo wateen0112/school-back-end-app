@@ -6,6 +6,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class PaperExam extends Model
 {
+    // أنواع الاختبارات الورقية
+    public const TYPE_WRITTEN_REVIEW_1 = 'written_review_1'; // مذاكرة كتابية أولى
+    public const TYPE_WRITTEN_REVIEW_2 = 'written_review_2'; // مذاكرة كتابية ثانية
+    public const TYPE_ORAL = 'oral';                         // اختبار شفهي
+    public const TYPE_COURSEWORK = 'coursework';             // درجة أعمال
+    public const TYPE_FINAL_EXAM = 'final_exam';             // امتحان
+
+    public const EXAM_TYPES = [
+        self::TYPE_WRITTEN_REVIEW_1,
+        self::TYPE_WRITTEN_REVIEW_2,
+        self::TYPE_ORAL,
+        self::TYPE_COURSEWORK,
+        self::TYPE_FINAL_EXAM,
+    ];
+
+    public const EXAM_TYPE_LABELS_AR = [
+        self::TYPE_WRITTEN_REVIEW_1 => 'مذاكرة كتابية أولى',
+        self::TYPE_WRITTEN_REVIEW_2 => 'مذاكرة كتابية ثانية',
+        self::TYPE_ORAL => 'اختبار شفهي',
+        self::TYPE_COURSEWORK => 'درجة أعمال',
+        self::TYPE_FINAL_EXAM => 'امتحان',
+    ];
+
     protected $guarded = [];
 
     protected $casts = [

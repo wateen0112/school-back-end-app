@@ -119,6 +119,7 @@ class StudentExamRepository implements StudentExamRepositoryInterface
         $degree = $existing ?: new Degree();
         $degree->quizze_id = $quizzeId;
         $degree->student_id = $studentId;
+        $degree->academic_year_id = $quiz->academic_year_id;
         $degree->question_id = null;
         $degree->score = 0;
         $degree->abuse = '0';

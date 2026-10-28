@@ -8,7 +8,7 @@ use Spatie\Translatable\HasTranslations;
 class Classroom extends Model
 {
 
-    use HasTranslations;
+    use HasTranslations, Concerns\Auditable;
     public $translatable = ['Name_Class'];
 
 

@@ -326,6 +326,7 @@ class SalaryController extends Controller
             'due_date' => 'required|date',
             'payment_method' => 'nullable|string|max:50',
             'notes' => 'nullable|string',
+            'manual_reference_no' => 'nullable|string|max:100',
         ]);
 
         $validator->after(function ($v) use ($request) {
@@ -349,7 +350,7 @@ class SalaryController extends Controller
         try {
             $payment = SalaryPayment::create($request->only([
                 'employee_type', 'employee_id', 'period_year', 'period_month',
-                'amount', 'due_date', 'payment_method', 'notes',
+                'amount', 'due_date', 'payment_method', 'notes', 'manual_reference_no',
             ]) + ['status' => 'pending']);
             CacheVersion::bump('accounting');
 
@@ -391,7 +392,7 @@ class SalaryController extends Controller
                 ], 409);
             }
 
-            $payment->update($request->only(['amount', 'due_date', 'status', 'payment_method', 'notes']));
+            $payment->update($request->only(['amount', 'due_date', 'status', 'payment_method', 'notes', 'manual_reference_no']));
 
             // Releasing a custom payment frees its installment back to pending.
             if ($payment->installment_id && $payment->status === 'cancelled') {
@@ -533,6 +534,8 @@ class SalaryController extends Controller
                 : null,
             'payment_method' => $payment->payment_method,
             'notes' => $payment->notes,
+            'invoice_number' => $payment->invoice_number,
+            'manual_reference_no' => $payment->manual_reference_no,
             'is_overdue' => $payment->status === 'pending' && $payment->due_date->isPast(),
             'days_until_due' => $payment->status === 'pending'
                 ? (int) now()->startOfDay()->diffInDays($payment->due_date, false)

@@ -165,11 +165,12 @@ class RoleController extends Controller
         $admins = User::where('school_id', $schoolId)
             ->with(['roles' => fn ($q) => $q->select('roles.id', 'roles.name', 'roles.is_active')])
             ->orderBy('name')
-            ->get(['id', 'name', 'email', 'is_super_admin'])
+            ->get(['id', 'name', 'email', 'is_super_admin', 'insurance_number'])
             ->map(fn (User $user) => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'insurance_number' => $user->insurance_number,
                 'type' => 'user',
                 'is_super_admin' => $user->is_super_admin,
                 'roles' => $user->roles->map(fn (Role $r) => $this->formatRoleLite($r))->values(),
@@ -184,6 +185,7 @@ class RoleController extends Controller
                 'id' => $teacher->id,
                 'name' => $teacher->Name,
                 'email' => $teacher->email,
+                'insurance_number' => $teacher->insurance_number,
                 'type' => 'teacher',
                 'is_super_admin' => false,
                 'roles' => $teacher->roles->map(fn (Role $r) => $this->formatRoleLite($r))->values(),
@@ -268,6 +270,7 @@ class RoleController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:8',
+            'insurance_number' => 'nullable|string|max:100',
             'role_ids' => 'nullable|array',
             'role_ids.*' => 'integer|exists:roles,id',
         ]);
@@ -282,6 +285,7 @@ class RoleController extends Controller
             'password' => \Illuminate\Support\Facades\Hash::make($request->password),
             'school_id' => $schoolId,
             'is_super_admin' => false,
+            'insurance_number' => $request->insurance_number,
         ]);
 
         if ($request->filled('role_ids')) {
@@ -305,6 +309,7 @@ class RoleController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'insurance_number' => $user->insurance_number,
                 'type' => 'user',
                 'is_super_admin' => $user->is_super_admin,
                 'roles' => $user->roles->map(fn (Role $r) => $this->formatRoleLite($r))->values(),

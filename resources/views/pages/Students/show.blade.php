@@ -60,6 +60,17 @@
                                         </tr>
 
                                         <tr>
+                                            <th scope="row">النسبة (الاسم الثاني)</th>
+                                            <td>{{ $Student->second_name ?: '—' }}</td>
+                                            <th scope="row">اسم الجد</th>
+                                            <td>{{ $Student->grandfather_name ?: '—' }}</td>
+                                            <th scope="row">رقم البطاقة (الرقم الوطني)</th>
+                                            <td>{{ $Student->national_id ?: '—' }}</td>
+                                            <th scope="row">مكان الإقامة</th>
+                                            <td>{{ $Student->residence_address ?: '—' }}</td>
+                                        </tr>
+
+                                        <tr>
                                             <th scope="row">{{trans('Students_trans.parent')}}</th>
                                             <td>{{ $Student->myparent->Name_Father}}</td>
                                             <th scope="row">{{trans('Students_trans.academic_year')}}</th>

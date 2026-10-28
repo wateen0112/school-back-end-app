@@ -181,10 +181,24 @@ class LoginController extends Controller
             return 'teacher';
         } elseif (strpos($userClass, 'Parent') !== false) {
             return 'parent';
-        } elseif ($user instanceof \App\User && \App\Models\Transportation\DriverProfile::where('user_id', $user->id)->where('status', 'ACTIVE')->exists()) {
+        } elseif ($user instanceof \App\User) {
             // School bus drivers sign in with a regular staff account but get
             // the dedicated driver experience in the mobile app.
-            return 'driver';
+            if (\App\Models\Transportation\DriverProfile::where('user_id', $user->id)->where('status', 'ACTIVE')->exists()) {
+                return 'driver';
+            }
+
+            // Staff whose role is a finance role (e.g. finance_officer,
+            // finance_director) get the dedicated accountant experience.
+            foreach ($user->roles as $role) {
+                $roleName = strtolower((string) $role->getTranslation('name', 'en', false));
+
+                if ($roleName !== '' && str_contains($roleName, 'finance')) {
+                    return 'accountant';
+                }
+            }
+
+            return 'admin';
         } else {
             return 'admin';
         }
@@ -209,13 +223,14 @@ class LoginController extends Controller
     }
 
     /**
-     * Return the user array with effective permissions for dashboard admins.
+     * Return the user array with effective permissions for any user model
+     * that implements the RBAC helpers (User, Teacher, Student, My_Parent).
      */
     private function withPermissions($user)
     {
         $data = $user->toArray();
 
-        if ($user instanceof \App\User) {
+        if (method_exists($user, 'effectivePermissions')) {
             $data['permissions'] = $user->effectivePermissions();
         }
 

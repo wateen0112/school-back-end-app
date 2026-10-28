@@ -82,6 +82,10 @@ class DatabaseSeeder extends Seeder
         // approval requests. Runs at the end because the sample requests point at real
         // teachers and students, which the seeders above are what create.
         $this->call(\Database\Seeders\DemoSchoolStaffSeeder::class);
+
+        // Sample accounting data (expenses, salary payments + fund movements) so the
+        // finance screens have content on a fresh demo database.
+        $this->call(\Database\Seeders\DemoAccountingSeeder::class);
     }
 
     /**

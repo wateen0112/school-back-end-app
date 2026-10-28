@@ -13,6 +13,12 @@ class AuditLogController extends Controller
         $query = AuditLog::with('user:id,name,email')
             ->orderByDesc('id');
 
+        // School admins only see their own school's logs; super admins see all.
+        $user = $request->user();
+        if ($user && ! ($user->is_super_admin ?? false)) {
+            $query->where('school_id', $user->school_id);
+        }
+
         if ($request->query('user_id')) {
             $query->where('user_id', $request->query('user_id'));
         }
@@ -23,6 +29,19 @@ class AuditLogController extends Controller
 
         if ($request->query('action')) {
             $query->where('action', $request->query('action'));
+        }
+
+        if ($request->query('entity_type')) {
+            // Matches both FQCN (App\Models\Student) and short names (Student)
+            $query->where('entity_type', 'like', '%'.$request->query('entity_type'));
+        }
+
+        if ($request->query('entity_id')) {
+            $query->where('entity_id', $request->query('entity_id'));
+        }
+
+        if ($request->query('q')) {
+            $query->where('description', 'like', '%'.$request->query('q').'%');
         }
 
         if ($request->query('from')) {

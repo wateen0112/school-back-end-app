@@ -7,7 +7,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Subject extends Model
 {
-    use HasTranslations;
+    use HasTranslations, Concerns\Auditable;
 
     public $translatable = ['Name'];
 
@@ -37,6 +37,12 @@ class Subject extends Model
     public function sectionTeachers()
     {
         return $this->hasMany(SectionSubjectTeacher::class, 'subject_id');
+    }
+
+    // إعدادات المادة لكل صف: العلامة العظمى وعلامة الرسوب
+    public function gradeSettings()
+    {
+        return $this->hasMany(SubjectGradeSetting::class, 'subject_id');
     }
 
     public function sections()

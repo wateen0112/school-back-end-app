@@ -61,7 +61,7 @@ class AuditLogger
                 'action' => $action,
                 'entity_type' => get_class($entity),
                 'entity_id' => $entity->getKey(),
-                'description' => static::buildChangeDescription($entity, $diff),
+                'description' => static::buildChangeDescription($action, $entity, $diff),
                 'meta' => array_merge($extraMeta, ['changed' => array_keys($diff)]),
                 'old_values' => $old,
                 'new_values' => $new,
@@ -117,11 +117,48 @@ class AuditLogger
         return $diff;
     }
 
-    private static function buildChangeDescription(Model $entity, array $diff): string
-    {
-        $short = class_basename($entity);
-        $changedKeys = implode(', ', array_keys($diff));
+    /** Arabic names for audited entities; falls back to the class basename. */
+    private const ENTITY_NAMES_AR = [
+        'Student' => 'الطالب',
+        'Teacher' => 'المعلم',
+        'My_Parent' => 'ولي الأمر',
+        'User' => 'المستخدم',
+        'Fee_invoice' => 'فاتورة الرسوم',
+        'PaymentStudent' => 'سند قبض الطالب',
+        'ReceiptStudent' => 'إيصال الطالب',
+        'ProcessingFee' => 'رسوم المعالجة',
+        'Expense' => 'المصروف',
+        'SalaryPayment' => 'دفع الراتب',
+        'Attendance' => 'الحضور',
+        'Subject' => 'المادة الدراسية',
+        'Classroom' => 'الفصل الدراسي',
+        'Section' => 'الشعبة',
+        'School' => 'المدرسة',
+        'Role' => 'الدور',
+        'Announcement' => 'الإعلان',
+        'SchoolBranch' => 'فرع المدرسة',
+        'Integration' => 'التكامل',
+        'PermissionTemplate' => 'قالب الصلاحيات',
+        'Plan' => 'خطة الاشتراك',
+        'SecurityPolicy' => 'سياسة الأمان',
+        'Subscription' => 'الاشتراك',
+        'PlatformSetting' => 'إعدادات المنصة',
+    ];
 
-        return "{$short} #{$entity->getKey()} changed [{$changedKeys}]";
+    private static function buildChangeDescription(string $action, Model $entity, array $diff): string
+    {
+        $name = self::ENTITY_NAMES_AR[class_basename($entity)] ?? class_basename($entity);
+        $suffix = str_contains($action, '.') ? substr($action, (int) strrpos($action, '.') + 1) : $action;
+
+        switch ($suffix) {
+            case 'created':
+                return "تم إنشاء {$name} رقم {$entity->getKey()}";
+            case 'deleted':
+                return "تم حذف {$name} رقم {$entity->getKey()}";
+            case 'updated':
+            default:
+                $changedKeys = implode('، ', array_keys($diff));
+                return "تم تعديل {$name} رقم {$entity->getKey()} — الحقول المتغيرة: [{$changedKeys}]";
+        }
     }
 }

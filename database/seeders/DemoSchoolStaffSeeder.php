@@ -30,6 +30,7 @@ use Throwable;
  *   | admin@school.local      | School Administrator    | no (executes direct) | everything         |
  *   | finance@school.local    | Finance Officer         | pay_salary           | -                  |
  *   | cfo@school.local        | Finance Director        | -                    | pay_salary         |
+ *   | accountant@school.local | Finance Officer         | pay_salary           | -                  |
  *   | academic@school.local   | Academic Coordinator    | send_marks           | -                  |
  *   | dean@school.local       | Dean of Studies         | -                    | send_marks         |
  *   | reports@school.local    | Student Reports Officer | send_report          | -                  |
@@ -274,6 +275,10 @@ class DemoSchoolStaffSeeder extends Seeder
             'finance_director' => [
                 'name' => 'Finance Director', 'email' => 'cfo@school.local',
                 'role' => 'finance_director', 'salary' => 6500.00,
+            ],
+            'accountant' => [
+                'name' => 'School Accountant', 'email' => 'accountant@school.local',
+                'role' => 'finance_officer', 'salary' => 4000.00,
             ],
             'academic_coordinator' => [
                 'name' => 'Academic Coordinator', 'email' => 'academic@school.local',

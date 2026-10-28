@@ -20,7 +20,7 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         try {
-            $students = Student::with(['grade', 'classroom', 'section', 'myparent', 'images'])
+            $students = Student::with(['grade', 'classroom', 'section', 'myparent', 'images', 'academicYear'])
                 ->when($request->filled('Grade_id') || $request->filled('grade_id'), function ($query) use ($request) {
                     $query->where('Grade_id', $request->input('Grade_id', $request->input('grade_id')));
                 })
@@ -45,6 +45,9 @@ class StudentController extends Controller
                         $query->where('Grade_id', $subject->Grade_id)
                             ->where('Classroom_id', $subject->Classroom_id);
                     }
+                })
+                ->when($request->filled('academic_year_id'), function ($query) use ($request) {
+                    $query->where('academic_year_id', $request->input('academic_year_id'));
                 });
 
             // A parent may only see their own children
@@ -56,20 +59,20 @@ class StudentController extends Controller
                 }
             }
 
-            $students = $students->get();
-            
+            $paginated = $students->paginate($request->integer('per_page', 50));
+
             // Format image URLs for each student
-            $students->each(function ($student) {
+            $paginated->getCollection()->each(function ($student) {
                 $student->images->transform(function ($image) {
                     $image->filename = asset('storage/' . $image->filename);
                     return $image;
                 });
             });
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Students retrieved successfully',
-                'data' => $students
+                'data' => $paginated
             ], 200);
             
         } catch (\Exception $e) {
@@ -87,6 +90,11 @@ class StudentController extends Controller
         try {
             $student = new Student();
             $student->name = ['en' => $request->name_en ?: $request->name_ar, 'ar' => $request->name_ar];
+            $student->second_name = $request->second_name;
+            $student->grandfather_name = $request->grandfather_name;
+            $student->national_id = $request->national_id;
+            $student->general_record_number = $request->general_record_number;
+            $student->residence_address = $request->residence_address;
             $student->email = $request->email;
             $student->password = Hash::make($request->password);
             $student->gender_id = $request->gender_id;
@@ -97,7 +105,7 @@ class StudentController extends Controller
             $student->Classroom_id = $request->Classroom_id;
             $student->section_id = $request->section_id;
             $student->parent_id = $request->parent_id;
-            $student->academic_year = $request->academic_year;
+            $this->bindAcademicYear($student, $request->input('academic_year_id'));
             $student->school_id = \App\Services\Scoping\SchoolContext::effectiveSchoolId($request->user());
             $student->save();
 
@@ -119,7 +127,7 @@ class StudentController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Student created successfully',
-                'data' => $student->load(['grade', 'classroom', 'section', 'myparent', 'images'])
+                'data' => $student->load(['grade', 'classroom', 'section', 'myparent', 'images', 'academicYear'])
             ], 201);
 
         } catch (\Exception $e) {
@@ -135,7 +143,7 @@ class StudentController extends Controller
     public function show($id)
     {
         try {
-            $student = Student::with(['grade', 'classroom', 'section', 'myparent', 'attendance', 'images'])->findOrFail($id);
+            $student = Student::with(['grade', 'classroom', 'section', 'myparent', 'attendance', 'images', 'academicYear'])->findOrFail($id);
             
             // Format image URLs for the student
             $student->images->transform(function ($image) {
@@ -163,6 +171,11 @@ class StudentController extends Controller
         try {
             $student = Student::findOrFail($request->input('id', $id));
             $student->name = ['en' => $request->name_en ?: $request->name_ar, 'ar' => $request->name_ar];
+            $student->second_name = $request->second_name;
+            $student->grandfather_name = $request->grandfather_name;
+            $student->national_id = $request->national_id;
+            $student->general_record_number = $request->general_record_number;
+            $student->residence_address = $request->residence_address;
             $student->email = $request->email;
             if ($request->filled('password')) {
                 $student->password = Hash::make($request->password);
@@ -175,19 +188,51 @@ class StudentController extends Controller
             $student->Classroom_id = $request->Classroom_id;
             $student->section_id = $request->section_id;
             $student->parent_id = $request->parent_id;
-            $student->academic_year = $request->academic_year;
+            $this->bindAcademicYear($student, $request->input('academic_year_id', $student->academic_year_id));
             $student->save();
 
             return response()->json([
                 'success' => true,
                 'message' => 'Student updated successfully',
-                'data' => $student->load(['grade', 'classroom', 'section', 'myparent'])
+                'data' => $student->load(['grade', 'classroom', 'section', 'myparent', 'academicYear'])
             ], 200);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error updating student',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function linkParent(Request $request, $id = null)
+    {
+        try {
+            $student = Student::findOrFail($id);
+
+            $request->validate([
+                'parent_id' => 'nullable|exists:my__parents,id',
+            ]);
+
+            $student->parent_id = $request->input('parent_id');
+            $student->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Parent linked successfully',
+                'data' => $student->load(['myparent']),
+            ], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error linking parent',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -210,6 +255,22 @@ class StudentController extends Controller
                 'message' => 'Error deleting student',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    /**
+     * Link the student to an academic year and keep the legacy free-text
+     * `academic_year` label in sync with that year's (localized) name.
+     */
+    private function bindAcademicYear(Student $student, $academicYearId): void
+    {
+        $year = $academicYearId ? \App\Models\AcademicYear::find($academicYearId) : null;
+
+        $student->academic_year_id = $year?->id;
+
+        if ($year) {
+            $student->academic_year = $year->getTranslation('name', app()->getLocale())
+                ?: $year->getTranslation('name', 'ar');
         }
     }
 

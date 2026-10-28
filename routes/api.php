@@ -249,6 +249,14 @@ Route::group(['middleware' => 'auth.any'], function () {
     Route::get('student-reports/{studentId}/{month}/{year}', 'Api\Dashboards\StudentReportController@detail')->name('api.web.student-reports.detail');
     Route::post('student-reports/generate', 'Api\Dashboards\StudentReportController@generate')->name('api.web.student-reports.generate');
 
+    // Student rewards & penalties
+    Route::group(['middleware' => 'permission:rewards.manage'], function () {
+        Route::get('rewards-penalties', 'Api\Rewards\RewardPenaltyController@index')->name('api.web.rewards-penalties.index');
+        Route::get('rewards-penalties/stats', 'Api\Rewards\RewardPenaltyController@stats')->name('api.web.rewards-penalties.stats');
+        Route::get('rewards-penalties/suggestions', 'Api\Rewards\RewardPenaltyController@suggestions')->name('api.web.rewards-penalties.suggestions');
+        Route::get('rewards-penalties/settings', 'Api\Rewards\RewardPenaltyController@settings')->name('api.web.rewards-penalties.settings');
+    });
+
     // Quizzes - GET only
     Route::get('Quizzes', 'Api\Quizzes\QuizzController@index')->name('api.web.Quizzes.index');
     Route::get('Quizzes/{Quizzes}', 'Api\Quizzes\QuizzController@show')->name('api.web.Quizzes.show');
@@ -474,6 +482,7 @@ Route::get('genders/{id}', 'Api\GenderController@show');
         Route::get('/transportation/routes', 'Api\Transportation\Admin\RouteController@index');
         Route::get('/transportation/routes/{id}', 'Api\Transportation\Admin\RouteController@show');
         Route::get('/transportation/students', 'Api\Transportation\Admin\StudentTransportController@index');
+        Route::get('/transportation/students/finance', 'Api\Transportation\Admin\StudentTransportController@finance');
         Route::get('/transportation/students/available', 'Api\Transportation\Admin\StudentTransportController@availableStudents');
         Route::get('/transportation/students/{studentId}', 'Api\Transportation\Admin\StudentTransportController@show');
         Route::get('/transportation/trips', 'Api\Transportation\Admin\TripController@index');
@@ -499,6 +508,7 @@ Route::get('genders/{id}', 'Api\GenderController@show');
     });
     Route::group(['middleware' => 'permission:transportation.students.manage'], function () {
         Route::put('/transportation/students/{studentId}/transport-profile', 'Api\Transportation\Admin\StudentTransportController@upsert');
+        Route::put('/transportation/students/{studentId}/home-location', 'Api\Transportation\Admin\StudentTransportController@updateHomeLocation');
     });
     Route::group(['middleware' => 'permission:transportation.trips.manage'], function () {
         Route::post('/transportation/trips', 'Api\Transportation\Admin\TripController@store');
@@ -517,6 +527,9 @@ Route::get('genders/{id}', 'Api\GenderController@show');
 // ============================================
 Route::group(['middleware' => ['auth:api', 'permission']], function () {
 
+    // Audit log — school scope
+    Route::get('audit-logs', 'Api\Platform\AuditLogController@index')->middleware('permission:audit.view');
+
     // Roles & Permissions — school scope
     Route::group(['middleware' => 'permission:roles.manage'], function () {
         Route::get('roles', 'Api\RoleController@index');
@@ -529,9 +542,19 @@ Route::group(['middleware' => ['auth:api', 'permission']], function () {
         Route::put('roles/users/{user}/roles', 'Api\RoleController@assignRoles');
     });
 
+    // Student rewards & penalties - Write
+    Route::group(['middleware' => 'permission:rewards.manage'], function () {
+        Route::post('rewards-penalties', 'Api\Rewards\RewardPenaltyController@store')->name('api.web.rewards-penalties.store');
+        Route::post('rewards-penalties/apply-suggestions', 'Api\Rewards\RewardPenaltyController@applySuggestions')->name('api.web.rewards-penalties.apply-suggestions');
+        Route::put('rewards-penalties/{id}', 'Api\Rewards\RewardPenaltyController@update')->name('api.web.rewards-penalties.update')->whereNumber('id');
+        Route::delete('rewards-penalties/{id}', 'Api\Rewards\RewardPenaltyController@destroy')->name('api.web.rewards-penalties.destroy')->whereNumber('id');
+    });
+    Route::group(['middleware' => 'permission:rewards.settings.manage'], function () {
+        Route::put('rewards-penalties/settings', 'Api\Rewards\RewardPenaltyController@updateSettings')->name('api.web.rewards-penalties.settings.update');
+    });
+
     // Classrooms - Write
-    Route::post('Classrooms', 'Api\Classrooms\ClassroomController@store')->name('api.web.Classrooms.store');
-    Route::put('Classrooms/{Classroom}', 'Api\Classrooms\ClassroomController@update')->name('api.web.Classrooms.update');
+    Route::post('Classrooms', 'Api\Classrooms\ClassroomController@store')->name('api.web.Classrooms.store');    Route::put('Classrooms/{Classroom}', 'Api\Classrooms\ClassroomController@update')->name('api.web.Classrooms.update');
     Route::delete('Classrooms/{Classroom}', 'Api\Classrooms\ClassroomController@destroy')->name('api.web.Classrooms.destroy');
     Route::post('delete_all', 'Api\Classrooms\ClassroomController@delete_all')->name('api.web.delete_all');
     Route::post('Filter_Classes', 'Api\Classrooms\ClassroomController@Filter_Classes')->name('api.web.Filter_Classes');
@@ -563,6 +586,7 @@ Route::group(['middleware' => ['auth:api', 'permission']], function () {
     Route::delete('Students/{Student}', 'Api\Students\StudentController@destroy')->name('api.web.Students.destroy');
     Route::post('students', 'Api\Students\StudentController@store')->middleware('academic.context');
     Route::put('students/{student}', 'Api\Students\StudentController@update');
+    Route::put('students/{student}/parent', 'Api\Students\StudentController@linkParent')->whereNumber('student');
     Route::delete('students/{student}', 'Api\Students\StudentController@destroy');
     Route::post('Upload_attachment', 'Api\Students\StudentController@Upload_attachment')->name('api.web.Upload_attachment');
     Route::post('Delete_attachment', 'Api\Students\StudentController@Delete_attachment')->name('api.web.Delete_attachment');
@@ -603,6 +627,13 @@ Route::group(['middleware' => ['auth:api', 'permission']], function () {
     Route::post('fees-invoices', 'Api\Students\FeesInvoicesController@store');
     Route::put('fees-invoices/{fees_invoice}', 'Api\Students\FeesInvoicesController@update');
     Route::delete('fees-invoices/{fees_invoice}', 'Api\Students\FeesInvoicesController@destroy');
+
+    // Student Discounts (cash / siblings / excellence / teacher's child / special)
+    Route::get('student-discounts', 'Api\Accounting\StudentDiscountController@index')->name('api.web.student-discounts.index');
+    Route::get('student-discounts/types', 'Api\Accounting\StudentDiscountController@types')->name('api.web.student-discounts.types');
+    Route::post('student-discounts', 'Api\Accounting\StudentDiscountController@store')->name('api.web.student-discounts.store');
+    Route::put('student-discounts/{discount}', 'Api\Accounting\StudentDiscountController@update')->name('api.web.student-discounts.update');
+    Route::delete('student-discounts/{discount}', 'Api\Accounting\StudentDiscountController@destroy')->name('api.web.student-discounts.destroy');
 
     // Fees - Write
     Route::post('Fees', 'Api\Students\FeesController@store')->name('api.web.Fees.store');
@@ -667,6 +698,30 @@ Route::group(['middleware' => ['auth:api', 'permission']], function () {
     Route::post('library', 'Api\Students\LibraryController@store')->name('api.web.library.store');
     Route::put('library/{library}', 'Api\Students\LibraryController@update')->name('api.web.library.update');
     Route::delete('library/{library}', 'Api\Students\LibraryController@destroy')->name('api.web.library.destroy');
+
+    // Grade pass/fail rules (إعدادات النجاح والرسوب الخاصة بكل صف على حدة)
+    Route::get('grade-pass-fail-rules', 'Api\Grades\GradePassFailRuleController@index')->name('api.web.grade-pass-fail-rules.index');
+    Route::post('grade-pass-fail-rules', 'Api\Grades\GradePassFailRuleController@store')->name('api.web.grade-pass-fail-rules.store');
+    Route::get('grade-pass-fail-rules/{id}', 'Api\Grades\GradePassFailRuleController@show')->name('api.web.grade-pass-fail-rules.show');
+    Route::put('grade-pass-fail-rules/{id}', 'Api\Grades\GradePassFailRuleController@update')->name('api.web.grade-pass-fail-rules.update');
+    Route::delete('grade-pass-fail-rules/{id}', 'Api\Grades\GradePassFailRuleController@destroy')->name('api.web.grade-pass-fail-rules.destroy');
+
+    // Grade transcript settings (إعدادات الجلاء المدرسي لكل صف)
+    Route::get('grade-transcript-settings', 'Api\Grades\GradeTranscriptSettingController@index')->name('api.web.grade-transcript-settings.index');
+    Route::post('grade-transcript-settings', 'Api\Grades\GradeTranscriptSettingController@store')->name('api.web.grade-transcript-settings.store');
+    Route::delete('grade-transcript-settings/{id}', 'Api\Grades\GradeTranscriptSettingController@destroy')->name('api.web.grade-transcript-settings.destroy');
+
+    // School transcript (جلاء مدرسي قابل للطباعة مع شعار المدرسة)
+    Route::get('students/{student}/transcript', 'Api\Grades\TranscriptController@show')->name('api.web.students.transcript');
+    Route::get('students/{student}/yearly-transcript', 'Api\Grades\TranscriptController@yearly')->name('api.web.students.yearly-transcript');
+
+    // Evaluation of student pass/fail per grade rules
+    Route::get('students/{student}/pass-fail-evaluation', 'Api\Grades\GradePassFailEvaluationController@show')->name('api.web.students.pass-fail-evaluation');
+
+    // Subject grade settings (العلامة العظمى وعلامة الرسوب لكل مادة-صف)
+    Route::get('subject-grade-settings', 'Api\Subjects\SubjectGradeSettingController@index')->name('api.web.subject-grade-settings.index');
+    Route::post('subject-grade-settings', 'Api\Subjects\SubjectGradeSettingController@store')->name('api.web.subject-grade-settings.store');
+    Route::delete('subject-grade-settings/{id}', 'Api\Subjects\SubjectGradeSettingController@destroy')->name('api.web.subject-grade-settings.destroy');
 
     // Subjects - Write
     Route::post('subjects', 'Api\Subjects\SubjectController@store')->name('api.web.subjects.store');

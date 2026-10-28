@@ -56,6 +56,9 @@ class TeacherController extends Controller
         try {
             $teacher = new Teacher();
             $teacher->Name = ['en' => $request->Name_en ?: $request->Name_ar, 'ar' => $request->Name_ar];
+            $teacher->surname = $request->Surname;
+            $teacher->mobile = $request->Mobile;
+            $teacher->insurance_number = $request->insurance_number;
             $teacher->email = $request->Email;
             $teacher->password = Hash::make($request->Password);
             $teacher->Specialization_id = $request->Specialization_id;

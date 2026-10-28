@@ -16,10 +16,13 @@ class QuizzController extends Controller
         $this->academicContext = new \App\Services\Scheduling\AcademicContextService();
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $quizzes = Quizze::with(['subject', 'teacher', 'grade', 'classroom', 'section'])->get();
+            $quizzes = Quizze::with(['subject', 'teacher', 'grade', 'classroom', 'section'])
+                ->when($request->filled('academic_year_id'), fn ($q) => $q->where('academic_year_id', $request->input('academic_year_id')))
+                ->when($request->filled('academic_term_id'), fn ($q) => $q->where('academic_term_id', $request->input('academic_term_id')))
+                ->get();
             
             return response()->json([
                 'success' => true,

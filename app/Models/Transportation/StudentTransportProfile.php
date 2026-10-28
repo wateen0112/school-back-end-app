@@ -16,6 +16,7 @@ class StudentTransportProfile extends Model
 
     protected $fillable = [
         'school_id', 'student_id', 'is_enabled',
+        'agreed_amount', 'academic_year_id', 'classroom_id',
         'morning_route_id', 'afternoon_route_id',
         'morning_pickup_address', 'morning_pickup_lat', 'morning_pickup_lng', 'morning_pickup_time',
         'morning_dropoff_address', 'morning_dropoff_lat', 'morning_dropoff_lng', 'morning_dropoff_time',
@@ -26,6 +27,7 @@ class StudentTransportProfile extends Model
 
     protected $casts = [
         'is_enabled' => 'boolean',
+        'agreed_amount' => 'decimal:2',
         'morning_pickup_lat' => 'float', 'morning_pickup_lng' => 'float',
         'morning_dropoff_lat' => 'float', 'morning_dropoff_lng' => 'float',
         'afternoon_pickup_lat' => 'float', 'afternoon_pickup_lng' => 'float',
@@ -54,6 +56,22 @@ class StudentTransportProfile extends Model
     public function afternoonRoute()
     {
         return $this->belongsTo(TransportationRoute::class, 'afternoon_route_id');
+    }
+
+    public function classroom()
+    {
+        return $this->belongsTo(\App\Models\Classroom::class, 'classroom_id');
+    }
+
+    public function academicYear()
+    {
+        return $this->belongsTo(\App\Models\AcademicYear::class, 'academic_year_id');
+    }
+
+    /** Accounting entries (type = "transport") produced by this assignment. */
+    public function accounts()
+    {
+        return $this->hasMany(\App\Models\StudentAccount::class, 'transport_profile_id');
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Models\Fee_invoice;
 use App\Models\My_Parent;
 use App\Models\ReceiptStudent;
 use App\Services\DashboardService;
+use App\Services\DiscountService;
 use Illuminate\Http\Request;
 
 class ParentFinanceController extends Controller
@@ -33,10 +34,12 @@ class ParentFinanceController extends Controller
             }
 
             $service = new DashboardService();
+            $discounts = new DiscountService();
             $children = $parent->students()->with(['grade', 'classroom', 'section'])->get();
 
             $totalInvoiced = 0;
             $totalPaid = 0;
+            $totalDiscount = 0;
             $childrenData = [];
 
             foreach ($children as $student) {
@@ -101,10 +104,19 @@ class ParentFinanceController extends Controller
                     ];
                 })->values();
 
-                $childRemaining = round($childTotalInvoiced - $childTotalPaid, 2);
+                $childDiscount = $discounts->totalDiscount(
+                    $student->id,
+                    $childTotalInvoiced,
+                    null
+                );
+                $childRemaining = round(
+                    max(0, $childTotalInvoiced - $childTotalPaid - $childDiscount),
+                    2
+                );
 
                 $totalInvoiced += $childTotalInvoiced;
                 $totalPaid += $childTotalPaid;
+                $totalDiscount += $childDiscount;
 
                 $childrenData[] = [
                     'id'             => (int) $student->id,
@@ -115,10 +127,16 @@ class ParentFinanceController extends Controller
                     'finance'        => [
                         'total_invoiced' => round($childTotalInvoiced, 2),
                         'total_paid'     => round($childTotalPaid, 2),
+                        'total_discount' => round($childDiscount, 2),
                         'remaining'      => $childRemaining,
                         'invoice_count'  => $invoices->count(),
                         'receipt_count'  => $receipts->count(),
                     ],
+                    'discounts'      => $discounts->serializedFor(
+                        $student->id,
+                        null,
+                        $childTotalInvoiced
+                    ),
                     'invoices'       => $invoiceItems,
                     'receipts'       => $receiptItems,
                 ];
@@ -136,7 +154,11 @@ class ParentFinanceController extends Controller
                         'children_count' => $children->count(),
                         'total_invoiced' => round($totalInvoiced, 2),
                         'total_paid'     => round($totalPaid, 2),
-                        'total_remaining'=> round($totalInvoiced - $totalPaid, 2),
+                        'total_discount' => round($totalDiscount, 2),
+                        'total_remaining'=> round(
+                            max(0, $totalInvoiced - $totalPaid - $totalDiscount),
+                            2
+                        ),
                     ],
                     'children' => $childrenData,
                 ],

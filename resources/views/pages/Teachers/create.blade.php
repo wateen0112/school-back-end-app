@@ -67,6 +67,29 @@
                                 </div>
                             </div>
                             <div class="form-row mb-4">
+                                <div class="col-md-4 mb-3">
+                                    <label for="Surname" class="text-label-lg text-on-surface-variant mb-2">الكنية</label>
+                                    <input type="text" name="Surname" class="form-control bg-surface-container border-outline-variant text-on-surface rounded-lg">
+                                    @error('Surname')
+                                    <div class="alert bg-error-container text-on-error border-0 rounded-lg mt-2">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="Mobile" class="text-label-lg text-on-surface-variant mb-2">رقم الموبايل</label>
+                                    <input type="text" name="Mobile" class="form-control bg-surface-container border-outline-variant text-on-surface rounded-lg">
+                                    @error('Mobile')
+                                    <div class="alert bg-error-container text-on-error border-0 rounded-lg mt-2">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="insurance_number" class="text-label-lg text-on-surface-variant mb-2">رقم التأمين</label>
+                                    <input type="text" name="insurance_number" class="form-control bg-surface-container border-outline-variant text-on-surface rounded-lg">
+                                    @error('insurance_number')
+                                    <div class="alert bg-error-container text-on-error border-0 rounded-lg mt-2">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-row mb-4">
                                 <div class="form-group col-md-6 mb-3">
                                     <label for="inputCity" class="text-label-lg text-on-surface-variant mb-2">{{trans('Teacher_trans.specialization')}}</label>
                                     <select class="custom-select bg-surface-container border-outline-variant text-on-surface rounded-lg px-3 py-2" name="Specialization_id">

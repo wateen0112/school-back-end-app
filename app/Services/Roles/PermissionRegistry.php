@@ -22,6 +22,7 @@ class PermissionRegistry
     {
         return [
             ['key' => 'dashboard.view',           'label_ar' => 'الرئيسية',               'label_en' => 'Dashboard',              'group' => 'general', 'group_label' => 'عام',                'path' => '/'],
+            ['key' => 'audit.view',               'label_ar' => 'سجل المراجعة',           'label_en' => 'Audit Log',              'group' => 'general', 'group_label' => 'عام',                'path' => '/audit-logs'],
             ['key' => 'students.manage',          'label_ar' => 'قائمة الطلاب',           'label_en' => 'Students',               'group' => 'students', 'group_label' => 'الطلاب',            'path' => '/students'],
             ['key' => 'attendance.manage',        'label_ar' => 'الحضور والغياب',         'label_en' => 'Attendance',             'group' => 'students', 'group_label' => 'الطلاب',            'path' => '/attendance'],
             ['key' => 'graduated.manage',         'label_ar' => 'الخريجون',               'label_en' => 'Graduated',              'group' => 'students', 'group_label' => 'الطلاب',            'path' => '/graduated'],
@@ -67,6 +68,8 @@ class PermissionRegistry
             ['key' => 'transportation.live_tracking.view', 'label_ar' => 'التتبع المباشر',      'label_en' => 'Live Tracking',          'group' => 'transportation', 'group_label' => 'المواصلات',      'path' => '/transportation/live'],
             ['key' => 'transportation.history.view',    'label_ar' => 'سجل الرحلات',            'label_en' => 'Trip History',           'group' => 'transportation', 'group_label' => 'المواصلات',      'path' => '/transportation/history'],
             ['key' => 'transportation.settings.manage', 'label_ar' => 'إعدادات المواصلات',      'label_en' => 'Transportation Settings', 'group' => 'transportation', 'group_label' => 'المواصلات',   'path' => '/transportation/settings'],
+            ['key' => 'rewards.manage',           'label_ar' => 'المكافآت والعقوبات',      'label_en' => 'Rewards & Penalties',    'group' => 'students', 'group_label' => 'الطلاب',             'path' => '/rewards-penalties'],
+            ['key' => 'rewards.settings.manage',  'label_ar' => 'إعدادات المكافآت والعقوبات', 'label_en' => 'Rewards Settings',    'group' => 'students', 'group_label' => 'الطلاب',             'path' => '/rewards-penalties/settings'],
             ['key' => 'online_classes.manage',    'label_ar' => 'الحصص الافتراضية',       'label_en' => 'Online Classes',         'group' => 'online', 'group_label' => 'الحصص الافتراضية',   'path' => '/online-classes'],
             ['key' => 'settings.manage',          'label_ar' => 'الإعدادات',              'label_en' => 'Settings',               'group' => 'general', 'group_label' => 'عام',                'path' => '/settings'],
             ['key' => 'roles.manage',             'label_ar' => 'الأدوار والصلاحيات',     'label_en' => 'Roles & Permissions',    'group' => 'general', 'group_label' => 'عام',                'path' => '/roles'],

@@ -71,6 +71,30 @@
                             </div>
                             <br>
                             <div class="form-row">
+                                <div class="col">
+                                    <label for="Surname">الكنية</label>
+                                    <input type="text" name="Surname" value="{{ $Teachers->surname }}" class="form-control">
+                                    @error('Surname')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col">
+                                    <label for="Mobile">رقم الموبايل</label>
+                                    <input type="text" name="Mobile" value="{{ $Teachers->mobile }}" class="form-control">
+                                    @error('Mobile')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col">
+                                    <label for="insurance_number">رقم التأمين</label>
+                                    <input type="text" name="insurance_number" value="{{ $Teachers->insurance_number }}" class="form-control">
+                                    @error('insurance_number')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-row">
                                 <div class="form-group col">
                                     <label for="inputCity">{{trans('Teacher_trans.specialization')}}</label>
                                     <select class="custom-select my-1 mr-sm-2" name="Specialization_id">

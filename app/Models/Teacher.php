@@ -10,7 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Teacher extends  Authenticatable
 {
-    use HasTranslations, HasApiTokens;
+    use HasTranslations, HasApiTokens, Concerns\Auditable;
     public $translatable = ['Name'];
     
     protected $hidden=['password'];

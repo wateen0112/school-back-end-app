@@ -61,6 +61,11 @@ class StoreStudentsRequest extends FormRequest
         $rules = [
             'name_ar' => 'required',
             'name_en' => 'nullable',
+            'second_name' => 'nullable|string|max:255',
+            'grandfather_name' => 'nullable|string|max:255',
+            'national_id' => 'nullable|string|max:50',
+            'general_record_number' => 'nullable|string|max:100',
+            'residence_address' => 'nullable|string|max:255',
             'email' => 'required|email|unique:students,email,'.$id,
             'gender_id' => 'required|exists:genders,id',
             'nationalitie_id' => 'required|exists:nationalities,id',
@@ -70,7 +75,8 @@ class StoreStudentsRequest extends FormRequest
             'Classroom_id' => 'required|exists:Classrooms,id',
             'section_id' => 'required|exists:sections,id',
             'parent_id' => 'required|exists:my__parents,id',
-            'academic_year' => 'required',
+            'academic_year_id' => 'required|exists:academic_years,id',
+            'academic_year' => 'nullable',
         ];
 
         // Password is required for store, optional for update

@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class SalaryPayment extends Model
 {
+    use Concerns\HasInvoiceNumber, Concerns\Auditable;
+
+    public static $invoicePrefix = 'SAL';
+
     protected $fillable = [
         'employee_type',
         'employee_id',
@@ -21,6 +25,8 @@ class SalaryPayment extends Model
         'paid_by',
         'source',
         'installment_id',
+        'invoice_number',
+        'manual_reference_no',
     ];
 
     protected $casts = [

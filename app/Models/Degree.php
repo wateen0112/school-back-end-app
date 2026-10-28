@@ -32,4 +32,9 @@ class Degree extends Model
     {
         return $this->belongsTo('App\Models\Question', 'question_id');
     }
+
+    public function academicYear()
+    {
+        return $this->belongsTo('App\Models\AcademicYear', 'academic_year_id');
+    }
 }

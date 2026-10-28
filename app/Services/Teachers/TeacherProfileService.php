@@ -34,6 +34,9 @@ class TeacherProfileService
             'Email'             => 'required|unique:teachers,Email,'.($teacherId ?? 'NULL'),
             'Name_ar'           => 'required|string|max:255',
             'Name_en'           => 'nullable|string|max:255',
+            'Surname'           => 'nullable|string|max:255',
+            'Mobile'            => 'nullable|string|max:30',
+            'insurance_number'  => 'nullable|string|max:100',
             'Specialization_id' => 'required|exists:specializations,id',
             'Gender_id'         => 'required|exists:genders,id',
             'Joining_Date'      => 'required|date|date_format:Y-m-d',
@@ -65,6 +68,9 @@ class TeacherProfileService
             'en' => $data['Name_en'] ?: $data['Name_ar'],
             'ar' => $data['Name_ar'],
         ];
+        $teacher->surname = $data['Surname'] ?? null;
+        $teacher->mobile = $data['Mobile'] ?? null;
+        $teacher->insurance_number = $data['insurance_number'] ?? null;
         $teacher->email = $data['Email'];
         $teacher->Specialization_id = $data['Specialization_id'];
         $teacher->Gender_id = $data['Gender_id'];

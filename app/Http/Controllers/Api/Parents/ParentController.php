@@ -141,9 +141,9 @@ class ParentController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'Father_Name' => 'required|string|max:255',
-            'Father_National_ID' => 'required|string|max:255|unique:my__parents,National_ID_Father,' . $id,
-            'email' => 'required|email|unique:my__parents,email,' . $id,
+            'Father_Name' => 'sometimes|required|string|max:255',
+            'Father_National_ID' => 'sometimes|required|string|max:255|unique:my__parents,National_ID_Father,' . $id,
+            'email' => 'sometimes|required|email|unique:my__parents,email,' . $id,
             'password' => 'sometimes|required|string|min:6|confirmed',
         ]);
 
@@ -158,9 +158,17 @@ class ParentController extends Controller
         try {
             $parent = My_Parent::findOrFail($id);
 
-            $parent->Name_Father = $request->Father_Name;
-            $parent->National_ID_Father = $request->Father_National_ID;
-            $parent->email = $request->email;
+            if ($request->has('Father_Name')) $parent->Name_Father = $request->Father_Name;
+            if ($request->has('Father_National_ID')) $parent->National_ID_Father = $request->Father_National_ID;
+            if ($request->has('Father_Phone')) $parent->Phone_Father = $request->Father_Phone;
+            if ($request->has('Father_Job')) $parent->Job_Father = $request->Father_Job;
+            if ($request->has('Father_Address')) $parent->Address_Father = $request->Father_Address;
+            if ($request->has('Mother_Name')) $parent->Name_Mother = $request->Mother_Name;
+            if ($request->has('Mother_National_ID')) $parent->National_ID_Mother = $request->Mother_National_ID;
+            if ($request->has('Mother_Phone')) $parent->Phone_Mother = $request->Mother_Phone;
+            if ($request->has('Mother_Job')) $parent->Job_Mother = $request->Mother_Job;
+            if ($request->has('Mother_Address')) $parent->Address_Mother = $request->Mother_Address;
+            if ($request->has('email')) $parent->email = $request->email;
 
             if ($request->filled('password')) {
                 $parent->password = Hash::make($request->password);

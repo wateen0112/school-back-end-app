@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attendance extends Model
 {
+    use Concerns\Auditable;
+
     protected $fillable=[
         'student_id',
         'grade_id',

@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasInvoiceNumber;
 use Illuminate\Database\Eloquent\Model;
 
 class Fee_invoice extends Model
 {
+    use HasInvoiceNumber, Concerns\Auditable;
+
+    public static $invoicePrefix = 'INV';
+
     public function grade()
     {
         return $this->belongsTo('App\Models\Grade', 'Grade_id');

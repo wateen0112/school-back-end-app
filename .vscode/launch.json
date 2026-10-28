@@ -5,6 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
+   
             "name": "school_mobile_app",
             "cwd": "school_mobile_app",
             "request": "launch",

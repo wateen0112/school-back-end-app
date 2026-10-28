@@ -9,7 +9,7 @@ use Spatie\Translatable\HasTranslations;
 
 class School extends Model
 {
-    use HasTranslations, SoftDeletes;
+    use HasTranslations, SoftDeletes, Concerns\Auditable;
 
     public $translatable = ['name'];
 
@@ -18,6 +18,8 @@ class School extends Model
         'email',
         'phone',
         'address',
+        'governorate',
+        'principal_name',
         'status',
         'logo',
         'theme',

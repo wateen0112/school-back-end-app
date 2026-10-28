@@ -135,6 +135,9 @@ class TransportationDemoSeeder extends Seeder
                         [
                             'school_id' => $school->id,
                             'is_enabled' => true,
+                            'agreed_amount' => 400 + $index * 50,
+                            'academic_year_id' => $student->academic_year_id,
+                            'classroom_id' => $student->Classroom_id,
                             'morning_route_id' => $morningRoute->id,
                             'afternoon_route_id' => $afternoonRoute->id,
                             'morning_pickup_address' => 'Student home #' . ($index + 1),

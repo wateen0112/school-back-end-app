@@ -13,6 +13,8 @@ use App\Models\Role;
 use App\Models\School;
 use App\Models\Section;
 use App\Models\Student;
+use App\Models\StudentAccount;
+use App\Models\AcademicYear;
 use App\Models\Transportation\Bus;
 use App\Models\Transportation\DriverProfile;
 use App\Models\Transportation\RouteStop;
@@ -95,6 +97,17 @@ class TransportationApiTest extends TestCase
     }
 
     /** Bus + driver user/profile + route with the student as stop #1. */
+    /** Academic year used by the finance-aware assignment tests. */
+    private function makeAcademicYear(): AcademicYear
+    {
+        return AcademicYear::create([
+            'school_id' => $this->school->id,
+            'name' => ['en' => '2026-2027', 'ar' => '2026-2027'],
+            'start_date' => '2026-09-01',
+            'end_date' => '2027-06-30',
+        ]);
+    }
+
     private function makeRouteWithDriver(): array
     {
         $bus = Bus::create(['school_id' => $this->school->id, 'bus_number' => 'BUS-1', 'capacity' => 30]);
@@ -207,9 +220,13 @@ class TransportationApiTest extends TestCase
     #[Test]
     public function admin_can_assign_student_profile_with_coordinates()
     {
+        $year = $this->makeAcademicYear();
+
         $response = $this->actingAs($this->admin, 'api')
             ->putJson("/api/transportation/students/{$this->student->id}/transport-profile", [
                 'is_enabled' => true,
+                'agreed_amount' => 500,
+                'academic_year_id' => $year->id,
                 'morning_pickup_lat' => 24.7136,
                 'morning_pickup_lng' => 46.6753,
                 'morning_pickup_address' => 'Riyadh, Al Olaya',
@@ -219,7 +236,151 @@ class TransportationApiTest extends TestCase
         $this->assertDatabaseHas('transportation_student_profiles', [
             'student_id' => $this->student->id,
             'morning_pickup_lat' => 24.7136,
+            'agreed_amount' => 500,
+            'academic_year_id' => $year->id,
+            // classroom defaults to the student's own enrollment
+            'classroom_id' => $this->student->Classroom_id,
         ]);
+    }
+
+    #[Test]
+    public function enabled_assignment_requires_agreed_amount()
+    {
+        $this->actingAs($this->admin, 'api')
+            ->putJson("/api/transportation/students/{$this->student->id}/transport-profile", [
+                'is_enabled' => true,
+            ])
+            ->assertStatus(422);
+    }
+
+    #[Test]
+    public function assignment_creates_transport_accounting_entry()
+    {
+        $year = $this->makeAcademicYear();
+
+        $this->actingAs($this->admin, 'api')
+            ->putJson("/api/transportation/students/{$this->student->id}/transport-profile", [
+                'is_enabled' => true,
+                'agreed_amount' => 750.50,
+                'academic_year_id' => $year->id,
+            ])
+            ->assertOk();
+
+        $profile = StudentTransportProfile::where('student_id', $this->student->id)->firstOrFail();
+
+        $this->assertDatabaseHas('student_accounts', [
+            'student_id' => $this->student->id,
+            'transport_profile_id' => $profile->id,
+            'type' => 'transport',
+            'Debit' => 750.50,
+            'credit' => 0,
+        ]);
+
+        // Amount update syncs the same entry instead of duplicating it.
+        $this->actingAs($this->admin, 'api')
+            ->putJson("/api/transportation/students/{$this->student->id}/transport-profile", [
+                'is_enabled' => true,
+                'agreed_amount' => 800,
+                'academic_year_id' => $year->id,
+            ])
+            ->assertOk();
+
+        $this->assertEquals(1, StudentAccount::where('transport_profile_id', $profile->id)->count());
+        $this->assertDatabaseHas('student_accounts', [
+            'transport_profile_id' => $profile->id,
+            'Debit' => 800,
+        ]);
+    }
+
+    #[Test]
+    public function disabling_profile_removes_transport_accounting_entry()
+    {
+        $year = $this->makeAcademicYear();
+
+        $this->actingAs($this->admin, 'api')
+            ->putJson("/api/transportation/students/{$this->student->id}/transport-profile", [
+                'is_enabled' => true,
+                'agreed_amount' => 400,
+                'academic_year_id' => $year->id,
+            ])
+            ->assertOk();
+
+        $this->assertEquals(1, StudentAccount::where('type', 'transport')->count());
+
+        $this->actingAs($this->admin, 'api')
+            ->putJson("/api/transportation/students/{$this->student->id}/transport-profile", [
+                'is_enabled' => false,
+                'agreed_amount' => 400,
+            ])
+            ->assertOk();
+
+        $this->assertEquals(0, StudentAccount::where('type', 'transport')->count());
+    }
+
+    #[Test]
+    public function accounting_summary_reports_transport_charges()
+    {
+        $year = $this->makeAcademicYear();
+
+        $this->actingAs($this->admin, 'api')
+            ->putJson("/api/transportation/students/{$this->student->id}/transport-profile", [
+                'is_enabled' => true,
+                'agreed_amount' => 600,
+                'academic_year_id' => $year->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->admin, 'api')
+            ->getJson('/api/accounting/summary')
+            ->assertOk()
+            ->assertJsonPath('data.transport_charges', 600);
+    }
+
+    #[Test]
+    public function transportation_finance_returns_agreed_totals()
+    {
+        $year = $this->makeAcademicYear();
+
+        $this->actingAs($this->admin, 'api')
+            ->putJson("/api/transportation/students/{$this->student->id}/transport-profile", [
+                'is_enabled' => true,
+                'agreed_amount' => 300,
+                'academic_year_id' => $year->id,
+            ])
+            ->assertOk();
+
+        $response = $this->actingAs($this->admin, 'api')
+            ->getJson('/api/transportation/students/finance')
+            ->assertOk()
+            ->assertJsonPath('data.students_count', 1)
+            ->assertJsonPath('data.total_agreed', 300)
+            ->assertJsonPath('data.total_charged', 300)
+            ->assertJsonPath('data.by_classroom.0.classroom_id', $this->student->Classroom_id)
+            ->assertJsonPath('data.by_academic_year.0.academic_year_id', $year->id);
+    }
+
+    #[Test]
+    public function index_filters_students_by_academic_year()
+    {
+        $year = $this->makeAcademicYear();
+
+        $this->actingAs($this->admin, 'api')
+            ->putJson("/api/transportation/students/{$this->student->id}/transport-profile", [
+                'is_enabled' => true,
+                'agreed_amount' => 300,
+                'academic_year_id' => $year->id,
+            ])
+            ->assertOk();
+
+        $this->actingAs($this->admin, 'api')
+            ->getJson('/api/transportation/students?academic_year_id=' . $year->id)
+            ->assertOk()
+            ->assertJsonPath('data.total', 1);
+
+        $this->actingAs($this->admin, 'api')
+            ->getJson('/api/transportation/students?academic_year_id=' . ($year->id + 999))
+            ->assertOk()
+            ->assertJsonPath('data.total', 0);
     }
 
     #[Test]

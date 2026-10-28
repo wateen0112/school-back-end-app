@@ -21,6 +21,11 @@ class StudentAccount extends Model
         return $this->belongsTo('App\Models\StudentInstallment', 'student_installment_id');
     }
 
+    public function transportProfile()
+    {
+        return $this->belongsTo('App\Models\Transportation\StudentTransportProfile', 'transport_profile_id');
+    }
+
     public function student()
     {
         return $this->belongsTo('App\Models\Student', 'student_id');

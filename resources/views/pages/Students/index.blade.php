@@ -31,6 +31,9 @@
                                         <tr class="bg-surface-container">
                                             <th class="px-4 py-3 text-label-lg text-on-surface-variant rounded-tl-lg">#</th>
                                             <th class="px-4 py-3 text-label-lg text-on-surface-variant">{{trans('Students_trans.name')}}</th>
+                                            <th class="px-4 py-3 text-label-lg text-on-surface-variant">اسم الجد</th>
+                                            <th class="px-4 py-3 text-label-lg text-on-surface-variant">الرقم الوطني</th>
+                                            <th class="px-4 py-3 text-label-lg text-on-surface-variant">مكان الإقامة</th>
                                             <th class="px-4 py-3 text-label-lg text-on-surface-variant">{{trans('Students_trans.email')}}</th>
                                             <th class="px-4 py-3 text-label-lg text-on-surface-variant">{{trans('Students_trans.gender')}}</th>
                                             <th class="px-4 py-3 text-label-lg text-on-surface-variant">{{trans('Students_trans.Grade')}}</th>
@@ -51,6 +54,9 @@
                                                     <span class="text-body-md">{{$student->name}}</span>
                                                 </div>
                                             </td>
+                                            <td class="px-4 py-4 text-body-md text-on-surface-variant">{{$student->grandfather_name ?: '—'}}</td>
+                                            <td class="px-4 py-4 text-body-md text-on-surface-variant">{{$student->national_id ?: '—'}}</td>
+                                            <td class="px-4 py-4 text-body-md text-on-surface-variant">{{$student->residence_address ?: '—'}}</td>
                                             <td class="px-4 py-4 text-body-md text-on-surface-variant">{{$student->email}}</td>
                                             <td class="px-4 py-4">
                                                 <span class="bg-primary/15 text-primary px-2 py-1 rounded text-xs">

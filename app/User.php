@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Concerns\Auditable;
 use App\Models\School;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, Auditable;
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'school_id', 'is_super_admin', 'salary',
+        'name', 'email', 'password', 'school_id', 'is_super_admin', 'salary', 'insurance_number',
     ];
 
     /**

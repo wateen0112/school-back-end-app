@@ -7,7 +7,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Section extends Model
 {
-    use HasTranslations;
+    use HasTranslations, Concerns\Auditable;
     public $translatable = ['Name_Section'];
     protected $fillable=['Name_Section','Status','Grade_id','Class_id'];
 

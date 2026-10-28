@@ -102,6 +102,7 @@ class AcademicYearController extends Controller
         try {
             $schoolId = $this->resolveSchoolId($request);
             $validated = $this->validateYear($request);
+            $this->assertNoConflicts($validated, $schoolId);
 
             $year = $this->createYear($schoolId, $validated);
 
@@ -134,6 +135,7 @@ class AcademicYearController extends Controller
 
         try {
             $validated = $this->validateYear($request, true);
+            $this->assertNoConflicts($validated, $academicYear->school_id ?? $this->resolveSchoolId($request), $academicYear);
             $data = $this->normalizePayload($validated);
 
             $academicYear->update($data);
@@ -246,6 +248,60 @@ class AcademicYearController extends Controller
         }
 
         return $partial ? $validator->validated() : $validator->validated();
+    }
+
+    /**
+     * Block a create/update that would conflict with an existing academic year:
+     * an overlapping date range (against non-archived years of the same school)
+     * or a duplicate name. Raises a 422 with a bilingual notice per field.
+     */
+    private function assertNoConflicts(array $validated, ?int $schoolId, ?AcademicYear $ignore = null): void
+    {
+        $isArabic = app()->getLocale() === 'ar';
+        $start = $validated['start_date'] ?? null;
+        $end = $validated['end_date'] ?? null;
+        $nameAr = $validated['name_ar'] ?? null;
+        $nameEn = $validated['name_en'] ?? $nameAr;
+
+        $errors = [];
+
+        if ($start && $end) {
+            $overlap = AcademicYear::query()
+                ->forSchool($schoolId)
+                ->where('status', '!=', AcademicYear::STATUS_ARCHIVED)
+                ->when($ignore, fn ($q) => $q->where('id', '!=', $ignore->id))
+                ->whereDate('start_date', '<=', $end)
+                ->whereDate('end_date', '>=', $start)
+                ->first();
+
+            if ($overlap) {
+                $label = $overlap->getTranslation('name', app()->getLocale(), true);
+                $errors['start_date'] = [$isArabic
+                    ? "تتداخل فترة هذه السنة الدراسية مع سنة أخرى ({$label}). عدّل التواريخ أو أرشِف السنة المتعارضة."
+                    : "This date range overlaps another academic year ({$label}). Adjust the dates or archive the conflicting one."];
+            }
+        }
+
+        if (! empty($nameAr) || ! empty($nameEn)) {
+            $duplicate = AcademicYear::query()
+                ->forSchool($schoolId)
+                ->when($ignore, fn ($q) => $q->where('id', '!=', $ignore->id))
+                ->where(function ($q) use ($nameAr, $nameEn) {
+                    $q->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(name, '$.ar')) = ?", [$nameAr])
+                        ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(name, '$.en')) = ?", [$nameEn]);
+                })
+                ->first();
+
+            if ($duplicate) {
+                $errors['name_ar'] = [$isArabic
+                    ? 'توجد سنة دراسية أخرى بنفس الاسم. اختر اسمًا مختلفًا.'
+                    : 'Another academic year already uses this name. Choose a different one.'];
+            }
+        }
+
+        if ($errors !== []) {
+            throw \Illuminate\Validation\ValidationException::withMessages($errors);
+        }
     }
 
     private function createYear(?int $schoolId, array $validated): AcademicYear

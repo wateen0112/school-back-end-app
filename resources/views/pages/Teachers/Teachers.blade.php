@@ -31,6 +31,8 @@
                                         <tr class="bg-surface-container">
                                             <th class="px-4 py-3 text-label-lg text-on-surface-variant rounded-tl-lg">#</th>
                                             <th class="px-4 py-3 text-label-lg text-on-surface-variant">{{trans('Teacher_trans.Name_Teacher')}}</th>
+                                            <th class="px-4 py-3 text-label-lg text-on-surface-variant">الكنية</th>
+                                            <th class="px-4 py-3 text-label-lg text-on-surface-variant">رقم الموبايل</th>
                                             <th class="px-4 py-3 text-label-lg text-on-surface-variant">{{trans('Teacher_trans.Gender')}}</th>
                                             <th class="px-4 py-3 text-label-lg text-on-surface-variant">{{trans('Teacher_trans.Joining_Date')}}</th>
                                             <th class="px-4 py-3 text-label-lg text-on-surface-variant">{{trans('Teacher_trans.specialization')}}</th>
@@ -55,6 +57,8 @@
                                                     <span class="text-body-md">{{$Teacher->Name}}</span>
                                                 </div>
                                             </td>
+                                            <td class="px-4 py-4 text-body-md text-on-surface-variant">{{$Teacher->surname ?: '—'}}</td>
+                                            <td class="px-4 py-4 text-body-md text-on-surface-variant" dir="ltr">{{$Teacher->mobile ?: '—'}}</td>
                                             <td class="px-4 py-4">
                                                 <span class="bg-tertiary/15 text-tertiary px-2 py-1 rounded text-xs">
                                                     {{$Teacher->genders->Name}}

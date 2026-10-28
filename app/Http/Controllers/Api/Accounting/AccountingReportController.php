@@ -8,6 +8,7 @@ use App\Models\PaymentStudent;
 use App\Models\ProcessingFee;
 use App\Models\ReceiptStudent;
 use App\Models\SalaryPayment;
+use App\Models\StudentAccount;
 use App\Support\CacheVersion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -24,7 +25,7 @@ class AccountingReportController extends Controller
             [$from, $to] = $this->periodRange($request, $year);
 
             $data = Cache::remember(
-                'accounting:summary:v1:'.CacheVersion::stamp('accounting')
+                'accounting:summary:v2:'.CacheVersion::stamp('accounting')
                     .':'.$year.'-'.($request->month ?: 'all'),
                 300,
                 function () use ($from, $to, $year) {
@@ -36,6 +37,11 @@ class AccountingReportController extends Controller
                         ->whereBetween('paid_at', [$from, $to])->sum('amount');
                     $salariesDue = (float) SalaryPayment::where('status', 'pending')
                         ->whereBetween('due_date', [$from, $to])->sum('amount');
+                    // Transportation charges are accrued (StudentAccount debit
+                    // rows), reported separately so cash revenue is not double
+                    // counted.
+                    $transportCharges = (float) StudentAccount::where('type', 'transport')
+                        ->whereBetween('date', [$from, $to])->sum('Debit');
 
                     $grossProfit = $revenue - $refunds - $processing;
                     $netProfit = $grossProfit - $expenses - $salariesPaid;
@@ -48,6 +54,7 @@ class AccountingReportController extends Controller
                         'expenses' => $expenses,
                         'salaries_paid' => $salariesPaid,
                         'salaries_due' => $salariesDue,
+                        'transport_charges' => $transportCharges,
                         'gross_profit' => $grossProfit,
                         'net_profit' => $netProfit,
                     ];

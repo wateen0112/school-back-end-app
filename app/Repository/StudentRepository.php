@@ -40,6 +40,10 @@ class StudentRepository implements StudentRepositoryInterface{
         try {
             $Edit_Students = Student::findorfail($request->id);
             $Edit_Students->name = ['ar' => $request->name_ar, 'en' => $request->name_en ?: $request->name_ar];
+            $Edit_Students->second_name = $request->second_name;
+            $Edit_Students->grandfather_name = $request->grandfather_name;
+            $Edit_Students->national_id = $request->national_id;
+            $Edit_Students->residence_address = $request->residence_address;
             $Edit_Students->email = $request->email;
             $Edit_Students->password = Hash::make($request->password);
             $Edit_Students->gender_id = $request->gender_id;
@@ -100,6 +104,10 @@ class StudentRepository implements StudentRepositoryInterface{
         try {
             $students = new Student();
             $students->name = ['en' => $request->name_en, 'ar' => $request->name_ar];
+            $students->second_name = $request->second_name;
+            $students->grandfather_name = $request->grandfather_name;
+            $students->national_id = $request->national_id;
+            $students->residence_address = $request->residence_address;
             $students->email = $request->email;
             $students->password = Hash::make($request->password);
             $students->gender_id = $request->gender_id;
